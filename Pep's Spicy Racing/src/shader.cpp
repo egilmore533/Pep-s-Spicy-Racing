@@ -28,7 +28,7 @@ GLuint BuildShaderProgram(const char *vsPath, const char *fsPath)
 
 		glGetProgramInfoLog(tempProgram, infoLogLength, NULL, strInfoLog);
 
-		printf("Shader linker failure: %s", strInfoLog);
+		printf("Shader linker failure: %s\n", strInfoLog);
 		return 0;
 	}
 
@@ -54,7 +54,7 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
 	shaderFile = fopen(strShaderFile, "r");
 	if (!shaderFile)
 	{
-		printf("failed to open shader file: %s", strShaderFile);
+		printf("failed to open shader file: %s\n", strShaderFile);
 		return 0;
 	}
 	while (fscanf(shaderFile, "%c", &inChar) > 0)
@@ -90,7 +90,7 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
 			break;
 		}
 
-		printf("Compile failure in %s shader:\n%s", strShaderType, strInfoLog);
+		printf("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
 		return 0;
 	}
 

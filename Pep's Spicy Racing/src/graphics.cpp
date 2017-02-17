@@ -30,13 +30,13 @@ Graphics::Graphics()
 
 	graphics_shader_program = glCreateProgram();
 
-	graphics_shader_program = BuildShaderProgram("shaders/vs1.glsl", "shaders/fs1.glsl");
+	graphics_shader_program = BuildShaderProgram("shader/vs1.glsl", "shader/fs1.glsl");
 	if (graphics_shader_program == -1)
 	{
 		exit(0);
 	}
 
-	printf("Using program %d", graphics_shader_program);
+	printf("Using program %d\n", graphics_shader_program);
 
 	time.restart();
 	delta_time.restart();

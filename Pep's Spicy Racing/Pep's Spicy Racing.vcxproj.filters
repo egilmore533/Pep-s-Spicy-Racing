@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{255792f1-cc72-4b35-aec1-6cc960de7a4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\main.cpp">
@@ -32,5 +35,13 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\fs1.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\vs1.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

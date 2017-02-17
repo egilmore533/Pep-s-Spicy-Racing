@@ -27,6 +27,10 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\graphics.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\shader.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\fs1.glsl" />
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\vs1.glsl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{358E9F98-BF9F-4706-BA09-317A5FEF898F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
