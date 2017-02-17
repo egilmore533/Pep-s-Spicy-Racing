@@ -44,26 +44,3 @@ sf::RenderWindow* Graphics::get_game_window()
 	return game_window;
 
 }
-
-void Graphics::graphic_loop()
-{
-
-	int running = 1;
-
-	while (running)
-	{
-		sf::Event event;
-		while (game_window->pollEvent(event))
-		{
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			{
-				game_window->close();
-				exit(0);
-			}
-		}
-
-		game_window->clear();
-
-		game_window->display();
-	}
-}

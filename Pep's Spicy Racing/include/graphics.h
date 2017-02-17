@@ -15,7 +15,6 @@ public:
 	~Graphics();
 	GLuint get_shader_program();
 	sf::RenderWindow *get_game_window();
-	void graphic_loop();
 
 private:
 		GLuint graphics_shader_program;
