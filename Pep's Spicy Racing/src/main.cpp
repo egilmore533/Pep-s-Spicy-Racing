@@ -1,5 +1,9 @@
+#include "graphics.h"
 
 int main()
 {
-	return 1;
+	Graphics *graphics = new Graphics;
+	graphics->graphic_loop();
+
+	return 0;
 }
