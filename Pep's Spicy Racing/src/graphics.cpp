@@ -1,6 +1,7 @@
 #include <GL\glew.h>
 
 #include "graphics.h"
+#include "shader.h"
 
 
 Graphics::Graphics()
@@ -27,6 +28,18 @@ Graphics::Graphics()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
+	graphics_shader_program = glCreateProgram();
+
+	graphics_shader_program = BuildShaderProgram("shaders/vs1.glsl", "shaders/fs1.glsl");
+	if (graphics_shader_program == -1)
+	{
+		exit(0);
+	}
+
+	printf("Using program %d", graphics_shader_program);
+
+	time.restart();
+	delta_time.restart();
 }
 
 Graphics::~Graphics()
@@ -43,4 +56,20 @@ sf::RenderWindow* Graphics::get_game_window()
 {
 	return game_window;
 
+}
+
+void Graphics::graphics_frame_begin()
+{
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Graphics::graphics_next_frame()
+{
+	game_window->display();
+}
+
+sf::Time Graphics::get_game_time()
+{
+	return time.getElapsedTime();
 }

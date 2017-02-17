@@ -18,9 +18,15 @@ int main()
 			}
 		}
 
-		graphics->Graphics::get_game_window()->clear();
+		graphics->Graphics::graphics_frame_begin();
 
-		graphics->Graphics::get_game_window()->display();
+		/*Drawing Code Start*/
+
+		/*Drawing Code Start*/
+
+		graphics->Graphics::graphics_next_frame();
+
+
 	}
 
 	return 0;
