@@ -3,6 +3,8 @@
 #include "graphics.h"
 #include "shader.h"
 
+sf::Clock Graphics::game_delta_time;
+sf::RenderWindow *Graphics::game_window;
 
 Graphics::Graphics()
 {
@@ -38,8 +40,7 @@ Graphics::Graphics()
 
 	printf("Using program %d\n", graphics_shader_program);
 
-	time.restart();
-	delta_time.restart();
+	game_delta_time.restart();
 }
 
 GLuint Graphics::get_shader_program()
@@ -62,9 +63,10 @@ void Graphics::graphics_frame_begin()
 void Graphics::graphics_next_frame()
 {
 	game_window->display();
+	game_delta_time.restart();
 }
 
-sf::Time Graphics::get_game_time()
+sf::Time Graphics::get_delta_time()
 {
-	return time.getElapsedTime();
+	return game_delta_time.getElapsedTime();
 }

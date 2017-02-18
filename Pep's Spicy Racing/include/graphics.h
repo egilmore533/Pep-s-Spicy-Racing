@@ -15,16 +15,15 @@ class Graphics
 public:
 	Graphics();
 	GLuint get_shader_program();
-	sf::RenderWindow *get_game_window();
+	static sf::RenderWindow *get_game_window();
 	void graphics_frame_begin();
 	void graphics_next_frame();
-	sf::Time get_game_time();
+	static sf::Time get_delta_time();
 
 private:
 		GLuint graphics_shader_program;
-		sf::RenderWindow *game_window;
-		sf::Clock time;
-		sf::Clock delta_time;
+		static sf::RenderWindow *game_window;
+		static sf::Clock game_delta_time;
 };
 
 #endif 

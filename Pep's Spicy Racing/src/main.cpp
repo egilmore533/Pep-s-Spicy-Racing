@@ -157,7 +157,13 @@ int main()
 				graphics->Graphics::get_game_window()->close();
 				running = 0;
 			}
+			else
+			{
+				camera->Camera::camera_get_keyboard_input(event);
+			}
 		}
+
+		camera->Camera::camera_get_mouse_input(event);
 
 		graphics->Graphics::graphics_frame_begin();
 

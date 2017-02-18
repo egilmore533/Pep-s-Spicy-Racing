@@ -1,10 +1,12 @@
 #include <glm\gtx\transform.hpp>
 #include <SFML/Window.hpp>
 
+#include "graphics.h"
 #include "camera.h"
 
 Camera::Camera(glm::vec2 screen_size, glm::vec3 pos)
 {
+	screen_dimensions = screen_size;
 	position = pos;
 	target = glm::vec3(0.0f, 0.0f, 0.0f);
 	forward = glm::normalize(position - target);
@@ -30,9 +32,11 @@ glm::mat4 Camera::get_camera_projection_matrix()
 	return projection_matrix;
 }
 
-void Camera::camera_get_keyboard_input(sf::Keyboard::Key key)
+void Camera::camera_get_keyboard_input(sf::Event event)
 {
 	float camera_speed = 0.5f;
+	sf::Keyboard::Key key = event.key.code;
+	float delta_time = Graphics::get_delta_time().asMicroseconds();
 
 	if (key == sf::Keyboard::W)
 	{
@@ -57,10 +61,36 @@ void Camera::camera_get_keyboard_input(sf::Keyboard::Key key)
 	camera_update_view_matrix();
 }
 
-void Camera::camera_get_mouse_input(sf::Mouse mouse)
+void Camera::camera_get_mouse_input(sf::Event event)
 {
-	float sensitivity = 0.1f;
+	float sensitivity = 0.005f;
+	float delta_time = Graphics::get_delta_time().asSeconds();
 
+	sf::Vector2i mouse_position = sf::Mouse::getPosition();
+	sf::Mouse::setPosition(sf::Vector2i(screen_dimensions.x/2, screen_dimensions.y/2), *Graphics::get_game_window());
+
+	float horizontal_angle = 3.14f;
+	float vertical_angle = 0.0f;
+	float initial_fov = 45.0f;
+
+	horizontal_angle += sensitivity * float(screen_dimensions.x / 2 - mouse_position.x);
+	vertical_angle += sensitivity * float(screen_dimensions.y / 2 - mouse_position.y);
+	
+	forward = glm::vec3(
+		cos(vertical_angle) * sin(horizontal_angle),
+		sin(vertical_angle),
+		cos(vertical_angle) * cos(horizontal_angle)
+	);
+
+	right = glm::vec3(
+		sin(horizontal_angle - 3.14f / 2.0f),
+		0,
+		cos(horizontal_angle - 3.14f / 2.0f)
+	);
+
+	up = glm::cross(right, forward);
+
+	camera_update_view_matrix();
 }
 
 void Camera::camera_update_view_matrix()

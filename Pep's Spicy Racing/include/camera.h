@@ -10,9 +10,9 @@ public:
 	Camera(glm::vec2 screen_size, glm::vec3 pos);
 	glm::mat4 get_camera_view_matrix();
 	glm::mat4 get_camera_projection_matrix();
-	void camera_get_keyboard_input(sf::Keyboard::Key key);
+	void camera_get_keyboard_input(sf::Event event);
 	void camera_update_view_matrix();
-	void camera_get_mouse_input(sf::Mouse mouse);
+	void camera_get_mouse_input(sf::Event event);
 
 private:
 	void camera_translate(Camera *camera, int direction);
@@ -24,11 +24,11 @@ private:
 	glm::vec3 right;		/**< the direction right of the camera */
 	glm::vec3 up;			/**< the direction above the camera */
 
-	float yaw;		/**< x rotation */
-	float pitch;	/**< y rotation */
-	float roll;		/**< z rotation */
+	float yaw;		/**< y-axis locked */
+	float pitch;	/**< x-axis locked */
+	float roll;		/**< z-axis locked probably will go unused*/ 
 
 	glm::mat4 view_matrix;
 	glm::mat4 projection_matrix;
-
+	glm::vec2 screen_dimensions;
 };
