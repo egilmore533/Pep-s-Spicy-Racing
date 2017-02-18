@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\camera.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\graphics.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\main.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\camera.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\graphics.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\shader.h" />
   </ItemGroup>

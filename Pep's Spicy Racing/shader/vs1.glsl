@@ -4,8 +4,10 @@ layout(location = 1) in vec3 vertexColor;
 
 out vec3 fragmentColor;
 
+uniform mat4 model_view_projection;
+
 void main()
 {
-	gl_Position = vec4(vertexPostion_modelspace, 1);
+	gl_Position = model_view_projection * vec4(vertexPostion_modelspace, 1);
 	fragmentColor = vertexColor;
 }

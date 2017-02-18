@@ -1,6 +1,10 @@
 #include <GL/glew.h>
 
+#include <glm\glm.hpp>
+#include <glm\gtx\transform.hpp>
+
 #include "graphics.h"
+#include "camera.h"
 
 static const GLfloat g_vertex_buffer_data[] = {
 	-1.0f,-1.0f,-1.0f, // triangle 1 : begin
@@ -116,18 +120,26 @@ void draw(GLuint shader, GLuint veterxBufferObject, GLuint colorBufferObject)
 int main()
 {
 	int running = 1;
-	Graphics *graphics = new Graphics;
-	GLuint vao; //vao == vertex array object
+	
 	GLuint cubeBufferObject;
 	GLuint colorbuffer;
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao); //make our vertex array object, we need it to restore state we set after binding it. Re-binding reloads the state associated with it.
+	Graphics *graphics = new Graphics;
 
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, -10.0f);
+	glm::mat4 model = glm::mat4(1.0f);
+	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
+
+	GLuint mvp_location;
+	glm::mat4 model_view_projection; // = projectionMatrix * view * model;
+
+	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
+	
+	
 	glGenBuffers(1, &cubeBufferObject); //create the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, cubeBufferObject); //we're "using" this one now
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW); //formatting the data for the buffer
-	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind any buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind the buffer
 
 	glGenBuffers(1, &colorbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
@@ -151,6 +163,12 @@ int main()
 
 		/*Drawing Code Start*/
 
+		model_view_projection = camera->Camera::get_camera_projection_matrix() *
+			camera->Camera::get_camera_view_matrix() * 
+			model;
+		
+		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
+		
 		draw(graphics->Graphics::get_shader_program(), cubeBufferObject, colorbuffer);
 
 		/*Drawing Code Start*/

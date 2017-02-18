@@ -42,11 +42,6 @@ Graphics::Graphics()
 	delta_time.restart();
 }
 
-Graphics::~Graphics()
-{
-
-}
-
 GLuint Graphics::get_shader_program()
 {
 	return graphics_shader_program;

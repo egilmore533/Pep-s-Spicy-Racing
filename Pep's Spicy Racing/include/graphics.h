@@ -14,7 +14,6 @@ class Graphics
 {
 public:
 	Graphics();
-	~Graphics();
 	GLuint get_shader_program();
 	sf::RenderWindow *get_game_window();
 	void graphics_frame_begin();
