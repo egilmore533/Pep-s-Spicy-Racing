@@ -126,7 +126,7 @@ int main()
 
 	Graphics *graphics = new Graphics;
 
-	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, -10.0f);
+	glm::vec3 cameraPosition = glm::vec3(4.0f, 3.0f, 4.0f);
 	glm::mat4 model = glm::mat4(1.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 

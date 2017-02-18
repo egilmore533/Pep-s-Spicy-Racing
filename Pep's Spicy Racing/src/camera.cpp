@@ -5,9 +5,9 @@
 
 Camera::Camera(glm::vec2 screen_size, glm::vec3 pos)
 {
-	position = position;
+	position = pos;
 	target = glm::vec3(0.0f, 0.0f, 0.0f);
-	forward = glm::vec3(0.0f, 0.0f, -1.0f);
+	forward = glm::normalize(position - target);
 	up = glm::vec3(0.0f, 1.0f, 0.0f);
 	right = glm::normalize(glm::cross(forward, up));
 
