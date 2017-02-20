@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _CAMERA_H_
+#define _CAMERA_H_
+
 #include <glm\gtx\transform.hpp>
 
 #define NEAR_CLIPPING_PLANE		0.1f
@@ -32,3 +34,5 @@ private:
 	glm::mat4 projection_matrix;
 	glm::vec2 screen_dimensions;
 };
+
+#endif

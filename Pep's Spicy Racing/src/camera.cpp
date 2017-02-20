@@ -95,6 +95,6 @@ void Camera::camera_get_mouse_input(sf::Event event)
 
 void Camera::camera_update_view_matrix()
 {
-	view_matrix = glm::lookAt(position, position + forward, up);
+	view_matrix = glm::lookAt(position, target, up);
 
 }

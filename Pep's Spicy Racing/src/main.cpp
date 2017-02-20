@@ -163,7 +163,7 @@ int main()
 			}
 		}
 
-		camera->Camera::camera_get_mouse_input(event);
+		//camera->Camera::camera_get_mouse_input(event);
 
 		graphics->Graphics::graphics_frame_begin();
 
