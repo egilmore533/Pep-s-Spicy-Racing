@@ -8,6 +8,7 @@
 #include "graphics.h"
 #include "camera.h"
 #include "texture.h"
+#include "mesh.h"
 
 
 static const GLfloat g_vertex_buffer_data[] = {
@@ -130,9 +131,11 @@ int main()
 
 	init_logger("game_log.log");
 
+	Graphics *graphics = new Graphics;
+
 	//Texture myCubeTexture = Texture("images/joe.png", true, true);
 
-	Graphics *graphics = new Graphics;
+	Mesh *mesh = new Mesh("models/monkey.obj");
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 model = glm::mat4(1.0f);
@@ -142,7 +145,6 @@ int main()
 	glm::mat4 model_view_projection; // = projectionMatrix * view * model;
 
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
-	
 	
 	glGenBuffers(1, &cubeBufferObject); //create the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, cubeBufferObject); //we're "using" this one now
@@ -182,7 +184,7 @@ int main()
 		
 		draw(graphics->Graphics::get_shader_program(), cubeBufferObject, colorbuffer);
 
-		/*Drawing Code Start*/
+		/*Drawing Code End*/
 
 		graphics->Graphics::graphics_next_frame();
 

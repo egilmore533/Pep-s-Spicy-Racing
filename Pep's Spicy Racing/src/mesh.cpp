@@ -8,6 +8,9 @@
 Mesh::Mesh(char *filename)
 {
 	FILE *file;
+	char buf[512];
+	int v, t, n, f;
+
 	if (!filename)
 	{
 		slog("no filename provided");
@@ -20,9 +23,6 @@ Mesh::Mesh(char *filename)
 		slog("failed to open file: %s", filename);
 		return;
 	}
-
-
-	char buf[256];
 
 	while (fscanf(file, "%s", buf) != EOF)
 	{
@@ -41,7 +41,7 @@ Mesh::Mesh(char *filename)
 				break;
 			case 't':
 				fgets(buf, sizeof(buf), file);
-				num_texcoords++;
+				num_texels++;
 				break;
 			default:
 				break;
@@ -59,14 +59,46 @@ Mesh::Mesh(char *filename)
 	//allocate memory for the data structures we need
 	tris = (triangle *)malloc(sizeof(triangle) * num_faces);
 	normals = (glm::vec3 *)malloc(sizeof(glm::vec3) * num_normals);
-	texels = (glm::vec2 *)malloc(sizeof(glm::vec2) * num_texcoords);
+	texels = (glm::vec2 *)malloc(sizeof(glm::vec2) * num_texels);
 	vertices = (glm::vec3 *)malloc(sizeof(glm::vec3) * num_vertices);
 
 	rewind(file);
-
+	v = t = n = f = 0;
 	while (fscanf(file, "%s", buf) != EOF)
 	{
-
+		switch (buf[0])
+		{
+		case 'v':
+			switch (buf[1])
+			{
+			case '\0':
+				fscanf(file, "%f %f %f", &vertices[v].x, &vertices[v].y, &vertices[v].z);
+				v++;
+				break;
+			case 'n':
+				fscanf(file, "%f %f %f", &normals[n].x, &normals[n].y, &normals[n].z);
+				n++;
+				break;
+			case 't':
+				fscanf(file, "%f %f", &texels[t].x, &texels[t].y);
+				t++;
+				break;
+			default:
+				break;
+			}
+			break;
+		case 'f':
+			fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d",
+				&tris[f].corners[0].v, &tris[f].corners[0].vt, &tris[f].corners[0].vn,
+				&tris[f].corners[1].v, &tris[f].corners[1].vt, &tris[f].corners[1].vn,
+				&tris[f].corners[2].v, &tris[f].corners[2].vt, &tris[f].corners[2].vn
+			);
+			f++;
+			break;
+		default:
+			fgets(buf, sizeof(buf), file);
+			break;
+		}
 	}
 
 	fclose(file);

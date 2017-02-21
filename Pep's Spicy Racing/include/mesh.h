@@ -21,7 +21,7 @@ public:
 	Mesh(char *filename);
 	~Mesh();
 
-private:
+//private:
 	glm::vec3 *vertices;
 	glm::vec2 *texels;
 	glm::vec3 *normals;
@@ -29,7 +29,7 @@ private:
 
 	int  num_vertices = 0;
 	int  num_normals = 0;
-	int  num_texcoords = 0;
+	int  num_texels = 0;
 	int  num_faces = 0;
 };
 
