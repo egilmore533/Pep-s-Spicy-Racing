@@ -32,7 +32,7 @@ void _slog(char *f,int l,char *msg,...)
     va_list ap;
     /*echo all logging to stdout*/
     va_start(ap,msg);
-    fprintf(stdout,"%s:%i: ",f,l);
+    fprintf(stdout,"%s:%d: ",f,l);
     vfprintf(stdout,msg,ap);
     fprintf(stdout,"\n");
     va_end(ap);
@@ -40,7 +40,7 @@ void _slog(char *f,int l,char *msg,...)
     if (__log_file != NULL)
     {
         va_start(ap,msg);
-        fprintf(__log_file,"%s:%i: ",f,l);
+        fprintf(__log_file,"%s:%d: ",f,l);
         fprintf(__log_file,msg,ap);
         fprintf(__log_file,"\n");
         va_end(ap);

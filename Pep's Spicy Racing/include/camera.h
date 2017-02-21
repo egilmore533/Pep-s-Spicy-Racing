@@ -12,9 +12,9 @@ public:
 	Camera(glm::vec2 screen_size, glm::vec3 pos);
 	glm::mat4 get_camera_view_matrix();
 	glm::mat4 get_camera_projection_matrix();
-	void camera_get_keyboard_input(sf::Event event);
+	void camera_get_keyboard_input();
 	void camera_update_view_matrix();
-	void camera_get_mouse_input(sf::Event event);
+	void camera_get_mouse_input();
 
 private:
 	void camera_translate(Camera *camera, int direction);

@@ -134,7 +134,7 @@ int main()
 
 	Graphics *graphics = new Graphics;
 
-	glm::vec3 cameraPosition = glm::vec3(4.0f, 3.0f, 4.0f);
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 model = glm::mat4(1.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
@@ -165,14 +165,9 @@ int main()
 				graphics->Graphics::get_game_window()->close();
 				running = 0;
 			}
-			else
-			{
-				camera->Camera::camera_get_keyboard_input(event);
-			}
 		}
-
-		camera->Camera::camera_get_mouse_input(event);
-
+		camera->Camera::camera_get_mouse_input();
+		camera->Camera::camera_get_keyboard_input();
 		camera->Camera::camera_update_view_matrix();
 
 		graphics->Graphics::graphics_frame_begin();
