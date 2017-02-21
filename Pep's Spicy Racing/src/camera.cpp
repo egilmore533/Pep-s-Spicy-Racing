@@ -1,6 +1,8 @@
 #include <glm\gtx\transform.hpp>
 #include <SFML/Window.hpp>
 
+#include <simple_logger.h>
+
 #include "graphics.h"
 #include "camera.h"
 
@@ -20,6 +22,9 @@ Camera::Camera(glm::vec2 screen_size, glm::vec3 pos)
 	pitch = 0.0f;
 	yaw = -90.0f;
 	roll = 0.0f;
+
+	horizontal_angle = 3.14f;
+	vertical_angle = 0.0f;
 }
 
 glm::mat4 Camera::get_camera_view_matrix()
@@ -34,47 +39,50 @@ glm::mat4 Camera::get_camera_projection_matrix()
 
 void Camera::camera_get_keyboard_input(sf::Event event)
 {
-	float camera_speed = 0.5f;
+	float camera_speed = 100.0f;
 	sf::Keyboard::Key key = event.key.code;
-	float delta_time = Graphics::get_delta_time().asMicroseconds();
+	float delta_time = Graphics::get_delta_time().asSeconds();
 
 	if (key == sf::Keyboard::W)
 	{
-		position += camera_speed * forward;
+		position += camera_speed * delta_time * forward;
 	}
 	else if (key == sf::Keyboard::S)
 	{
-		position -= camera_speed * forward;
+		position -= camera_speed * delta_time * forward;
 	}
 	else if (key  == sf::Keyboard::D)
 	{
-		position += glm::normalize(glm::cross(forward, up)) * camera_speed;
+		position += glm::normalize(glm::cross(forward, up)) * delta_time * camera_speed;
 	}
 	else if (key == sf::Keyboard::A)
 	{
-		position -= glm::normalize(glm::cross(forward, up)) * camera_speed;
+		position -= glm::normalize(glm::cross(forward, up)) * delta_time * camera_speed;
 	}
 	else
 	{
 		return;
 	}
-	camera_update_view_matrix();
+
+	//camera_update_view_matrix();
 }
 
 void Camera::camera_get_mouse_input(sf::Event event)
 {
-	float sensitivity = 0.005f;
+	float sensitivity = 10;
 	float delta_time = Graphics::get_delta_time().asSeconds();
 
 	sf::Vector2i mouse_position = sf::Mouse::getPosition();
 	sf::Mouse::setPosition(sf::Vector2i(screen_dimensions.x/2, screen_dimensions.y/2), *Graphics::get_game_window());
 
-	float horizontal_angle = 3.14f;
-	float vertical_angle = 0.0f;
+	slog("mouse Position: %d, %d", mouse_position.x, mouse_position.y);
+	slog("set positon: %d, %d", screen_dimensions.x / 2, screen_dimensions.y / 2);
+	slog("mouse Position: %d, %d", sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+
 	float initial_fov = 45.0f;
 
-	horizontal_angle += sensitivity * float(screen_dimensions.x / 2 - mouse_position.x);
-	vertical_angle += sensitivity * float(screen_dimensions.y / 2 - mouse_position.y);
+	horizontal_angle += sensitivity * delta_time * float(screen_dimensions.x / 2 - mouse_position.x);
+	vertical_angle += sensitivity * delta_time * float(screen_dimensions.y / 2 - mouse_position.y);
 	
 	forward = glm::vec3(
 		cos(vertical_angle) * sin(horizontal_angle),
@@ -90,11 +98,10 @@ void Camera::camera_get_mouse_input(sf::Event event)
 
 	up = glm::cross(right, forward);
 
-	camera_update_view_matrix();
+	//camera_update_view_matrix();
 }
 
 void Camera::camera_update_view_matrix()
 {
 	view_matrix = glm::lookAt(position, target, up);
-
 }

@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include <simple_logger.h>
+
 #include "shader.h"
 
 GLuint BuildShaderProgram(const char *vsPath, const char *fsPath)
@@ -28,7 +30,7 @@ GLuint BuildShaderProgram(const char *vsPath, const char *fsPath)
 
 		glGetProgramInfoLog(tempProgram, infoLogLength, NULL, strInfoLog);
 
-		printf("Shader linker failure: %s\n", strInfoLog);
+		slog("Shader linker failure: %s\n", strInfoLog);
 		return 0;
 	}
 
@@ -54,7 +56,7 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
 	shaderFile = fopen(strShaderFile, "r");
 	if (!shaderFile)
 	{
-		printf("failed to open shader file: %s\n", strShaderFile);
+		slog("failed to open shader file: %s\n", strShaderFile);
 		return 0;
 	}
 	while (fscanf(shaderFile, "%c", &inChar) > 0)
@@ -90,7 +92,7 @@ GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
 			break;
 		}
 
-		printf("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
+		slog("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
 		return 0;
 	}
 

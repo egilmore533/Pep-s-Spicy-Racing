@@ -1,5 +1,7 @@
 #include <GL\glew.h>
 
+#include <simple_logger.h>
+
 #include "graphics.h"
 #include "shader.h"
 
@@ -20,7 +22,7 @@ Graphics::Graphics()
 	game_window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pep's Spicy Adventure", sf::Style::Default, settings);
 	if ((error = glewInit()) != GLEW_OK)
 	{
-		printf("Error: %s\n", glewGetErrorString(error));
+		slog("Error: %s\n", glewGetErrorString(error));
 		exit(1);
 	}
 
@@ -38,7 +40,7 @@ Graphics::Graphics()
 		exit(0);
 	}
 
-	printf("Using program %d\n", graphics_shader_program);
+	slog("Using program %d\n", graphics_shader_program);
 
 	game_delta_time.restart();
 }

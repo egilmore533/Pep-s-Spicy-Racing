@@ -1,5 +1,5 @@
-#ifndef _GRAPHICS_H_
-#define _GRAPHICS_H_
+#ifndef __GRAPHICS_H__
+#define __GRAPHICS_H__
 
 #include <SFML\OpenGL.hpp>
 #include <SFML\Graphics.hpp>

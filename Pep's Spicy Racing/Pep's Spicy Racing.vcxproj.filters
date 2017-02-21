@@ -33,6 +33,12 @@
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\simple_logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\graphics.h">
@@ -45,6 +51,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\simple_logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

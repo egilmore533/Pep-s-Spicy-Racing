@@ -1,5 +1,5 @@
-#ifndef _CAMERA_H_
-#define _CAMERA_H_
+#ifndef __CAMERA_H__
+#define __CAMERA_H__
 
 #include <glm\gtx\transform.hpp>
 
@@ -29,6 +29,9 @@ private:
 	float yaw;		/**< y-axis locked */
 	float pitch;	/**< x-axis locked */
 	float roll;		/**< z-axis locked probably will go unused*/ 
+
+	float horizontal_angle;
+	float vertical_angle;
 
 	glm::mat4 view_matrix;
 	glm::mat4 projection_matrix;

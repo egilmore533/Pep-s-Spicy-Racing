@@ -3,8 +3,12 @@
 #include <glm\glm.hpp>
 #include <glm\gtx\transform.hpp>
 
+#include <simple_logger.h>
+
 #include "graphics.h"
 #include "camera.h"
+#include "texture.h"
+
 
 static const GLfloat g_vertex_buffer_data[] = {
 	-1.0f,-1.0f,-1.0f, // triangle 1 : begin
@@ -124,6 +128,10 @@ int main()
 	GLuint cubeBufferObject;
 	GLuint colorbuffer;
 
+	init_logger("game_log.log");
+
+	//Texture myCubeTexture = Texture("images/joe.png", true, true);
+
 	Graphics *graphics = new Graphics;
 
 	glm::vec3 cameraPosition = glm::vec3(4.0f, 3.0f, 4.0f);
@@ -163,7 +171,9 @@ int main()
 			}
 		}
 
-		//camera->Camera::camera_get_mouse_input(event);
+		camera->Camera::camera_get_mouse_input(event);
+
+		camera->Camera::camera_update_view_matrix();
 
 		graphics->Graphics::graphics_frame_begin();
 

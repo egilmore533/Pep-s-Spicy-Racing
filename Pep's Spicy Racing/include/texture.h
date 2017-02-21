@@ -1,5 +1,5 @@
-#ifndef _TEXTURE_H_
-#define _TEXTURE_H_
+#ifndef __TEXTURE_H__
+#define __TEXTURE_H__
 
 #include <SFML\OpenGL.hpp>
 #include <SFML\Graphics.hpp>
@@ -13,7 +13,6 @@ public:
 	void texture_draw();
 
 private:
-	GLuint textureID;
 	sf::Texture texture;
 
 
