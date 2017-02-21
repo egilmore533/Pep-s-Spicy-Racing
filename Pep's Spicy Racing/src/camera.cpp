@@ -19,10 +19,6 @@ Camera::Camera(glm::vec2 screen_size, glm::vec3 pos)
 
 	projection_matrix = glm::perspective(glm::radians(45.0f), screen_size.x / screen_size.y, NEAR_CLIPPING_PLANE, FAR_CLIPPING_PLANE);
 
-	pitch = 0.0f;
-	yaw = -90.0f;
-	roll = 0.0f;
-
 	horizontal_angle = 3.14f;
 	vertical_angle = 0.0f;
 }
