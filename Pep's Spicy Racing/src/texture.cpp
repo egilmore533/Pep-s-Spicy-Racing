@@ -46,7 +46,7 @@ Texture::~Texture()
 
 }
 
-void Texture::texture_draw()
+void Texture::bind()
 {
 	sf::Texture::bind(&texture);
 }

@@ -21,30 +21,30 @@ public:
 	* @brief gets the camera's view matrix, used for drawing 3d objects in the model view projection matrix
 	* @return glm::mat4 the camera's view matrix member
 	*/
-	glm::mat4 get_camera_view_matrix();
+	glm::mat4 get_view_matrix();
 
 	/**
 	* @brief gets the camera's projection matrix, used for drawing 3d objects in the model view projection matrix
 	* @return glm::mat4 the camera's projection matrix member
 	*/
-	glm::mat4 get_camera_projection_matrix();
+	glm::mat4 get_projection_matrix();
 
 	/**
 	* @brief handles keyboard input and updates the camera's position accordingly, uses delta_time from graphics in an 
 	*		 attempt to keep movement smooth, it is still janky
 	*/
-	void camera_get_keyboard_input();
+	void get_keyboard_input();
 
 	/**
 	* @brief handles mouse positioning to rotate the camera, uses delta_time and some triginometry to 
 	*		 calculate how to rotate the camera smoothly, still janky
 	*/
-	void camera_get_mouse_input();
+	void get_mouse_input();
 
 	/**
 	* @brief update's the camera's view matrix using position + forward as the center, could use target instead
 	*/
-	void camera_update_view_matrix();
+	void update_view_matrix();
 
 private:	
 	glm::vec3 position;		/**< position of the camera in the game world */

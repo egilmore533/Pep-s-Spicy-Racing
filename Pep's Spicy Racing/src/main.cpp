@@ -168,16 +168,16 @@ int main()
 				running = 0;
 			}
 		}
-		camera->Camera::camera_get_mouse_input();
-		camera->Camera::camera_get_keyboard_input();
-		camera->Camera::camera_update_view_matrix();
+		camera->Camera::get_mouse_input();
+		camera->Camera::get_keyboard_input();
+		camera->Camera::update_view_matrix();
 
-		graphics->Graphics::graphics_frame_begin();
+		graphics->Graphics::frame_begin();
 
 		/*Drawing Code Start*/
 
-		model_view_projection = camera->Camera::get_camera_projection_matrix() *
-			camera->Camera::get_camera_view_matrix() * 
+		model_view_projection = camera->Camera::get_projection_matrix() *
+			camera->Camera::get_view_matrix() * 
 			model;
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
@@ -186,7 +186,7 @@ int main()
 
 		/*Drawing Code End*/
 
-		graphics->Graphics::graphics_next_frame();
+		graphics->Graphics::next_frame();
 
 
 	}

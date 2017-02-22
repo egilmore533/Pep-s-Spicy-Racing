@@ -56,13 +56,13 @@ sf::RenderWindow* Graphics::get_game_window()
 
 }
 
-void Graphics::graphics_frame_begin()
+void Graphics::frame_begin()
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Graphics::graphics_next_frame()
+void Graphics::next_frame()
 {
 	game_window->display();
 	game_delta_time.restart();

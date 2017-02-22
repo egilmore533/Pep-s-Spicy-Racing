@@ -10,7 +10,7 @@
 * @param *vsPath	a character pointer containing the path to our vertex shader file
 * @param *fsPath	a character pointer containing the path to our fragment shader file
 */
-GLuint BuildShaderProgram(const char *vsPath, const char *fsPath);
+GLuint build_shader_program(const char *vsPath, const char *fsPath);
 
 /**
 * @brief cimple compiler for our shader files, determines if vertex, fragment, or geometry 
@@ -18,6 +18,6 @@ GLuint BuildShaderProgram(const char *vsPath, const char *fsPath);
 * @param eShaderType	the type of shader being compiled
 * @param *strShaderFile	the path to the shader file being compiled
 */
-GLuint CreateShader(GLenum eShaderType, const char *strShaderFile);
+GLuint create_shader(GLenum eShaderType, const char *strShaderFile);
 
 #endif

@@ -31,13 +31,13 @@ public:
 	/**
 	* @brief clears the screen
 	*/
-	void graphics_frame_begin();
+	void frame_begin();
 
 	/**
 	* @brief displays the next frame to the window, also restarts the delta time for the game
     *		needs further implementation to calculate a fps
 	*/
-	void graphics_next_frame();
+	void next_frame();
 
 	/**
 	* @brief gets the time that has passed since the last frame

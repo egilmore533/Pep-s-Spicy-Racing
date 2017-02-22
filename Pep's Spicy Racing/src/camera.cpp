@@ -23,17 +23,17 @@ Camera::Camera(glm::vec2 screen_size, glm::vec3 pos)
 	vertical_angle = 0.0f;
 }
 
-glm::mat4 Camera::get_camera_view_matrix()
+glm::mat4 Camera::get_view_matrix()
 {
 	return view_matrix;
 }
 
-glm::mat4 Camera::get_camera_projection_matrix()
+glm::mat4 Camera::get_projection_matrix()
 {
 	return projection_matrix;
 }
 
-void Camera::camera_get_keyboard_input()
+void Camera::get_keyboard_input()
 {
 	float camera_speed = 16.0f;
 	float delta_time = Graphics::get_delta_time().asSeconds();
@@ -58,11 +58,9 @@ void Camera::camera_get_keyboard_input()
 	{
 		return;
 	}
-
-	//camera_update_view_matrix();
 }
 
-void Camera::camera_get_mouse_input()
+void Camera::get_mouse_input()
 {
 	float sensitivity = 1.0f;
 	float delta_time = Graphics::get_delta_time().asSeconds();
@@ -86,11 +84,9 @@ void Camera::camera_get_mouse_input()
 	);
 
 	up = glm::cross(right, forward);
-
-	//camera_update_view_matrix();
 }
 
-void Camera::camera_update_view_matrix()
+void Camera::update_view_matrix()
 {
 	view_matrix = glm::lookAt(position, position + forward, up);
 }

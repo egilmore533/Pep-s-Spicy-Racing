@@ -33,7 +33,7 @@ public:
 	/**
 	* @brief handles binding the texture
 	*/
-	void texture_draw();
+	void bind();
 
 private:
 	sf::Texture texture; /**< the data for the texture */

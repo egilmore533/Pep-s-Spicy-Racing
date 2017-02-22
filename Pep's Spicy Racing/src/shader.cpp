@@ -4,7 +4,7 @@
 
 #include "shader.h"
 
-GLuint BuildShaderProgram(const char *vsPath, const char *fsPath)
+GLuint build_shader_program(const char *vsPath, const char *fsPath)
 {
 	GLint infoLogLength;
 	GLuint vertexShader;
@@ -13,8 +13,8 @@ GLuint BuildShaderProgram(const char *vsPath, const char *fsPath)
 	GLint status;
 	GLchar strInfoLog[4096];
 
-	vertexShader = CreateShader(GL_VERTEX_SHADER, vsPath);
-	fragmentShader = CreateShader(GL_FRAGMENT_SHADER, fsPath);
+	vertexShader = create_shader(GL_VERTEX_SHADER, vsPath);
+	fragmentShader = create_shader(GL_FRAGMENT_SHADER, fsPath);
 
 	tempProgram = glCreateProgram();
 
@@ -40,7 +40,7 @@ GLuint BuildShaderProgram(const char *vsPath, const char *fsPath)
 	return tempProgram;
 }
 
-GLuint CreateShader(GLenum eShaderType, const char *strShaderFile)
+GLuint create_shader(GLenum eShaderType, const char *strShaderFile)
 {
 	char shaderSource[4096];
 	char inChar;
