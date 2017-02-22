@@ -50,7 +50,7 @@ GLuint Graphics::get_shader_program()
 	return graphics_shader_program;
 }
 
-sf::RenderWindow* Graphics::get_game_window()
+sf::RenderWindow *Graphics::get_game_window()
 {
 	return game_window;
 

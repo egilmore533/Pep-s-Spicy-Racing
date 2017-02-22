@@ -129,3 +129,71 @@ Mesh::~Mesh()
 		free(tris);
 	}
 }
+
+/**
+* @brief gets the number of vertices in this mesh, used for formatting the buffer in glBufferData
+*/
+int Mesh::get_num_vertices()
+{
+	return num_vertices;
+}
+
+/**
+* @brief gets the number of texels in this mesh, used for formatting the buffer in glBufferData
+*/
+int Mesh::get_num_texels()
+{
+	return num_texels;
+}
+
+/**
+* @brief gets the number of normals in this mesh, used for formatting the buffer in glBufferData
+*/
+int Mesh::get_num_normals()
+{
+	return num_normals;
+}
+
+/**
+* @brief gets the number of tris (triangles) in this mesh, used for formatting the buffer in glBufferData
+*/
+int Mesh::get_num_faces()
+{
+	return num_faces;
+}
+
+/**
+* @brief gets the pointer to the vertex data
+* @return glm::vec3 pointer to the Mesh's vertices member
+*/
+glm::vec3 *Mesh::get_vertices()
+{
+	return vertices;
+}
+
+/**
+* @brief gets the pointer to the texel data
+* @return glm::vec3 pointer to the Mesh's texels member
+*/
+glm::vec2 *Mesh::get_texels()
+{
+	return texels;
+}
+
+/**
+* @brief gets the pointer to the normals data
+* @return glm::vec3 pointer to the Mesh's normals member
+*/
+glm::vec3 *Mesh::get_normals()
+{
+	return normals;
+}
+
+/**
+* @brief gets the pointer to the triangle data
+* @return glm::vec3 pointer to the Mesh's tris member
+*/
+triangle *Mesh::get_tris()
+{
+	return tris;
+}

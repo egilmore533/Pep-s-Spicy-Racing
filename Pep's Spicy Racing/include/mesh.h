@@ -36,11 +36,59 @@ public:
 	*/
 	~Mesh();
 
+	/**
+	* @brief gets the number of vertices in this mesh, used for formatting the buffer in glBufferData
+	* @return int	the num_vertices member from the Mesh class
+	*/
+	int get_num_vertices();
+
+	/**
+	* @brief gets the number of texels in this mesh, used for formatting the buffer in glBufferData
+	* @return int	the num_texels member from the Mesh class
+	*/
+	int get_num_texels();
+
+	/**
+	* @brief gets the number of normals in this mesh, used for formatting the buffer in glBufferData
+	* @return int	the num_normals member from the Mesh class
+	*/
+	int get_num_normals();
+
+	/**
+	* @brief gets the number of faces (tris/triangles) in this mesh, used for formatting the buffer in glBufferData
+	* @return int	the num_faces member from the Mesh class
+	*/
+	int get_num_faces();
+
+	/**
+	* @brief gets the pointer to the vertex data
+	* @return glm::vec3 pointer to the Mesh's vertices member
+	*/
+	glm::vec3 *get_vertices();
+
+	/**
+	* @brief gets the pointer to the texel data
+	* @return glm::vec3 pointer to the Mesh's texels member
+	*/
+	glm::vec2 *get_texels();
+
+	/**
+	* @brief gets the pointer to the normals data
+	* @return glm::vec3 pointer to the Mesh's normals member
+	*/
+	glm::vec3 *get_normals();
+
+	/**
+	* @brief gets the pointer to the triangle data
+	* @return glm::vec3 pointer to the Mesh's tris member
+	*/
+	triangle *get_tris();
+
 private:
 	glm::vec3 *vertices;	/**< a pointer to all the vertices that this mesh has */
 	glm::vec2 *texels;		/**< a pointer to all the texels that this mesh has */
-	glm::vec3 *normals;		/**< a pointer to the normals that this mesh has */
-	triangle *tris;			/**< a pointer to the triangles this mesh has */
+	glm::vec3 *normals;		/**< a pointer to all the normals that this mesh has */
+	triangle *tris;			/**< a pointer to all the triangles this mesh has */
 
 	int  num_vertices = 0;	/**< number of vertices this mesh has allocated for and is storing */
 	int  num_normals = 0;	/**< number of normals this mesh has allocated for and is storing */

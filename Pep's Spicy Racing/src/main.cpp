@@ -89,7 +89,7 @@ static const GLfloat g_color_buffer_data[] = {
 	0.982f,  0.099f,  0.879f
 };
 
-void draw(GLuint shader, GLuint veterxBufferObject, GLuint colorBufferObject)
+void draw(GLuint shader, GLuint veterxBufferObject, GLuint colorBufferObject, Mesh *mesh)
 {
 
 	glUseProgram(shader);
@@ -109,14 +109,14 @@ void draw(GLuint shader, GLuint veterxBufferObject, GLuint colorBufferObject)
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferObject);
 	glVertexAttribPointer(
 		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-		3,                                // size
+		2,                                // size
 		GL_FLOAT,                         // type
 		GL_FALSE,                         // normalized?
 		0,                                // stride
 		(void*)0                          // array buffer offset
 	);
 
-	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
+	glDrawArrays(GL_TRIANGLES, 0, mesh->Mesh::get_num_vertices());
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -147,13 +147,13 @@ int main()
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
 	
 	glGenBuffers(1, &cubeBufferObject); //create the buffer
-	glBindBuffer(GL_ARRAY_BUFFER, cubeBufferObject); //we're "using" this one now
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW); //formatting the data for the buffer
+	glBindBuffer(GL_ARRAY_BUFFER, cubeBufferObject); //we're "using" this buffer (the one we just made in this case) now
+	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_vertices() * sizeof(glm::vec3), mesh->Mesh::get_vertices(), GL_STATIC_DRAW); //formatting the data for the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind the buffer
 
 	glGenBuffers(1, &colorbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_texels() * sizeof(glm::vec2), mesh->Mesh::get_texels(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	
 
@@ -182,7 +182,7 @@ int main()
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
 		
-		draw(graphics->Graphics::get_shader_program(), cubeBufferObject, colorbuffer);
+		draw(graphics->Graphics::get_shader_program(), cubeBufferObject, colorbuffer, mesh);
 
 		/*Drawing Code End*/
 
