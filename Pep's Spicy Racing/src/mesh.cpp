@@ -46,6 +46,7 @@ Mesh::Mesh(char *filename)
 			default:
 				break;
 			}
+			break;
 		case 'f':
 			fgets(buf, sizeof(buf), file);
 			num_faces++;
@@ -88,7 +89,7 @@ Mesh::Mesh(char *filename)
 			}
 			break;
 		case 'f':
-			fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d",
+			fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n",
 				&tris[f].corners[0].v, &tris[f].corners[0].vt, &tris[f].corners[0].vn,
 				&tris[f].corners[1].v, &tris[f].corners[1].vt, &tris[f].corners[1].vn,
 				&tris[f].corners[2].v, &tris[f].corners[2].vt, &tris[f].corners[2].vn
@@ -101,7 +102,11 @@ Mesh::Mesh(char *filename)
 		}
 	}
 
-	fclose(file);
+	if (file)
+	{
+		fclose(file);
+	}
+	
 }
 
 

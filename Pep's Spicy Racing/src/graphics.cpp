@@ -34,7 +34,7 @@ Graphics::Graphics()
 
 	graphics_shader_program = glCreateProgram();
 
-	graphics_shader_program = BuildShaderProgram("shader/vs1.glsl", "shader/fs1.glsl");
+	graphics_shader_program = build_shader_program("shader/vs1.glsl", "shader/fs1.glsl");
 	if (graphics_shader_program == -1)
 	{
 		exit(0);
