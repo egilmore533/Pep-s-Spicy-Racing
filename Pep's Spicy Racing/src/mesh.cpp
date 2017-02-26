@@ -100,7 +100,7 @@ Mesh::Mesh(char *filename)
 			fgets(buf, sizeof(buf), file);
 			break;
 		}
-	}
+	}	
 
 	if (file)
 	{

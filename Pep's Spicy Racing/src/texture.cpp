@@ -6,39 +6,40 @@
 
 Texture::Texture(char *filepath, bool repeated, bool smoothed)
 {
-	sf::Image *img_data = new sf::Image();
+	sf::Image *image = new sf::Image();
 
-	if (!img_data->loadFromFile(filepath))
+	if (!image->loadFromFile(filepath))
 	{
-		slog("Error Loading Texture: %s", filepath);
+		slog("Error Loading image: %s", filepath);
 		return;
 	}
 
 	glEnable(GL_TEXTURE_2D);
 
-	texture.setRepeated(repeated);
-	texture.setSmooth(smoothed);
+	glGenTextures(1, &texture);
+	// "Bind" the newly created texture : all future texture functions will modify this texture
+	glBindTexture(GL_TEXTURE_2D, texture);
 
-	//sf::Texture::bind(&texture);
-}
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->getSize().x, image->getSize().y, 0, GL_BGR, GL_UNSIGNED_BYTE, image->getPixelsPtr());
 
-Texture::Texture(char *filepath, bool repeated, bool smoothed, sf::Vector2i start_coordinates, sf::Vector2i size)
-{
-	if (!texture.loadFromFile(filepath, sf::IntRect(start_coordinates.x, start_coordinates.y, size.x, size.y)))
+	if (repeated)
 	{
-		slog("Error Loading Texture: %s", filepath);
-		return;
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
-
-	texture.setRepeated(repeated);
-	texture.setSmooth(smoothed);
-
-	glEnable(GL_TEXTURE_2D);
-
-	texture.setRepeated(repeated);
-	texture.setSmooth(smoothed);
-
-	sf::Texture::bind(&texture);
+	if (smoothed)
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	}
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
+	}
+	glGenerateMipmap(GL_TEXTURE_2D);
+	delete image;
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture::~Texture()
@@ -46,7 +47,11 @@ Texture::~Texture()
 
 }
 
-void Texture::bind()
+/**
+* @brief gets the unique texture ID for use
+* @return GLuint texture
+*/
+GLuint Texture::get_texture()
 {
-	sf::Texture::bind(&texture);
+	return texture;
 }
