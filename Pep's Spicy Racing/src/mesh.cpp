@@ -74,6 +74,8 @@ Mesh::Mesh(char *filename)
 			{
 			case '\0':
 				fscanf(file, "%f %f %f", &vertices[v].x, &vertices[v].y, &vertices[v].z);
+
+
 				v++;
 				break;
 			case 'n':
@@ -107,7 +109,7 @@ Mesh::Mesh(char *filename)
 		fclose(file);
 	}
 	
-	//setup_mesh();
+	setup_mesh();
 }
 
 /**
@@ -117,15 +119,45 @@ void Mesh::setup_mesh()
 {
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &uvbo);
+	glGenBuffers(1, &nbo);
 	glGenBuffers(1, &ebo);
 
 	glBindVertexArray(vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, get_num_vertices() * sizeof(glm::vec3), &get_vertices()[0], GL_STATIC_DRAW);
-	
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (GLvoid*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, uvbo);
+	glBufferData(GL_ARRAY_BUFFER, get_num_texels() * sizeof(glm::vec2), &get_texels()[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (GLvoid*)0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, nbo);
+	glBufferData(GL_ARRAY_BUFFER, get_num_normals() * sizeof(glm::vec3), &get_normals()[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (GLvoid*)0);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	//glBufferData((GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint), &this->indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, get_num_faces() * sizeof(triangle), &get_tris()[0], GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+}
+
+/**
+* @brief draws the mesh
+* @param shader_program	id of the shader program to use in drawing
+*/
+void Mesh::draw(GLuint shader_program)
+{
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, get_num_faces(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 

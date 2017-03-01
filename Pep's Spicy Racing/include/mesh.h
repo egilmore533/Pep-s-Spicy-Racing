@@ -10,9 +10,9 @@
  */
 typedef struct
 {
-	unsigned int v; /**< vertex index for the corner */
-	unsigned int vn; /**< normal index for the corner */
-	unsigned int vt; /**< texel index for the corner */
+	unsigned int v;		/**< vertex index for the corner */
+	unsigned int vn;	/**< normal index for the corner */
+	unsigned int vt;	/**< texel index for the corner */
 }triangle_corner;
 
 typedef struct
@@ -49,6 +49,12 @@ public:
 	 * @brief sets up the appropriate vertex array object and buffers for the mesh
 	 */
 	void setup_mesh();
+
+	/**
+	 * @brief draws the mesh
+	 * @param shader_program	id of the shader program to use in drawing
+	 */
+	void draw(GLuint shader_program);
 
 	/**
 	* @brief gets the number of vertices in this mesh, used for formatting the buffer in glBufferData
@@ -111,6 +117,8 @@ private:
 
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
 	GLuint vbo;		/**< vertex buffer obejct, used to contain our vertices array in a buffer for OpenGL to use*/
+	GLuint uvbo;	/**< uv buffer object, used to contain our uv array */
+	GLuint nbo;		/**< normal buffer object, used to contain our normal array */
 	GLuint ebo;		/**< element buffer object, used to store what order we want to draw each unique vertex (index drawing) */
 };
 

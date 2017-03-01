@@ -10,6 +10,17 @@
 #include "texture.h"
 #include "mesh.h"
 
+GLfloat test_vertices[] = {
+	0.5f,  0.5f, 0.0f,  // Top Right
+	0.5f, -0.5f, 0.0f,  // Bottom Right
+	-0.5f, -0.5f, 0.0f,  // Bottom Left
+	-0.5f,  0.5f, 0.0f   // Top Left 
+};
+GLuint test_indices[] = {  // Note that we start from 0!
+	0, 1, 3,   // First Triangle
+	1, 2, 3    // Second Triangle
+};
+
 
 static const GLfloat g_vertex_buffer_data[] = {
 	-1.0f,-1.0f,-1.0f, // triangle 1 : begin
@@ -102,9 +113,6 @@ int main()
 {
 	int running = 1;
 	
-	GLuint monkeyVertexBuffer;
-	GLuint textureVertexBuffer;
-
 	init_logger("game_log.log");
 
 	Graphics *graphics = new Graphics;
@@ -112,11 +120,6 @@ int main()
 	Texture *myTexture = new Texture("images/joe.png", true, true);
 
 	Mesh *mesh = new Mesh("models/monkey.obj");
-
-	slog("faces: %d", mesh->get_num_faces());
-	slog("normals: %d", mesh->get_num_normals());
-	slog("texels: %d", mesh->get_num_texels());
-	slog("vertices: %d", mesh->get_num_vertices());
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 model = glm::mat4(1.0f);
@@ -126,43 +129,7 @@ int main()
 	glm::mat4 model_view_projection; // = projectionMatrix * view * model;
 
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
-	GLuint textureID = glGetUniformLocation(graphics->Graphics::get_shader_program(), "myTextureSampler");
-
-	glGenVertexArrays(1, &monkeyVertexBuffer);
-	//glGenVertexArrays(1, &textureVertexBuffer);
-
-	glBindVertexArray(monkeyVertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, monkeyVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
-
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
-
-	/*
-	glBindVertexArray(textureVertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, textureVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(mesh->Mesh::get_texels()), mesh->Mesh::get_texels(), GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
-
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
-	*/
-
-
-	/*
-	glGenBuffers(1, &monkeyObjectBuffer); //create the buffer
-	glBindBuffer(GL_ARRAY_BUFFER, monkeyObjectBuffer); //we're "using" this buffer (the one we just made in this case) now
-	//glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_vertices() * sizeof(glm::vec3), mesh->Mesh::get_vertices(), GL_STATIC_DRAW); //formatting the data for the buffer
-	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_vertices() * sizeof(unsigned int), mesh->Mesh::get_vertices(), GL_STATIC_DRAW); //formatting the data for the buffer
-	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind the buffer
-
-	glGenBuffers(1, &textureObjectBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, textureObjectBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_texels() * sizeof(glm::vec2), mesh->Mesh::get_texels(), GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_texels() * sizeof(glm::vec2), mesh->Mesh::get_texels(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	*/
+	//GLuint textureID = glGetUniformLocation(graphics->Graphics::get_shader_program(), "myTextureSampler");
 
 	while(running)
 	{
@@ -189,7 +156,7 @@ int main()
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
 		
-		draw(graphics->Graphics::get_shader_program(), monkeyVertexBuffer, textureVertexBuffer, mesh);
+		mesh->draw(graphics->Graphics::get_shader_program());
 
 		/*Drawing Code End*/
 
