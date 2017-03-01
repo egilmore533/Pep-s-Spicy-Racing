@@ -1,6 +1,8 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
+#include <GL/glew.h>
+
 #include <glm/glm.hpp>
 
 /**
@@ -12,6 +14,13 @@ typedef struct
 	unsigned int vn; /**< normal index for the corner */
 	unsigned int vt; /**< texel index for the corner */
 }triangle_corner;
+
+typedef struct
+{
+	glm::vec3 position;
+	glm::vec3 normal;
+	glm::vec2 texel;
+}vertex;
 
 /**
 * @struct triangle, used to store data about a face/triangle from an .obj file, stores data from three points
@@ -35,6 +44,11 @@ public:
 	* @brief deconstructor for the mesh, destroys the data from the vertices, texels, normals, and triangles
 	*/
 	~Mesh();
+
+	/**
+	 * @brief sets up the appropriate vertex array object and buffers for the mesh
+	 */
+	void setup_mesh();
 
 	/**
 	* @brief gets the number of vertices in this mesh, used for formatting the buffer in glBufferData
@@ -94,6 +108,10 @@ private:
 	int  num_normals = 0;	/**< number of normals this mesh has allocated for and is storing */
 	int  num_texels = 0;	/**< number of texels this mesh has allocated for and is storing */
 	int  num_faces = 0;		/**< number of faces this mesh has allocated for and is storing */
+
+	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
+	GLuint vbo;		/**< vertex buffer obejct, used to contain our vertices array in a buffer for OpenGL to use*/
+	GLuint ebo;		/**< element buffer object, used to store what order we want to draw each unique vertex (index drawing) */
 };
 
 #endif

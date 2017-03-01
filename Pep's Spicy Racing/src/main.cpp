@@ -89,45 +89,21 @@ static const GLfloat g_color_buffer_data[] = {
 	0.982f,  0.099f,  0.879f
 };
 
-void draw(GLuint shader, GLuint veterxBufferObject, GLuint colorBufferObject, Mesh *mesh)
+void draw(GLuint shader, GLuint veterxArrayObject, GLuint colorArrayObject, Mesh *mesh)
 {
-
 	glUseProgram(shader);
-	
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, veterxBufferObject);
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
-
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, colorBufferObject);
-	glVertexAttribPointer(
-		1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
-		2,                                // size
-		GL_FLOAT,                         // type
-		GL_FALSE,                         // normalized?
-		0,                                // stride
-		(void*)0                          // array buffer offset
-	);
-
-	glDrawArrays(GL_TRIANGLES, 0, mesh->Mesh::get_num_vertices() * 3);
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+	glBindVertexArray(veterxArrayObject);
+	//glBindVertexArray(colorArrayObject);
+	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
+	glBindVertexArray(0);
 }
 
 int main()
 {
 	int running = 1;
 	
-	GLuint monkeyObjectBuffer;
-	GLuint textureObjectBuffer;
+	GLuint monkeyVertexBuffer;
+	GLuint textureVertexBuffer;
 
 	init_logger("game_log.log");
 
@@ -136,6 +112,11 @@ int main()
 	Texture *myTexture = new Texture("images/joe.png", true, true);
 
 	Mesh *mesh = new Mesh("models/monkey.obj");
+
+	slog("faces: %d", mesh->get_num_faces());
+	slog("normals: %d", mesh->get_num_normals());
+	slog("texels: %d", mesh->get_num_texels());
+	slog("vertices: %d", mesh->get_num_vertices());
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 model = glm::mat4(1.0f);
@@ -147,18 +128,41 @@ int main()
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
 	GLuint textureID = glGetUniformLocation(graphics->Graphics::get_shader_program(), "myTextureSampler");
 
+	glGenVertexArrays(1, &monkeyVertexBuffer);
+	//glGenVertexArrays(1, &textureVertexBuffer);
 
+	glBindVertexArray(monkeyVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, monkeyVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
+	/*
+	glBindVertexArray(textureVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, textureVertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mesh->Mesh::get_texels()), mesh->Mesh::get_texels(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+	*/
+
+
+	/*
 	glGenBuffers(1, &monkeyObjectBuffer); //create the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, monkeyObjectBuffer); //we're "using" this buffer (the one we just made in this case) now
 	//glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_vertices() * sizeof(glm::vec3), mesh->Mesh::get_vertices(), GL_STATIC_DRAW); //formatting the data for the buffer
-	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_faces() * sizeof(triangle), &mesh->Mesh::get_tris()[0].corners[0], GL_STATIC_DRAW); //formatting the data for the buffer
+	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_vertices() * sizeof(unsigned int), mesh->Mesh::get_vertices(), GL_STATIC_DRAW); //formatting the data for the buffer
 	glBindBuffer(GL_ARRAY_BUFFER, 0); //unbind the buffer
 
 	glGenBuffers(1, &textureObjectBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, textureObjectBuffer);
 	//glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_texels() * sizeof(glm::vec2), mesh->Mesh::get_texels(), GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_texels() * sizeof(glm::vec2), &mesh->Mesh::get_texels()[0][0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, mesh->Mesh::get_num_texels() * sizeof(glm::vec2), mesh->Mesh::get_texels(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	*/
 
 	while(running)
 	{
@@ -185,11 +189,7 @@ int main()
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
 		
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, myTexture->Texture::get_texture());
-		glUniform1i(textureID, 0);
-		
-		draw(graphics->Graphics::get_shader_program(), monkeyObjectBuffer, textureObjectBuffer, mesh);
+		draw(graphics->Graphics::get_shader_program(), monkeyVertexBuffer, textureVertexBuffer, mesh);
 
 		/*Drawing Code End*/
 

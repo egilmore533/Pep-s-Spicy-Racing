@@ -107,6 +107,25 @@ Mesh::Mesh(char *filename)
 		fclose(file);
 	}
 	
+	//setup_mesh();
+}
+
+/**
+* @brief sets up the appropriate vertex array object and buffers for the mesh
+*/
+void Mesh::setup_mesh()
+{
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ebo);
+
+	glBindVertexArray(vao);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, get_num_vertices() * sizeof(glm::vec3), &get_vertices()[0], GL_STATIC_DRAW);
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	//glBufferData((GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(GLuint), &this->indices[0], GL_STATIC_DRAW);
 }
 
 
