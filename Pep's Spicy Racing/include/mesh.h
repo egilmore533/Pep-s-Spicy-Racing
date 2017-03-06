@@ -1,6 +1,8 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
+#include <vector>
+
 #include <GL/glew.h>
 
 #include <glm/glm.hpp>
@@ -46,80 +48,85 @@ public:
 	~Mesh();
 
 	/**
-	 * @brief sets up the appropriate vertex array object and buffers for the mesh
-	 */
-	void setup_mesh();
-
-	/**
 	 * @brief draws the mesh
 	 * @param shader_program	id of the shader program to use in drawing
 	 */
 	void draw(GLuint shader_program);
 
-	/**
-	* @brief gets the number of vertices in this mesh, used for formatting the buffer in glBufferData
-	* @return int	the num_vertices member from the Mesh class
-	*/
-	int get_num_vertices();
-
-	/**
-	* @brief gets the number of texels in this mesh, used for formatting the buffer in glBufferData
-	* @return int	the num_texels member from the Mesh class
-	*/
-	int get_num_texels();
-
-	/**
-	* @brief gets the number of normals in this mesh, used for formatting the buffer in glBufferData
-	* @return int	the num_normals member from the Mesh class
-	*/
-	int get_num_normals();
-
-	/**
-	* @brief gets the number of faces (tris/triangles) in this mesh, used for formatting the buffer in glBufferData
-	* @return int	the num_faces member from the Mesh class
-	*/
-	int get_num_faces();
-
-	/**
-	* @brief gets the pointer to the vertex data
-	* @return glm::vec3 pointer to the Mesh's vertices member
-	*/
-	glm::vec3 *get_vertices();
-
-	/**
-	* @brief gets the pointer to the texel data
-	* @return glm::vec3 pointer to the Mesh's texels member
-	*/
-	glm::vec2 *get_texels();
-
-	/**
-	* @brief gets the pointer to the normals data
-	* @return glm::vec3 pointer to the Mesh's normals member
-	*/
-	glm::vec3 *get_normals();
-
-	/**
-	* @brief gets the pointer to the triangle data
-	* @return glm::vec3 pointer to the Mesh's tris member
-	*/
-	triangle *get_tris();
+	
 
 private:
-	glm::vec3 *vertices;	/**< a pointer to all the vertices that this mesh has */
-	glm::vec2 *texels;		/**< a pointer to all the texels that this mesh has */
-	glm::vec3 *normals;		/**< a pointer to all the normals that this mesh has */
-	triangle *tris;			/**< a pointer to all the triangles this mesh has */
+	/**
+	 * @brief loads data from an obj file into this mesh, looking for vertices, uvs, normals, and faces
+	 * @param filename		the filepath to the obj file to load from
+	 */
+	void load_obj(char *filename);
 
-	int  num_vertices = 0;	/**< number of vertices this mesh has allocated for and is storing */
-	int  num_normals = 0;	/**< number of normals this mesh has allocated for and is storing */
-	int  num_texels = 0;	/**< number of texels this mesh has allocated for and is storing */
-	int  num_faces = 0;		/**< number of faces this mesh has allocated for and is storing */
+	/**
+	 * @brief gets a vertex that is near if it already exists in the indexed data
+	 * @param in_vertex		vertex to check if already indexed
+	 * @param in_uv			uv to check if already indexed
+	 * @param in_normal		normal to check if already indexed
+	 * @return the index if found, else -1
+	 */
+	int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::vec3 in_normal);
 
+	/**
+	 * @brief index the vertices, uvs, and normals for use in a vertex buffer object
+	 */
+	void Mesh::index_data();
+
+	/**
+	 * @brief sets up the appropriate vertex array object and buffers for the mesh
+	 */
+	void setup_buffers();
+
+	unsigned int get_num_indexed_vertices();
+
+	unsigned int get_num_indexed_uvs();
+
+	unsigned int get_num_indexed_normals();
+
+	unsigned int get_num_indices();
+
+	std::vector<glm::vec3> get_indexed_vertices();
+
+	std::vector<glm::vec2> get_indexed_uvs();
+
+	std::vector<glm::vec3> get_indexed_normals();
+
+	std::vector<unsigned short> get_indices();
+
+/////////////////Data Structures////////////////////
+	//data from the file, unchanged
+	std::vector<glm::vec3> vertices;	/**< vertices from the obj file */
+	std::vector<glm::vec2> uvs;			/**< uvs from the obj file */
+	std::vector<glm::vec3> normals;		/**< normals from the obj file */
+	
+	//data from the face section of the obj, unchanged
+	std::vector<unsigned int> vertex_indices;	/**< unique identifier (not the line numbers) of the vertices from the obj */
+	std::vector<unsigned int> uv_indices;		/**< unique identifier of the uvs from the obj */
+	std::vector<unsigned int> normal_indices;	/**< unique identifier of the normals from the obj */
+
+	//this is the indexed section, used to make drawing easier
+	std::vector<unsigned short> indices;		/**< the unique indices for the mesh data */
+	std::vector<glm::vec3> indexed_vertices;    /**< all the unique vertices in the order they are needed for referencing through indexed rendering */
+	std::vector<glm::vec2> indexed_uvs;			/**< all the unique uvs in the order they are needed for referencing through indexed rendering */
+	std::vector<glm::vec3> indexed_normals;		/**< all the unique normals in the order they are needed for referencing through indexed rendering */
+
+	//vertex buffer objects
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
 	GLuint vbo;		/**< vertex buffer obejct, used to contain our vertices array in a buffer for OpenGL to use*/
-	GLuint uvbo;	/**< uv buffer object, used to contain our uv array */
-	GLuint nbo;		/**< normal buffer object, used to contain our normal array */
 	GLuint ebo;		/**< element buffer object, used to store what order we want to draw each unique vertex (index drawing) */
 };
+
+/**
+ * @brief utility function; 
+ *		 determines if two floats are close enough together to be considered equal
+ * @param v1	first float
+ * @param v2	second float
+ * @return bool true if near, else false
+ */
+bool is_near(float v1, float v2);
 
 #endif
