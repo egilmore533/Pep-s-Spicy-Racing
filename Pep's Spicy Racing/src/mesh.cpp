@@ -10,8 +10,9 @@
 
 Mesh::Mesh(char *filename)
 {
-	load_obj(filename);
-	setup_buffers();
+	this->load_obj(filename);
+	this->index_data();
+	this->setup_buffers();
 }
 
 /**
@@ -68,6 +69,7 @@ void Mesh::load_obj(char *filename)
 			default:
 				break;
 			}
+			break;
 		case 'f':
 		{
 			std::string vertex1, vertex2, vertex3;
@@ -102,26 +104,20 @@ void Mesh::load_obj(char *filename)
 }
 
 /**
- * @brief determines if two floats are close enough together to be considered equal
- * @param v1	first float
- * @param v2	second float
- * @return bool true if near, else false
- */
-bool is_near(float v1, float v2) {
-	return fabs(v1 - v2) < 0.01f;
-}
-
-/**
  * @brief gets a vertex that is near if it already exists in the indexed data
  * @param in_vertex		vertex to check if already indexed
  * @param in_uv			uv to check if already indexed
  * @param in_normal		normal to check if already indexed
- * @return the index if found, else -1
+ * @return int the index if found, else -1
  */
 int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::vec3 in_normal)
 {
+	return -1;
+	/*
+	
 	// Lame linear search
-	for (unsigned int i = 0; i<indexed_vertices.size(); i++) {
+	for (unsigned int i = 0; i<indexed_vertices.size(); i++) 
+	{
 		if (
 			//similar means same position, same UV, and same normal
 			is_near(in_vertex.x, indexed_vertices[i].x) &&
@@ -132,13 +128,15 @@ int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::ve
 			is_near(in_normal.x, indexed_normals[i].x) &&
 			is_near(in_normal.y, indexed_normals[i].y) &&
 			is_near(in_normal.z, indexed_normals[i].z)
-			) {
+			) 
+		{
 			return i;
 		}
 	}
 	// No other vertex could be used instead.
 	// Looks like we'll have to add it to the VBO.
 	return -1;
+	*/
 }
 
 /**
@@ -295,4 +293,14 @@ std::vector<glm::vec3> Mesh::get_indexed_normals()
 std::vector<unsigned short> Mesh::get_indices()
 {
 	return indices;
+}
+
+/**
+* @brief determines if two floats are close enough together to be considered equal
+* @param v1	first float
+* @param v2	second float
+* @return bool true if near, else false
+*/
+bool is_near(float v1, float v2) {
+	return fabs(v1 - v2) < 0.01f;
 }

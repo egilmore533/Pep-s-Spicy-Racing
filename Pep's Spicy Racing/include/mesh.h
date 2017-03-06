@@ -62,6 +62,8 @@ private:
 	 */
 	void load_obj(char *filename);
 
+	int get_same_vertex_index();
+
 	/**
 	 * @brief gets a vertex that is near if it already exists in the indexed data
 	 * @param in_vertex		vertex to check if already indexed
@@ -69,12 +71,12 @@ private:
 	 * @param in_normal		normal to check if already indexed
 	 * @return the index if found, else -1
 	 */
-	int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::vec3 in_normal);
+	int get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::vec3 in_normal);
 
 	/**
 	 * @brief index the vertices, uvs, and normals for use in a vertex buffer object
 	 */
-	void Mesh::index_data();
+	void index_data();
 
 	/**
 	 * @brief sets up the appropriate vertex array object and buffers for the mesh

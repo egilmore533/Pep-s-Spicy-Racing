@@ -66,7 +66,7 @@ void Camera::get_mouse_input()
 	float delta_time = Graphics::get_delta_time().asSeconds();
 
 	sf::Vector2i mouse_position = sf::Mouse::getPosition(*Graphics::get_game_window());
-	sf::Mouse::setPosition(sf::Vector2i(screen_dimensions.x/2, screen_dimensions.y/2), *Graphics::get_game_window());
+	//sf::Mouse::setPosition(sf::Vector2i(screen_dimensions.x/2, screen_dimensions.y/2), *Graphics::get_game_window());
 
 	horizontal_angle += sensitivity * delta_time * float(screen_dimensions.x / 2 - mouse_position.x);
 	vertical_angle += sensitivity * delta_time * float(screen_dimensions.y / 2 - mouse_position.y);
