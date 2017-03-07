@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #include <string>
-#include <cstring>
 
 #include <simple_logger.h>
 
@@ -112,11 +111,8 @@ void Mesh::load_obj(char *filename)
  */
 int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::vec3 in_normal)
 {
-	return -1;
-	/*
-	
 	// Lame linear search
-	for (unsigned int i = 0; i<indexed_vertices.size(); i++) 
+	for (int i = 0; i<indexed_vertices.size(); i++) 
 	{
 		if (
 			//similar means same position, same UV, and same normal
@@ -136,7 +132,6 @@ int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::ve
 	// No other vertex could be used instead.
 	// Looks like we'll have to add it to the VBO.
 	return -1;
-	*/
 }
 
 /**
@@ -145,10 +140,10 @@ int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::ve
 void Mesh::index_data()
 {
 	// For each input vertex
-	for (unsigned int i = 0; i<vertices.size(); i++) {
-
+	for (unsigned int i = 0; i<vertices.size(); i++) 
+	{
 		// Try to find a similar vertex that has already been indexed
-		unsigned short index;
+		int index;
 		index = get_similar_vertex_index(vertices[i], uvs[i], normals[i]);
 
 		//this vertex hasn't yet been indexed so it needs to be added
@@ -159,7 +154,8 @@ void Mesh::index_data()
 			indexed_normals.push_back(normals[i]);
 			indices.push_back((unsigned short)vertices.size() - 1);
 		}
-		else { // A similar vertex is already in the VBO, use it instead !
+		else
+		{ 
 			indices.push_back(index);
 		}
 	}
@@ -170,6 +166,10 @@ void Mesh::index_data()
 */
 void Mesh::setup_buffers()
 {
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ebo);
+
 	// ..:: Initialization code :: ..
 	// 1. Bind Vertex Array Object
 	glBindVertexArray(vao);

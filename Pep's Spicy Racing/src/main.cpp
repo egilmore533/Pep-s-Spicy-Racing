@@ -1,3 +1,7 @@
+#ifndef _DEBUG
+#include <windows.hpp>
+#endif
+
 #include <GL/glew.h>
 
 #include <glm\glm.hpp>
@@ -9,12 +13,13 @@
 #include "camera.h"
 #include "texture.h"
 #include "mesh.h"
+#include "entity.h"
 
 GLfloat test_vertices[] = {
-	// Positions         // Colors
-	0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // Bottom Right
-	-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // Bottom Left
-	0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // Top 
+	0.5f,  0.5f, 0.0f,  // Top Right
+	0.5f, -0.5f, 0.0f,  // Bottom Right
+	-0.5f, -0.5f, 0.0f,  // Bottom Left
+	-0.5f,  0.5f, 0.0f   // Top Left 
 };
 
 GLuint test_indices[] = {  // Note that we start from 0!
@@ -43,12 +48,13 @@ int main()
 	int running = 1;
 	
 	init_logger("game_log.log");
+	entity_initialize_system(10);
 
 	Graphics *graphics = new Graphics;
 
-	Texture *myTexture = new Texture("images/joe.png", true, true);
+	//Texture *myTexture = new Texture("images/joe.png", true, true);
 
-	Mesh *mesh = new Mesh("models/monkey.obj");
+	Mesh *mesh = new Mesh("models/cube.obj");
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 model = glm::mat4(1.0f);
@@ -59,6 +65,27 @@ int main()
 
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
 	//GLuint textureID = glGetUniformLocation(graphics->Graphics::get_shader_program(), "ourTexture");
+
+	GLuint VAO, VBO, EBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+	// 2. Copy our vertices array in a vertex buffer for OpenGL to use
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(test_vertices), test_vertices, GL_STATIC_DRAW);
+	// 3. Copy our index array in a element buffer for OpenGL to use
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(test_indices), test_indices, GL_STATIC_DRAW);
+	// 3. Then set the vertex attributes pointers
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	// 4. Unbind VAO (NOT the EBO)
+	glBindVertexArray(0);
+
+
+	Entity *my_entity = entity_new(100, 1.0f);
 
 	while(running)
 	{
@@ -84,6 +111,11 @@ int main()
 			model;
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
+		
+		glUseProgram(graphics->Graphics::get_shader_program());
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 		
 
 		mesh->draw(graphics->Graphics::get_shader_program());

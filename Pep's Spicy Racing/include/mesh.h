@@ -53,16 +53,12 @@ public:
 	 */
 	void draw(GLuint shader_program);
 
-	
-
 private:
 	/**
 	 * @brief loads data from an obj file into this mesh, looking for vertices, uvs, normals, and faces
 	 * @param filename		the filepath to the obj file to load from
 	 */
 	void load_obj(char *filename);
-
-	int get_same_vertex_index();
 
 	/**
 	 * @brief gets a vertex that is near if it already exists in the indexed data
@@ -83,20 +79,52 @@ private:
 	 */
 	void setup_buffers();
 
+	/**
+	* @brief gets the number of indexed vertices for use in drawing
+	* @return unsigned int the size of the indexed_vertices
+	*/
 	unsigned int get_num_indexed_vertices();
 
+	/**
+	* @brief gets the number of indexed uvs for use in drawing
+	* @return unsigned int the size of the indexed_uvs
+	*/
 	unsigned int get_num_indexed_uvs();
 
+	/**
+	* @brief gets the number of indexed normals for use in drawing
+	* @return unsigned int the size of the indexed_normals
+	*/
 	unsigned int get_num_indexed_normals();
 
+	/**
+	* @brief gets the number of indices for use in drawing
+	* @return unsigned int the size of the indices
+	*/
 	unsigned int get_num_indices();
 
+	/**
+	* @brief gets the indexed vertices for use in drawing
+	* @return std::vector<glm::vec3> the indexed_vertices
+	*/
 	std::vector<glm::vec3> get_indexed_vertices();
 
+	/**
+	* @brief gets the indexed uvs for use in drawing
+	* @return std::vector<glm::vec2> the indexed_uvs
+	*/
 	std::vector<glm::vec2> get_indexed_uvs();
 
+	/**
+	* @brief gets the indexed normals for use in drawing
+	* @return std::vector<glm::vec3> the indexed_normals
+	*/
 	std::vector<glm::vec3> get_indexed_normals();
 
+	/**
+	* @brief gets the indices for use in drawing
+	* @return std::vector<unsigned short> the indices
+	*/
 	std::vector<unsigned short> get_indices();
 
 /////////////////Data Structures////////////////////
@@ -120,6 +148,11 @@ private:
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
 	GLuint vbo;		/**< vertex buffer obejct, used to contain our vertices array in a buffer for OpenGL to use*/
 	GLuint ebo;		/**< element buffer object, used to store what order we want to draw each unique vertex (index drawing) */
+
+	GLuint vertex_buffer;
+	GLuint uv_buffer;
+	GLuint normal_buffer;
+	GLuint element_buffer;
 };
 
 /**
