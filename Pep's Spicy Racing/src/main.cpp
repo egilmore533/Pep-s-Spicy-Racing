@@ -50,7 +50,7 @@ int main()
 
 	Mesh *mesh = new Mesh("models/monkey.obj");
 
-	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 10.0f);
 	glm::mat4 model = glm::mat4(1.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 

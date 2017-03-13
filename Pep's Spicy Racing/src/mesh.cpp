@@ -264,8 +264,9 @@ void Mesh::draw(GLuint shader_program)
 	);
 	*/
 
-
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	for (int i = 0; i < vertices.size(); i += 3)
+		glDrawArrays(GL_LINE_LOOP, i, 3);
+	//glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
 	glDisableVertexAttribArray(0);
 
