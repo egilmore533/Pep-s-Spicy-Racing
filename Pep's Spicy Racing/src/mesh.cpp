@@ -22,6 +22,9 @@ void Mesh::load_obj(char *filename)
 {
 	FILE *file;
 	char buf[512];
+	std::vector<glm::vec3> temp_vertices;
+	std::vector<glm::vec2> temp_uvs;
+	std::vector<glm::vec3> temp_normals;
 
 	if (!filename)
 	{
@@ -47,14 +50,14 @@ void Mesh::load_obj(char *filename)
 			{
 				glm::vec3 vertex;
 				fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-				vertices.push_back(vertex);
+				temp_vertices.push_back(vertex);
 				break;
 			}
 			case 'n':
 			{
 				glm::vec3 normal;
 				fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-				normals.push_back(normal);
+				temp_normals.push_back(normal);
 				break;
 			}
 			case 't':
@@ -62,7 +65,7 @@ void Mesh::load_obj(char *filename)
 				glm::vec2 uv;
 				fscanf(file, "%f %f\n", &uv.x, &uv.y);
 				uv.y = -uv.y;
-				uvs.push_back(uv);
+				temp_uvs.push_back(uv);
 				break;
 			}
 			default:
@@ -100,6 +103,26 @@ void Mesh::load_obj(char *filename)
 	{
 		fclose(file);
 	}
+
+	// For each vertex of each triangle
+	for (unsigned int i = 0; i<vertex_indices.size(); i++) {
+
+		// Get the indices of its attributes
+		unsigned int vertexIndex = vertex_indices[i];
+		unsigned int uvIndex = uv_indices[i];
+		unsigned int normalIndex = normal_indices[i];
+
+		// Get the attributes thanks to the index
+		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+		glm::vec2 uv = temp_uvs[uvIndex - 1];
+		glm::vec3 normal = temp_normals[normalIndex - 1];
+
+		// Put the attributes in the actual buffers
+		vertices.push_back(vertex);
+		uvs.push_back(uv);
+		normals.push_back(normal);
+	}
+	slog("finished loading");
 }
 
 /**
@@ -166,6 +189,7 @@ void Mesh::index_data()
 */
 void Mesh::setup_buffers()
 {
+	/*
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);
@@ -181,15 +205,18 @@ void Mesh::setup_buffers()
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, get_num_indices() * sizeof(unsigned int), &get_indices()[0], GL_STATIC_DRAW);
 		// 3. Then set the vertex attributes pointers
 		// Position attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 	// 4. Unbind VAO (NOT the EBO)
 	glBindVertexArray(0);
+	*/
 
-	/*
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	
 	glGenBuffers(1, &vertex_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	glBufferData(GL_ARRAY_BUFFER, get_num_indexed_vertices() * sizeof(glm::vec3), &get_indexed_vertices()[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
 	glGenBuffers(1, &uv_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uv_buffer);
@@ -202,7 +229,6 @@ void Mesh::setup_buffers()
 	glGenBuffers(1, &element_buffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, get_num_indices() * sizeof(unsigned short), &get_indices()[0], GL_STATIC_DRAW);
-	*/
 }
 
 /**
@@ -212,9 +238,42 @@ void Mesh::setup_buffers()
 void Mesh::draw(GLuint shader_program)
 {
 	glUseProgram(shader_program);
+
+	// 1rst attribute buffer : vertices
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+	glVertexAttribPointer(
+		0,                  // attribute
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride
+		(void*)0            // array buffer offset
+	);
+	
+	/*
+	// Index buffer
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer);
+
+	// Draw the triangles !
+	glDrawElements(
+		GL_TRIANGLES,      // mode
+		indices.size(),    // count
+		GL_UNSIGNED_SHORT,   // type
+		(void*)0           // element array buffer offset
+	);
+	*/
+
+
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+
+	glDisableVertexAttribArray(0);
+
+	/*
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, get_num_indices(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+	*/
 }
 
 

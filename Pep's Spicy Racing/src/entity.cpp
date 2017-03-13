@@ -86,11 +86,13 @@ void entity_free(Entity **entity)
 
 /**
 * @brief gets a pointer to the next free entity that we can use in the entity_list
+* @param filename the filepath to the model for this entity
 * @param think_rate the rate at which this new entity will think
 * @param move_speed the movement speed of this new entity
+* @param shader_program the shader program that will be used to draw this entity
 * @return a pointer to the next entity to be used
 */
-Entity *entity_new(int think_rate, float move_speed)
+Entity *entity_new(char *filename, int think_rate, float move_speed, GLuint shader_program)
 {
 	int i;
 	//makesure we have the room for a new entity
@@ -109,13 +111,42 @@ Entity *entity_new(int think_rate, float move_speed)
 		//found the first entity in the list that is free to use, 
 		// clear memory, fill out config data, increment entityNum, and return the new entity
 		memset(&entity_list[i], 0, sizeof(Entity));
-
 		entity_list[i].in_use = true;
 		entity_list[i].think_rate = think_rate;
 		entity_list[i].move_speed = move_speed;
+		entity_list[i].mesh = new Mesh(filename);
 		entity_num++;
 
 		return &entity_list[i];
 	}
 	return NULL;
+}
+
+/**
+* @brief draws every entity that is in use in the entity_list by running their draw function pointers
+*/
+void entitiy_draw_all()
+{
+	int i;
+	Entity *cam = NULL; //get the camera
+	for (i = 0; i < entity_max; i++)
+	{
+		if (!entity_list[i].in_use)
+		{
+			continue;
+		}
+		/*
+		if (!entity_list[i].draw)
+		{
+			continue;
+		}
+		*/
+		entity_list[i].draw();
+	}
+}
+
+
+void Entity::draw()
+{
+	mesh->Mesh::draw(shader_program);
 }

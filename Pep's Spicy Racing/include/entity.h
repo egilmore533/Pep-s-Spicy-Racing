@@ -27,7 +27,7 @@ public:
 	void think();
 
 	/**
-	 * @brief draws the entity to the screen
+	 * @brief draws the entity to the screen using basic drawing stuff
 	 */
 	void draw();
 
@@ -38,6 +38,7 @@ public:
 	float move_speed;			/**< the movement speed of the entity */
 	//Sprite *sprite;			/**< the sprite that belongs to this entity */
 	//Soundpack *soundpack;		/**< the soundpak that belongs to this entity */
+	GLuint shader_program;
 };
 
 /**
@@ -50,9 +51,10 @@ void entity_free(Entity **entity);
 * @brief gets a pointer to the next free entity that we can use in the entity_list
 * @param think_rate the rate at which this new entity will think
 * @param move_speed the movement speed of this new entity
+* @param shader_program the shader program that will be used to draw this entity
 * @return a pointer to the next entity to be used
 */
-Entity *entity_new(int think_rate, float move_speed);
+Entity *entity_new(char *filename, int think_rate, float move_speed, GLuint shader_program);
 
 /**
  * @brief intializes the entity system to be used as a resource manager, sets all pointers to NULL

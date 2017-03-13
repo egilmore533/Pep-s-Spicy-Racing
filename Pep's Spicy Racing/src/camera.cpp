@@ -35,7 +35,7 @@ glm::mat4 Camera::get_projection_matrix()
 
 void Camera::get_keyboard_input()
 {
-	float camera_speed = 16.0f;
+	float camera_speed = 32.0f;
 	float delta_time = Graphics::get_delta_time().asSeconds();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))

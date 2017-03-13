@@ -27,12 +27,6 @@ GLuint test_indices[] = {  // Note that we start from 0!
 	1, 2, 3    // Second Triangle
 };
 
-GLfloat texCoords[] = {
-	0.0f, 0.0f,  // Lower-left corner  
-	1.0f, 0.0f,  // Lower-right corner
-	0.5f, 1.0f   // Top-center corner
-};
-
 
 void draw(GLuint shader, GLuint veterxArrayObject, GLuint colorArrayObject, Mesh *mesh)
 {
@@ -54,7 +48,7 @@ int main()
 
 	//Texture *myTexture = new Texture("images/joe.png", true, true);
 
-	Mesh *mesh = new Mesh("models/cube.obj");
+	Mesh *mesh = new Mesh("models/monkey.obj");
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::mat4 model = glm::mat4(1.0f);
@@ -66,6 +60,7 @@ int main()
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
 	//GLuint textureID = glGetUniformLocation(graphics->Graphics::get_shader_program(), "ourTexture");
 
+	
 	GLuint VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -83,9 +78,9 @@ int main()
 	glEnableVertexAttribArray(0);
 	// 4. Unbind VAO (NOT the EBO)
 	glBindVertexArray(0);
+	
 
-
-	Entity *my_entity = entity_new(100, 1.0f);
+	//Entity *my_entity = entity_new(100, 1.0f, graphics->Graphics::get_shader_program());
 
 	while(running)
 	{
@@ -112,11 +107,14 @@ int main()
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
 		
+		/*
 		glUseProgram(graphics->Graphics::get_shader_program());
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
-		
+		*/
+
+		//entitiy_draw_all();
 
 		mesh->draw(graphics->Graphics::get_shader_program());
 
