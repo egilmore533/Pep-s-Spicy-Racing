@@ -175,7 +175,7 @@ void Mesh::index_data()
 			indexed_vertices.push_back(vertices[i]);
 			indexed_uvs.push_back(uvs[i]);
 			indexed_normals.push_back(normals[i]);
-			indices.push_back((unsigned short)vertices.size() - 1);
+			indices.push_back((unsigned short)indices.size());
 		}
 		else
 		{ 
@@ -264,9 +264,9 @@ void Mesh::draw(GLuint shader_program)
 	);
 	*/
 
-	for (int i = 0; i < vertices.size(); i += 3)
-		glDrawArrays(GL_LINE_LOOP, i, 3);
-	//glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	//for (int i = 0; i < vertices.size(); i += 3)
+	//	glDrawArrays(GL_LINE_LOOP, i, 3);
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
 	glDisableVertexAttribArray(0);
 
