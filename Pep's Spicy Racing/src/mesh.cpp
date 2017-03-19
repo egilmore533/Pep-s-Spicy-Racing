@@ -9,10 +9,6 @@
 
 Mesh::Mesh(char *filename)
 {
-	vertex_indices.reserve(1000);
-	uv_indices.reserve(1000);
-	normal_indices.reserve(1000);
-
 	vertices.reserve(1000);
 	uvs.reserve(1000);
 	normals.reserve(1000);
@@ -137,16 +133,6 @@ void Mesh::load_obj(char *filename)
 					unique_flag = true;
 				}
 			}
-
-			vertex_indices.push_back(vertex_index[0]);
-			vertex_indices.push_back(vertex_index[1]);
-			vertex_indices.push_back(vertex_index[2]);
-			uv_indices.push_back(uv_index[0]);
-			uv_indices.push_back(uv_index[1]);
-			uv_indices.push_back(uv_index[2]);
-			normal_indices.push_back(normal_index[0]);
-			normal_indices.push_back(normal_index[1]);
-			normal_indices.push_back(normal_index[2]);
 			break;
 		}
 
@@ -160,59 +146,6 @@ void Mesh::load_obj(char *filename)
 	{
 		fclose(file);
 	}
-
-	/*
-	// For each vertex of each triangle
-	for (unsigned int i = 0; i<vertex_indices.size(); i++) {
-
-		// Get the indices of its attributes
-		unsigned int vertexIndex = vertex_indices[i];
-		unsigned int uvIndex = uv_indices[i];
-		unsigned int normalIndex = normal_indices[i];
-
-		// Get the attributes thanks to the index
-		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-		glm::vec2 uv = temp_uvs[uvIndex - 1];
-		glm::vec3 normal = temp_normals[normalIndex - 1];
-
-		// Put the attributes in the actual buffers
-		vertices.push_back(vertex);
-		uvs.push_back(uv);
-		normals.push_back(normal);
-	}
-	*/
-}
-
-/**
- * @brief gets a vertex that is near if it already exists in the indexed data
- * @param in_vertex		vertex to check if already indexed
- * @param in_uv			uv to check if already indexed
- * @param in_normal		normal to check if already indexed
- * @return int the index if found, else -1
- */
-int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::vec3 in_normal)
-{
-	// Lame linear search
-	for (int i = 0; i<indexed_vertices.size(); i++) 
-	{
-		if (
-			//similar means same position, same UV, and same normal
-			is_near(in_vertex.x, indexed_vertices[i].x) &&
-			is_near(in_vertex.y, indexed_vertices[i].y) &&
-			is_near(in_vertex.z, indexed_vertices[i].z) &&
-			is_near(in_uv.x, indexed_uvs[i].x) &&
-			is_near(in_uv.y, indexed_uvs[i].y) &&
-			is_near(in_normal.x, indexed_normals[i].x) &&
-			is_near(in_normal.y, indexed_normals[i].y) &&
-			is_near(in_normal.z, indexed_normals[i].z)
-			) 
-		{
-			return i;
-		}
-	}
-	// No other vertex could be used instead.
-	// Looks like we'll have to add it to the VBO.
-	return -1;
 }
 
 /**
@@ -247,28 +180,6 @@ void Mesh::setup_buffers()
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)0);
 	// 4. Unbind VAO (NOT the EBO)
 	glBindVertexArray(0);
-
-
-	/*
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	
-	glGenBuffers(1, &vertex_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &uv_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uv_buffer);
-	glBufferData(GL_ARRAY_BUFFER, get_num_indexed_uvs() * sizeof(glm::vec2), &get_indexed_uvs()[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &normal_buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
-	glBufferData(GL_ARRAY_BUFFER, get_num_indexed_normals() * sizeof(glm::vec3), &get_indexed_normals()[0], GL_STATIC_DRAW);
-
-	glGenBuffers(1, &element_buffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, get_num_indices() * sizeof(unsigned short), &get_indices()[0], GL_STATIC_DRAW);
-	*/
 }
 
 /**
@@ -284,112 +195,10 @@ void Mesh::draw(GLuint shader_program)
 	glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 	
-	/*
-	// Index buffer
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer);
-
-	// Draw the triangles !
-	glDrawElements(
-		GL_TRIANGLES,      // mode
-		indices.size(),    // count
-		GL_UNSIGNED_SHORT,   // type
-		(void*)0           // element array buffer offset
-	);
-	
-	/*
-	//for (int i = 0; i < vertices.size(); i += 3)
-	//	glDrawArrays(GL_LINE_LOOP, i, 3);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-	
-
-	glDisableVertexAttribArray(0);
-	*/
 }
 
 
 Mesh::~Mesh()
 {
 	
-}
-
-/**
-* @brief gets the number of indexed vertices for use in drawing
-* @return unsigned int the size of the indexed_vertices
-*/
-unsigned int Mesh::get_num_indexed_vertices()
-{
-	return indexed_vertices.size();
-}
-
-/**
-* @brief gets the number of indexed uvs for use in drawing
-* @return unsigned int the size of the indexed_uvs
-*/
-unsigned int Mesh::get_num_indexed_uvs()
-{
-	return indexed_uvs.size();
-}
-
-/**
-* @brief gets the number of indexed normals for use in drawing
-* @return unsigned int the size of the indexed_normals
-*/
-unsigned int Mesh::get_num_indexed_normals()
-{
-	return indexed_normals.size();
-}
-
-/**
-* @brief gets the number of indices for use in drawing
-* @return unsigned int the size of the indices
-*/
-unsigned int Mesh::get_num_indices()
-{
-	return indices.size();
-}
-
-/**
-* @brief gets the indexed vertices for use in drawing
-* @return std::vector<glm::vec3> the indexed_vertices
-*/
-std::vector<glm::vec3> Mesh::get_indexed_vertices()
-{
-	return indexed_vertices;
-}
-
-/**
-* @brief gets the indexed uvs for use in drawing
-* @return std::vector<glm::vec2> the indexed_uvs
-*/
-std::vector<glm::vec2> Mesh::get_indexed_uvs()
-{
-	return indexed_uvs;
-}
-
-/**
-* @brief gets the indexed normals for use in drawing
-* @return std::vector<glm::vec3> the indexed_normals 
-*/
-std::vector<glm::vec3> Mesh::get_indexed_normals()
-{
-	return indexed_normals;
-}
-
-/**
- * @brief gets the indices for use in drawing
- * @return std::vector<unsigned short> the indices
- */
-std::vector<unsigned short> Mesh::get_indices()
-{
-	return indices;
-}
-
-/**
-* @brief determines if two floats are close enough together to be considered equal
-* @param v1	first float
-* @param v2	second float
-* @return bool true if near, else false
-*/
-bool is_near(float v1, float v2) {
-	return fabs(v1 - v2) < 0.01f;
 }

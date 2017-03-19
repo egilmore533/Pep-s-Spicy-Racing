@@ -59,25 +59,6 @@ int main()
 
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
 	//GLuint textureID = glGetUniformLocation(graphics->Graphics::get_shader_program(), "ourTexture");
-
-	
-	GLuint VAO, VBO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-	// 2. Copy our vertices array in a vertex buffer for OpenGL to use
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(test_vertices), test_vertices, GL_STATIC_DRAW);
-	// 3. Copy our index array in a element buffer for OpenGL to use
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(test_indices), test_indices, GL_STATIC_DRAW);
-	// 3. Then set the vertex attributes pointers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-	// 4. Unbind VAO (NOT the EBO)
-	glBindVertexArray(0);
 	
 
 	//Entity *my_entity = entity_new(100, 1.0f, graphics->Graphics::get_shader_program());
@@ -106,13 +87,6 @@ int main()
 			model;
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
-		
-		/*
-		glUseProgram(graphics->Graphics::get_shader_program());
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-		*/
 
 		//entitiy_draw_all();
 
