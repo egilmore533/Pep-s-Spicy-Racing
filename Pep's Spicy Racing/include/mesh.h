@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 
 /**
- * @struct triangle_corner (vertex,point,corner), used to store data about a vertex from an .obj file
+ * @struct triangle_corner (vertex/point/corner), used to store the indexes for a vertex from an .obj file (one part of three for the face)
  */
 typedef struct
 {
@@ -17,21 +17,15 @@ typedef struct
 	unsigned int vn;	/**< normal index for the corner */
 }triangle_corner;
 
-typedef struct
-{
-	glm::vec3 position;
-	glm::vec3 normal;
-	glm::vec2 texel;
-}vertex;
-
 /**
-* @struct triangle, used to store data about a face/triangle from an .obj file, stores data from three points
+* @struct vertex the actual data that each face's triangle_corner refers to
 */
 typedef struct
 {
-	triangle_corner corners[3];	/**< the three corners/vertices/points that this triangle is defined by */
-}triangle;
-
+	glm::vec3 position;	/**< vertex data for the corner */
+	glm::vec3 normal;	/**< texel data for the corner */
+	glm::vec2 texel;	/**< normal data for the corner */
+}vertex;
 
 class Mesh
 {
@@ -61,15 +55,6 @@ private:
 	void load_obj(char *filename);
 
 	/**
-	 * @brief gets a vertex that is near if it already exists in the indexed data
-	 * @param in_vertex		vertex to check if already indexed
-	 * @param in_uv			uv to check if already indexed
-	 * @param in_normal		normal to check if already indexed
-	 * @return the index if found, else -1
-	 */
-	int get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::vec3 in_normal);
-
-	/**
 	 * @brief index the vertices, uvs, and normals for use in a vertex buffer object
 	 */
 	void index_data();
@@ -79,94 +64,21 @@ private:
 	 */
 	void setup_buffers();
 
-	/**
-	* @brief gets the number of indexed vertices for use in drawing
-	* @return unsigned int the size of the indexed_vertices
-	*/
-	unsigned int get_num_indexed_vertices();
-
-	/**
-	* @brief gets the number of indexed uvs for use in drawing
-	* @return unsigned int the size of the indexed_uvs
-	*/
-	unsigned int get_num_indexed_uvs();
-
-	/**
-	* @brief gets the number of indexed normals for use in drawing
-	* @return unsigned int the size of the indexed_normals
-	*/
-	unsigned int get_num_indexed_normals();
-
-	/**
-	* @brief gets the number of indices for use in drawing
-	* @return unsigned int the size of the indices
-	*/
-	unsigned int get_num_indices();
-
-	/**
-	* @brief gets the indexed vertices for use in drawing
-	* @return std::vector<glm::vec3> the indexed_vertices
-	*/
-	std::vector<glm::vec3> get_indexed_vertices();
-
-	/**
-	* @brief gets the indexed uvs for use in drawing
-	* @return std::vector<glm::vec2> the indexed_uvs
-	*/
-	std::vector<glm::vec2> get_indexed_uvs();
-
-	/**
-	* @brief gets the indexed normals for use in drawing
-	* @return std::vector<glm::vec3> the indexed_normals
-	*/
-	std::vector<glm::vec3> get_indexed_normals();
-
-	/**
-	* @brief gets the indices for use in drawing
-	* @return std::vector<unsigned short> the indices
-	*/
-	std::vector<unsigned short> get_indices();
-
 /////////////////Data Structures////////////////////
-	//data from the file, unchanged
+	//data from the file, unchanged in order
 	std::vector<glm::vec3> vertices;	/**< vertices from the obj file */
-	std::vector<glm::vec2> uvs;			/**< uvs from the obj file */
+	std::vector<glm::vec2> uvs;			/**< uvs/texels from the obj file */
 	std::vector<glm::vec3> normals;		/**< normals from the obj file */
-	
-	//data from the face section of the obj, unchanged
-	std::vector<unsigned int> vertex_indices;	/**< unique identifier (not the line numbers) of the vertices from the obj */
-	std::vector<unsigned int> uv_indices;		/**< unique identifier of the uvs from the obj */
-	std::vector<unsigned int> normal_indices;	/**< unique identifier of the normals from the obj */
 
-	//this is the indexed section, used to make drawing easier
-	std::vector<unsigned short> indices;		/**< the unique indices for the mesh data */
-	std::vector<glm::vec3> indexed_vertices;    /**< all the unique vertices in the order they are needed for referencing through indexed rendering */
-	std::vector<glm::vec2> indexed_uvs;			/**< all the unique uvs in the order they are needed for referencing through indexed rendering */
-	std::vector<glm::vec3> indexed_normals;		/**< all the unique normals in the order they are needed for referencing through indexed rendering */
-
-	std::vector<triangle_corner> unique_triplets;			/**< three unique indexes from the face sections */
-	std::vector<int> ind;
-	std::vector<vertex> buffer_data;
+	std::vector<triangle_corner> unique_triplets;			/**< each unique vertex,uv,normal (v,vt,vn) indexes from one tri of the .obj face */
+	std::vector<int> ind;									/**< the indexes of each unique */
+	std::vector<vertex> buffer_data;						/**< the data being sent to the graphics card */
 
 
 	//vertex buffer objects
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
 	GLuint vbo;		/**< vertex buffer obejct, used to contain our vertices array in a buffer for OpenGL to use*/
 	GLuint ebo;		/**< element buffer object, used to store what order we want to draw each unique vertex (index drawing) */
-
-	GLuint vertex_buffer;
-	GLuint uv_buffer;
-	GLuint normal_buffer;
-	GLuint element_buffer;
 };
-
-/**
- * @brief utility function; 
- *		 determines if two floats are close enough together to be considered equal
- * @param v1	first float
- * @param v2	second float
- * @return bool true if near, else false
- */
-bool is_near(float v1, float v2);
 
 #endif
