@@ -13,8 +13,8 @@
 typedef struct
 {
 	unsigned int v;		/**< vertex index for the corner */
-	unsigned int vn;	/**< normal index for the corner */
 	unsigned int vt;	/**< texel index for the corner */
+	unsigned int vn;	/**< normal index for the corner */
 }triangle_corner;
 
 typedef struct
@@ -143,6 +143,11 @@ private:
 	std::vector<glm::vec3> indexed_vertices;    /**< all the unique vertices in the order they are needed for referencing through indexed rendering */
 	std::vector<glm::vec2> indexed_uvs;			/**< all the unique uvs in the order they are needed for referencing through indexed rendering */
 	std::vector<glm::vec3> indexed_normals;		/**< all the unique normals in the order they are needed for referencing through indexed rendering */
+
+	std::vector<triangle_corner> unique_triplets;			/**< three unique indexes from the face sections */
+	std::vector<int> ind;
+	std::vector<vertex> buffer_data;
+
 
 	//vertex buffer objects
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */

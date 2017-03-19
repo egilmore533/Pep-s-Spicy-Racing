@@ -9,6 +9,17 @@
 
 Mesh::Mesh(char *filename)
 {
+	vertex_indices.reserve(1000);
+	uv_indices.reserve(1000);
+	normal_indices.reserve(1000);
+
+	vertices.reserve(1000);
+	uvs.reserve(1000);
+	normals.reserve(1000);
+
+	unique_triplets.reserve(3000);
+	buffer_data.reserve(1000);
+
 	this->load_obj(filename);
 	this->index_data();
 	this->setup_buffers();
@@ -25,6 +36,12 @@ void Mesh::load_obj(char *filename)
 	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
 	std::vector<glm::vec3> temp_normals;
+
+	temp_vertices.reserve(1000);
+	temp_uvs.reserve(1000);
+	temp_normals.reserve(1000);
+
+	int current_index = 0;
 
 	if (!filename)
 	{
@@ -50,14 +67,14 @@ void Mesh::load_obj(char *filename)
 			{
 				glm::vec3 vertex;
 				fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-				temp_vertices.push_back(vertex);
+				vertices.push_back(vertex);
 				break;
 			}
 			case 'n':
 			{
 				glm::vec3 normal;
 				fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-				temp_normals.push_back(normal);
+				normals.push_back(normal);
 				break;
 			}
 			case 't':
@@ -65,7 +82,7 @@ void Mesh::load_obj(char *filename)
 				glm::vec2 uv;
 				fscanf(file, "%f %f\n", &uv.x, &uv.y);
 				uv.y = -uv.y;
-				temp_uvs.push_back(uv);
+				uvs.push_back(uv);
 				break;
 			}
 			default:
@@ -81,6 +98,46 @@ void Mesh::load_obj(char *filename)
 				slog("File can't be read by our simple parser Try exporting with other options\n");
 				return;
 			}
+			
+			for (unsigned int trip = 0; trip < 3; trip++)
+			{
+				bool unique_flag = true;
+				int index;
+				triangle_corner triplet;
+				triplet.v = vertex_index[trip];
+				triplet.vt = uv_index[trip];
+				triplet.vn = normal_index[trip];
+				for (unsigned int i = 0; i < unique_triplets.size(); i++)
+				{
+					if (unique_triplets[i].v == triplet.v &&
+						unique_triplets[i].vt == triplet.vt &&
+						unique_triplets[i].vn == triplet.vn)
+					{
+						unique_flag = false;
+						index = i;
+						break;
+					}
+				}
+				if (unique_flag)
+				{
+					unique_triplets.push_back(triplet);
+					ind.push_back(current_index++);
+
+					vertex vertex_data;
+
+					vertex_data.position = vertices[(triplet.v) - 1];
+					vertex_data.texel = uvs[(triplet.vt) - 1];
+					vertex_data.normal = normals[(triplet.vn) - 1];
+
+					buffer_data.push_back(vertex_data);
+				}
+				else
+				{
+					ind.push_back(index);
+					unique_flag = true;
+				}
+			}
+
 			vertex_indices.push_back(vertex_index[0]);
 			vertex_indices.push_back(vertex_index[1]);
 			vertex_indices.push_back(vertex_index[2]);
@@ -104,6 +161,7 @@ void Mesh::load_obj(char *filename)
 		fclose(file);
 	}
 
+	/*
 	// For each vertex of each triangle
 	for (unsigned int i = 0; i<vertex_indices.size(); i++) {
 
@@ -122,7 +180,7 @@ void Mesh::load_obj(char *filename)
 		uvs.push_back(uv);
 		normals.push_back(normal);
 	}
-	slog("finished loading");
+	*/
 }
 
 /**
@@ -162,26 +220,7 @@ int Mesh::get_similar_vertex_index(glm::vec3 in_vertex, glm::vec2 in_uv, glm::ve
  */
 void Mesh::index_data()
 {
-	// For each input vertex
-	for (unsigned int i = 0; i<vertices.size(); i++) 
-	{
-		// Try to find a similar vertex that has already been indexed
-		int index;
-		index = get_similar_vertex_index(vertices[i], uvs[i], normals[i]);
-
-		//this vertex hasn't yet been indexed so it needs to be added
-		if (index == -1)
-		{
-			indexed_vertices.push_back(vertices[i]);
-			indexed_uvs.push_back(uvs[i]);
-			indexed_normals.push_back(normals[i]);
-			indices.push_back((unsigned short)indices.size());
-		}
-		else
-		{ 
-			indices.push_back(index);
-		}
-	}
+	
 }
 
 /**
@@ -189,7 +228,6 @@ void Mesh::index_data()
 */
 void Mesh::setup_buffers()
 {
-	/*
 	glGenVertexArrays(1, &vao);
 	glGenBuffers(1, &vbo);
 	glGenBuffers(1, &ebo);
@@ -199,18 +237,19 @@ void Mesh::setup_buffers()
 	glBindVertexArray(vao);
 		// 2. Copy our vertices array in a vertex buffer for OpenGL to use
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, get_num_indexed_vertices() * sizeof(glm::vec3), &get_indexed_vertices()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, buffer_data.size() * sizeof(vertex), &buffer_data[0], GL_STATIC_DRAW);
 		// 3. Copy our index array in a element buffer for OpenGL to use
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, get_num_indices() * sizeof(unsigned int), &get_indices()[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, ind.size() * sizeof(unsigned int), &ind[0], GL_STATIC_DRAW);
 		// 3. Then set the vertex attributes pointers
 		// Position attribute
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)0);
 	// 4. Unbind VAO (NOT the EBO)
 	glBindVertexArray(0);
-	*/
 
+
+	/*
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	
@@ -229,6 +268,7 @@ void Mesh::setup_buffers()
 	glGenBuffers(1, &element_buffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, get_num_indices() * sizeof(unsigned short), &get_indices()[0], GL_STATIC_DRAW);
+	*/
 }
 
 /**
@@ -239,17 +279,10 @@ void Mesh::draw(GLuint shader_program)
 {
 	glUseProgram(shader_program);
 
-	// 1rst attribute buffer : vertices
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-	glVertexAttribPointer(
-		0,                  // attribute
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
+	// Draw mesh
+	glBindVertexArray(vao);
+	glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 	
 	/*
 	// Index buffer
@@ -262,18 +295,14 @@ void Mesh::draw(GLuint shader_program)
 		GL_UNSIGNED_SHORT,   // type
 		(void*)0           // element array buffer offset
 	);
-	*/
-
+	
+	/*
 	//for (int i = 0; i < vertices.size(); i += 3)
 	//	glDrawArrays(GL_LINE_LOOP, i, 3);
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	
 
 	glDisableVertexAttribArray(0);
-
-	/*
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLES, get_num_indices(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
 	*/
 }
 
