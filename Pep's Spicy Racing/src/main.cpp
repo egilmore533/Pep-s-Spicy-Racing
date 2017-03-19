@@ -11,31 +11,8 @@
 
 #include "graphics.h"
 #include "camera.h"
-#include "texture.h"
 #include "mesh.h"
 #include "entity.h"
-
-GLfloat test_vertices[] = {
-	0.5f,  0.5f, 0.0f,  // Top Right
-	0.5f, -0.5f, 0.0f,  // Bottom Right
-	-0.5f, -0.5f, 0.0f,  // Bottom Left
-	-0.5f,  0.5f, 0.0f   // Top Left 
-};
-
-GLuint test_indices[] = {  // Note that we start from 0!
-	0, 1, 3,   // First Triangle
-	1, 2, 3    // Second Triangle
-};
-
-
-void draw(GLuint shader, GLuint veterxArrayObject, GLuint colorArrayObject, Mesh *mesh)
-{
-	glUseProgram(shader);
-	glBindVertexArray(veterxArrayObject);
-	//glBindVertexArray(colorArrayObject);
-	glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
-	glBindVertexArray(0);
-}
 
 int main()
 {
@@ -45,8 +22,6 @@ int main()
 	entity_initialize_system(10);
 
 	Graphics *graphics = new Graphics;
-
-	//Texture *myTexture = new Texture("images/joe.png", true, true);
 
 	Mesh *mesh = new Mesh("models/cube.obj");
 

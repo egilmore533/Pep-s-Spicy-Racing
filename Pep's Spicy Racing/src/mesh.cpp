@@ -17,7 +17,7 @@ Mesh::Mesh(char *filename)
 	buffer_data.reserve(1000);
 
 	this->load_obj(filename);
-	this->index_data();
+	this->load_texture("images/joe.png");
 	this->setup_buffers();
 }
 
@@ -149,11 +149,11 @@ void Mesh::load_obj(char *filename)
 }
 
 /**
- * @brief index the vertices, uvs, and normals for use in a vertex buffer object
- */
-void Mesh::index_data()
+* @brief loads a texture to be used for the mesh
+*/
+void Mesh::load_texture(const char *filepath)
 {
-	
+	myTexture = new Texture(filepath, true, true);
 }
 
 /**
@@ -178,6 +178,9 @@ void Mesh::setup_buffers()
 		// Position attribute
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)0);
+		// Position attribute
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)offsetof(vertex, texel));
 	// 4. Unbind VAO (NOT the EBO)
 	glBindVertexArray(0);
 }
@@ -189,7 +192,7 @@ void Mesh::setup_buffers()
 void Mesh::draw(GLuint shader_program)
 {
 	glUseProgram(shader_program);
-
+	glBindTexture(GL_TEXTURE_2D, myTexture->get_texture());
 	// Draw mesh
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);

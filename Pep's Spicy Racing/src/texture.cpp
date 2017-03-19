@@ -4,11 +4,11 @@
 
 #include "texture.h"
 
-Texture::Texture(char *filepath, bool repeated, bool smoothed)
+Texture::Texture(const char *filepath, bool repeated, bool smoothed)
 {
-	sf::Image *image = new sf::Image();
-
-	if (!image->loadFromFile(filepath))
+	sf::Image image;
+	std::string file = filepath;
+	if (!image.loadFromFile(file))
 	{
 		slog("Error Loading image: %s", filepath);
 		return;
@@ -20,13 +20,14 @@ Texture::Texture(char *filepath, bool repeated, bool smoothed)
 	// "Bind" the newly created texture : all future texture functions will modify this texture
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->getSize().x, image->getSize().y, 0, GL_BGR, GL_UNSIGNED_BYTE, image->getPixelsPtr());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getSize().x, image.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
 
 	if (repeated)
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
+
 	if (smoothed)
 	{
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -38,7 +39,6 @@ Texture::Texture(char *filepath, bool repeated, bool smoothed)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
 	}
 	glGenerateMipmap(GL_TEXTURE_2D);
-	delete image;
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 

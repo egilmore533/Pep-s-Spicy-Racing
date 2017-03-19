@@ -13,7 +13,7 @@ public:
 	* @param repeated	boolean flag to set whether or not to repeat the texture when mapping to our model
 	* @param smoothed	boolean flag to set how we handle the drawing of the texture
 	*/
-	Texture(char *filepath, bool repeated, bool smoothed);
+	Texture(const char *filepath, bool repeated, bool smoothed);
 
 	/**
 	* @brief destructor that handles destroying the texture's members, none now, but in the future there may be some

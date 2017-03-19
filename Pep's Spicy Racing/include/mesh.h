@@ -7,6 +7,9 @@
 
 #include <glm/glm.hpp>
 
+
+#include "texture.h"
+
 /**
  * @struct triangle_corner (vertex/point/corner), used to store the indexes for a vertex from an .obj file (one part of three for the face)
  */
@@ -50,14 +53,15 @@ public:
 private:
 	/**
 	 * @brief loads data from an obj file into this mesh, looking for vertices, uvs, normals, and faces
+	 *			also loads indices and sets up the buffer_data for the mesh
 	 * @param filename		the filepath to the obj file to load from
 	 */
 	void load_obj(char *filename);
 
 	/**
-	 * @brief index the vertices, uvs, and normals for use in a vertex buffer object
+	 * @brief loads a texture to be used for the mesh
 	 */
-	void index_data();
+	void load_texture(const char *filepath);
 
 	/**
 	 * @brief sets up the appropriate vertex array object and buffers for the mesh
@@ -65,15 +69,18 @@ private:
 	void setup_buffers();
 
 /////////////////Data Structures////////////////////
+
 	//data from the file, unchanged in order
 	std::vector<glm::vec3> vertices;	/**< vertices from the obj file */
 	std::vector<glm::vec2> uvs;			/**< uvs/texels from the obj file */
 	std::vector<glm::vec3> normals;		/**< normals from the obj file */
 
+	//indexing data and the final buffer to be sent to the graphics card
 	std::vector<triangle_corner> unique_triplets;			/**< each unique vertex,uv,normal (v,vt,vn) indexes from one tri of the .obj face */
 	std::vector<int> ind;									/**< the indexes of each unique */
 	std::vector<vertex> buffer_data;						/**< the data being sent to the graphics card */
 
+	Texture *myTexture;
 
 	//vertex buffer objects
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
