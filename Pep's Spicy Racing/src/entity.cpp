@@ -1,4 +1,5 @@
 #include <string>
+#include <glm/gtc/matrix_transform.hpp>
 #include <simple_logger.h>
 
 #include "json_helper.h"
@@ -90,10 +91,11 @@ void entity_free(Entity **entity)
 /**
 * @brief gets a pointer to the next free entity that we can use in the entity_list, and defines an entity using the given json file
 * @param *json_file definition file for this entity to be created from
+* @param position  the position the entity is in the world space (model matrix)
 * @param default_shader_program	(temporary parameter) default shader program from the graphics class, only used if no shader defined
 * @return a pointer to the next entity to be used
 */
-Entity *entity_new(char *json_file, GLuint default_shader_program)
+Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_program)
 {
 	int i;
 	//makesure we have the room for a new entity
@@ -113,6 +115,10 @@ Entity *entity_new(char *json_file, GLuint default_shader_program)
 		// clear memory, fill out config data, increment entityNum, and return the new entity
 		memset(&entity_list[i], 0, sizeof(Entity));
 		entity_list[i].in_use = true;
+		entity_list[i].world_position = position;
+
+		entity_list[i].model = glm::mat4(1.0f);
+		glm::translate(entity_list[i].model, entity_list[i].world_position);
 		entity_num++;
 
 		//create the entity using &entity_list[i]
@@ -126,8 +132,10 @@ Entity *entity_new(char *json_file, GLuint default_shader_program)
 		}
 
 		std::string model_filepath = entity_def["model-filepath"];
+		std::string texture_filepath = entity_def["texture-filepath"];
+
 		//since this json object we can count on being formated properly for an entity assume the data is there
-		entity_list[i].mesh = new Mesh(model_filepath.c_str());
+		entity_list[i].mesh = new Mesh(model_filepath.c_str(), texture_filepath.c_str());
 		entity_list[i].move_speed = (float)entity_def["move-speed"];
 		entity_list[i].think_rate = (int)entity_def["think-rate"];
 
@@ -154,18 +162,59 @@ void entitiy_draw_all()
 		{
 			continue;
 		}
-		/*
-		if (!entity_list[i].draw)
-		{
-			continue;
-		}
-		*/
 		entity_list[i].draw();
 	}
 }
 
+/**
+* @brief updates every entity that is in use in the entity_list by running their update function pointers
+*/
+void entity_update_all()
+{
+	int i;
+	Entity *cam = NULL; //get the camera
+	for (i = 0; i < entity_max; i++)
+	{
+		if (!entity_list[i].in_use)
+		{
+			continue;
+		}
+		entity_list[i].update();
+	}
+}
 
+/**
+ * @brief draws an entity, using its shader program
+ */
 void Entity::draw()
 {
 	mesh->Mesh::draw(shader_program);
+}
+
+/**
+ * @brief temporary update for what will soon become the player entity, updates the players model 
+ *			by getting input and using it to determine the entity's position in world space
+ */
+void Entity::update()
+{
+	float delta_time = Graphics::get_delta_time().asSeconds();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		world_position.z += move_speed * delta_time;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		world_position.z -= move_speed * delta_time;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		world_position.x +=  delta_time * move_speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		world_position.x -=  delta_time * move_speed;
+	}
+
+	model = glm::translate(model, world_position);
 }

@@ -7,7 +7,12 @@
 
 #include "mesh.h"
 
-Mesh::Mesh(const char *filename)
+/**
+* @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
+* @param	filepath	the path to the .obj file from the working directory
+* @param	texture_filename	the path to the texture file
+*/
+Mesh::Mesh(const char *filename, const char *texture_filename)
 {
 	vertices.reserve(1000);
 	uvs.reserve(1000);
@@ -17,7 +22,7 @@ Mesh::Mesh(const char *filename)
 	buffer_data.reserve(1000);
 
 	this->load_obj(filename);
-	this->load_texture("images/joe.png");
+	this->load_texture(texture_filename);
 	this->setup_buffers();
 }
 
@@ -200,7 +205,9 @@ void Mesh::draw(GLuint shader_program)
 	
 }
 
-
+/**
+* @brief deconstructor for the mesh, destroys the data from the vertices, texels, normals, and triangles
+*/
 Mesh::~Mesh()
 {
 	

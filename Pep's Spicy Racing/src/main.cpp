@@ -27,12 +27,14 @@ int main()
 	glm::mat4 model = glm::mat4(1.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
-	GLuint mvp_location;
+	GLuint model_location, view_location, projection_location;
 	glm::mat4 model_view_projection; // = projectionMatrix * view * model;
 
-	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
+	model_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model");
+	view_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "view");
+	projection_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "projection");
 	
-	Entity *my_entity = entity_new("json/entities/example-entity.json", graphics->Graphics::get_shader_program());
+	Entity *my_entity = entity_new("json/entities/example-entity.json", glm::vec3(0,0,0), graphics->Graphics::get_shader_program());
 
 	while(running)
 	{
@@ -51,13 +53,15 @@ int main()
 
 		graphics->Graphics::frame_begin();
 
+		entity_update_all();
+
 		/*Drawing Code Start*/
 
-		model_view_projection = camera->Camera::get_projection_matrix() *
-			camera->Camera::get_view_matrix() * 
-			model;
+		//model_view_projection = camera->Camera::get_projection_matrix() * camera->Camera::get_view_matrix() * model;
 		
-		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
+		glUniformMatrix4fv(model_location, 1, GL_FALSE, &my_entity->model[0][0]);
+		glUniformMatrix4fv(view_location, 1, GL_FALSE, &camera->Camera::get_view_matrix()[0][0]);
+		glUniformMatrix4fv(projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
 
 		entitiy_draw_all();
 

@@ -36,8 +36,9 @@ public:
 	/**
 	 * @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
 	 * @param	filepath	the path to the .obj file from the working directory
+	 * @param	texture_filename	the path to the texture file
 	 */
-	Mesh(const char *filename);
+	Mesh(const char *filename, const char *texture_filename);
 
 	/**
 	* @brief deconstructor for the mesh, destroys the data from the vertices, texels, normals, and triangles
@@ -60,6 +61,7 @@ private:
 
 	/**
 	 * @brief loads a texture to be used for the mesh
+	 * @param filepath	path to the texture file
 	 */
 	void load_texture(const char *filepath);
 
@@ -80,7 +82,7 @@ private:
 	std::vector<int> ind;									/**< the indexes of each unique */
 	std::vector<vertex> buffer_data;						/**< the data being sent to the graphics card */
 
-	Texture *myTexture;
+	Texture *myTexture;				/**< Mesh's texture(s) */
 
 	//vertex buffer objects
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
