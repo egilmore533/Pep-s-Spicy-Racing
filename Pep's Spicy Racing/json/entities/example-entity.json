@@ -1,0 +1,12 @@
+{
+"Entity": {
+  "name": "Test Entity",
+  "model-filepath": "models/cube.obj",
+  "color": "1.0, 0.5, 0.2, 1.0",
+  "think-rate": 100,
+  "move-speed": 1.0,
+  "shader-program": "",
+  "draw function": "",
+  "texture": "images/joe.png"
+}
+}

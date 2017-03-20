@@ -37,7 +37,7 @@ public:
 	 * @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
 	 * @param	filepath	the path to the .obj file from the working directory
 	 */
-	Mesh(char *filename);
+	Mesh(const char *filename);
 
 	/**
 	* @brief deconstructor for the mesh, destroys the data from the vertices, texels, normals, and triangles
@@ -56,7 +56,7 @@ private:
 	 *			also loads indices and sets up the buffer_data for the mesh
 	 * @param filename		the filepath to the obj file to load from
 	 */
-	void load_obj(char *filename);
+	void load_obj(const char *filename);
 
 	/**
 	 * @brief loads a texture to be used for the mesh

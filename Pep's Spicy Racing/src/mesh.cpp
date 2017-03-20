@@ -7,7 +7,7 @@
 
 #include "mesh.h"
 
-Mesh::Mesh(char *filename)
+Mesh::Mesh(const char *filename)
 {
 	vertices.reserve(1000);
 	uvs.reserve(1000);
@@ -25,7 +25,7 @@ Mesh::Mesh(char *filename)
  * @brief loads data from an obj file into this mesh, looking for vertices, uvs, normals, and faces
  * @param filename		the filepath to the obj file to load from
  */
-void Mesh::load_obj(char *filename)
+void Mesh::load_obj(const char *filename)
 {
 	FILE *file;
 	char buf[512];

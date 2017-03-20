@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\camera.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\entity.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\graphics.cpp" />
+    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\json_helper.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\main.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\mesh.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\shader.cpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\camera.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\entity.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\graphics.h" />
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\json_helper.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\mesh.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\shader.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\simple_logger.h" />

@@ -23,8 +23,6 @@ int main()
 
 	Graphics *graphics = new Graphics;
 
-	Mesh *mesh = new Mesh("models/cube.obj");
-
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	glm::mat4 model = glm::mat4(1.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
@@ -33,10 +31,8 @@ int main()
 	glm::mat4 model_view_projection; // = projectionMatrix * view * model;
 
 	mvp_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "model_view_projection");
-	//GLuint textureID = glGetUniformLocation(graphics->Graphics::get_shader_program(), "ourTexture");
 	
-
-	//Entity *my_entity = entity_new(100, 1.0f, graphics->Graphics::get_shader_program());
+	Entity *my_entity = entity_new("json/entities/example-entity.json", graphics->Graphics::get_shader_program());
 
 	while(running)
 	{
@@ -63,9 +59,7 @@ int main()
 		
 		glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &model_view_projection[0][0]);
 
-		//entitiy_draw_all();
-
-		mesh->draw(graphics->Graphics::get_shader_program());
+		entitiy_draw_all();
 
 		/*Drawing Code End*/
 

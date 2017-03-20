@@ -1,6 +1,9 @@
+#include <string>
 #include <simple_logger.h>
 
+#include "json_helper.h"
 #include "entity.h"
+#include "graphics.h"
 
 static Entity *entity_list = NULL;
 static int entity_num = 0;
@@ -85,14 +88,12 @@ void entity_free(Entity **entity)
 }
 
 /**
-* @brief gets a pointer to the next free entity that we can use in the entity_list
-* @param filename the filepath to the model for this entity
-* @param think_rate the rate at which this new entity will think
-* @param move_speed the movement speed of this new entity
-* @param shader_program the shader program that will be used to draw this entity
+* @brief gets a pointer to the next free entity that we can use in the entity_list, and defines an entity using the given json file
+* @param *json_file definition file for this entity to be created from
+* @param default_shader_program	(temporary parameter) default shader program from the graphics class, only used if no shader defined
 * @return a pointer to the next entity to be used
 */
-Entity *entity_new(char *filename, int think_rate, float move_speed, GLuint shader_program)
+Entity *entity_new(char *json_file, GLuint default_shader_program)
 {
 	int i;
 	//makesure we have the room for a new entity
@@ -112,11 +113,29 @@ Entity *entity_new(char *filename, int think_rate, float move_speed, GLuint shad
 		// clear memory, fill out config data, increment entityNum, and return the new entity
 		memset(&entity_list[i], 0, sizeof(Entity));
 		entity_list[i].in_use = true;
-		entity_list[i].think_rate = think_rate;
-		entity_list[i].move_speed = move_speed;
-		entity_list[i].mesh = new Mesh(filename);
 		entity_num++;
 
+		//create the entity using &entity_list[i]
+		json def = load_from_def(json_file);
+		json entity_def = get_element_data(def, "Entity");
+		
+		//we cannot count on this def file to contain the proper data
+		if (entity_def == NULL)
+		{
+			return &entity_list[i];
+		}
+
+		std::string model_filepath = entity_def["model-filepath"];
+		//since this json object we can count on being formated properly for an entity assume the data is there
+		entity_list[i].mesh = new Mesh(model_filepath.c_str());
+		entity_list[i].move_speed = (float)entity_def["move-speed"];
+		entity_list[i].think_rate = (int)entity_def["think-rate"];
+
+		if (entity_def["shader-program"] == "")
+		{
+			//for now if the shader-program isn't defined, use the standard one from the graphics class
+			entity_list[i].shader_program = default_shader_program;
+		}
 		return &entity_list[i];
 	}
 	return NULL;
