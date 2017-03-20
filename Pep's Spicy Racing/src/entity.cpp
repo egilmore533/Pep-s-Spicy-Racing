@@ -118,6 +118,7 @@ Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_pr
 		entity_list[i].world_position = position;
 
 		entity_list[i].model = glm::mat4(1.0f);
+		entity_list[i].rotation_angle = 0;
 		glm::translate(entity_list[i].model, entity_list[i].world_position);
 		entity_num++;
 
@@ -138,6 +139,7 @@ Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_pr
 		entity_list[i].mesh = new Mesh(model_filepath.c_str(), texture_filepath.c_str());
 		entity_list[i].move_speed = (float)entity_def["move-speed"];
 		entity_list[i].think_rate = (int)entity_def["think-rate"];
+		entity_list[i].rotation_speed = (float)entity_def["rotation-speed"];
 
 		if (entity_def["shader-program"] == "")
 		{
@@ -215,6 +217,16 @@ void Entity::update()
 	{
 		world_position.x -=  delta_time * move_speed;
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
+	{
+		rotation_angle -= delta_time * rotation_speed;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
+	{
+		rotation_angle += delta_time * rotation_speed;
+	}
 
+	model = glm::mat4(1.0f);
+	model = glm::rotate(model, rotation_angle, glm::vec3(0,1,0));
 	model = glm::translate(model, world_position);
 }
