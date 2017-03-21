@@ -132,6 +132,17 @@ Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_pr
 			return &entity_list[i];
 		}
 
+		//TODO make a light class and remove this
+		if (entity_def["name"] == "Light Cube")
+		{
+			entity_list[i].scale = 0.2f;
+		}
+		else
+		{
+			entity_list[i].scale = 1.0f;
+		}
+		//End TODO
+
 		//since this json object we can count on being formated properly for an entity assume the data is there
 		std::string model_filepath = entity_def["model-filepath"];
 		std::string texture_filepath = entity_def["texture-filepath"];
@@ -146,6 +157,7 @@ Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_pr
 		{
 			//for now if the shader-program isn't defined, use the standard one from the graphics class
 			entity_list[i].shader_program = default_shader_program;
+			entity_list[i].model_location = glGetUniformLocation(entity_list[i].shader_program, "model");
 			entity_list[i].color_location = glGetUniformLocation(entity_list[i].shader_program, "object_color");
 		}
 		else //write code to compile and use shader here
@@ -196,6 +208,8 @@ void Entity::draw()
 {
 	glUseProgram(shader_program);
 	glUniform4fv(color_location, 1, &mesh->color_data[0]);
+	glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
+
 	mesh->Mesh::draw(shader_program);
 }
 
@@ -233,6 +247,7 @@ void Entity::update()
 	}
 
 	model = glm::mat4(1.0f);
+	model = glm::scale(model, glm::vec3(scale));
 	model = glm::rotate(model, rotation_angle, glm::vec3(0,1,0));
 	model = glm::translate(model, world_position);
 }

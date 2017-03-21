@@ -45,8 +45,11 @@ public:
 
 	glm::vec3 world_position;	/**< entity's position in world space */
 	float rotation_angle;		/**< the model's rotation (about the y axis, in )*/
+	float scale;				/**< the scale of the entity's model */
 
 	glm::mat4 model;			/**< the model matrix of this entity, used to draw the entity in world position */
+
+	GLuint model_location;		
 	GLuint color_location;		/**< location of the uniform color data */
 
 };
