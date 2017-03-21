@@ -247,7 +247,7 @@ void Entity::update()
 	}
 
 	model = glm::mat4(1.0f);
-	model = glm::scale(model, glm::vec3(scale));
-	model = glm::rotate(model, rotation_angle, glm::vec3(0,1,0));
 	model = glm::translate(model, world_position);
+	model = glm::rotate(model, rotation_angle, glm::vec3(0,1,0));
+	model = glm::scale(model, glm::vec3(scale));
 }

@@ -185,9 +185,12 @@ void Mesh::setup_buffers()
 		// Position attribute
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)0);
-		// Position attribute
+		// UV/Tex attribute
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)offsetof(vertex, texel));
+		// Normal attribute
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)offsetof(vertex, normal));
 	// 4. Unbind VAO (NOT the EBO)
 	glBindVertexArray(0);
 }
