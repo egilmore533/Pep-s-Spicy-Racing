@@ -132,11 +132,12 @@ Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_pr
 			return &entity_list[i];
 		}
 
+		//since this json object we can count on being formated properly for an entity assume the data is there
 		std::string model_filepath = entity_def["model-filepath"];
 		std::string texture_filepath = entity_def["texture-filepath"];
-
-		//since this json object we can count on being formated properly for an entity assume the data is there
-		entity_list[i].mesh = new Mesh(model_filepath.c_str(), texture_filepath.c_str());
+		glm::vec4 color_data = glm::vec4(entity_def["color"][0], entity_def["color"][1], entity_def["color"][2], entity_def["color"][3]);
+		
+		entity_list[i].mesh = new Mesh(model_filepath.c_str(), texture_filepath.c_str(), color_data);
 		entity_list[i].move_speed = (float)entity_def["move-speed"];
 		entity_list[i].think_rate = (int)entity_def["think-rate"];
 		entity_list[i].rotation_speed = (float)entity_def["rotation-speed"];
@@ -146,6 +147,8 @@ Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_pr
 			//for now if the shader-program isn't defined, use the standard one from the graphics class
 			entity_list[i].shader_program = default_shader_program;
 		}
+		else //write code to compile and use shader here
+		{ }
 		return &entity_list[i];
 	}
 	return NULL;

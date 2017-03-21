@@ -12,7 +12,7 @@
 * @param	filepath	the path to the .obj file from the working directory
 * @param	texture_filename	the path to the texture file
 */
-Mesh::Mesh(const char *filename, const char *texture_filename)
+Mesh::Mesh(const char *filename, const char *texture_filename, glm::vec4 color)
 {
 	vertices.reserve(1000);
 	uvs.reserve(1000);
@@ -21,9 +21,12 @@ Mesh::Mesh(const char *filename, const char *texture_filename)
 	unique_triplets.reserve(3000);
 	buffer_data.reserve(1000);
 
-	this->load_obj(filename);
-	this->load_texture(texture_filename);
-	this->setup_buffers();
+	color_data = color;
+	
+
+	load_obj(filename);
+	load_texture(texture_filename);
+	setup_buffers();
 }
 
 /**
@@ -197,6 +200,7 @@ void Mesh::setup_buffers()
 void Mesh::draw(GLuint shader_program)
 {
 	glUseProgram(shader_program);
+
 	glBindTexture(GL_TEXTURE_2D, myTexture->get_texture());
 	// Draw mesh
 	glBindVertexArray(vao);
