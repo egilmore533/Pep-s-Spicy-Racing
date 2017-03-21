@@ -16,6 +16,6 @@ void main()
 {
 	gl_Position = projection * view * model * vec4(vertCoord, 1);
 	TexCoord = texCoord;
-	Normal = normal;
+	Normal = vec3(model * vec4(normal, 1));
 	FragPos = vec3(model * vec4(vertCoord, 1));
 }

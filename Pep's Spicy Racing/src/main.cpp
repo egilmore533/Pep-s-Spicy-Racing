@@ -76,7 +76,7 @@ int main()
 		glUniformMatrix4fv(projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
 
 		//TODO add this to the light code, for each draw call
-		glUniform4f(light_color_location, 1.0f, 1.0f, 1.0f, 1.0f);
+		glUniform4f(light_color_location, 1.0f, 0.0f, 1.0f, 0.0f);
 		glUniform3f(light_posiiton_location, test_cube->world_position.x, test_cube->world_position.y, test_cube->world_position.z);
 
 		entitiy_draw_all();
