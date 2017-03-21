@@ -46,6 +46,11 @@ public:
 	*/
 	void update_view_matrix();
 
+	/**
+	* @brief returns the camera's position in world space
+	*/
+	glm::vec3 get_position();
+
 private:	
 	glm::vec3 position;		/**< position of the camera in the game world */
 	glm::vec3 target;		/**< the position the camera is looking to, use if you want to lock camera to some point in space */

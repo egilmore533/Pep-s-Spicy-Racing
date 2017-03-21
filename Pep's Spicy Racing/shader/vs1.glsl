@@ -16,6 +16,9 @@ void main()
 {
 	gl_Position = projection * view * model * vec4(vertCoord, 1);
 	TexCoord = texCoord;
-	Normal = vec3(model * vec4(normal, 1));
+
+	//multiply the normals by the model matrix, removing the translation bits to ensure proper scaling
+	//this is aparently costly and it should be faster to do it on the CPU side
+	Normal = vec3(transpose(inverse(model)) * vec4(normal, 0));
 	FragPos = vec3(model * vec4(vertCoord, 1));
 }

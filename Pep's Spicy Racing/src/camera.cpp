@@ -93,3 +93,12 @@ void Camera::update_view_matrix()
 {
 	view_matrix = glm::lookAt(position, position + forward, up);
 }
+
+/**
+* @brief returns the camera's position in world space
+* @return the camera's position
+*/
+glm::vec3 Camera::get_position()
+{
+	return position;
+}
