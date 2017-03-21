@@ -22,7 +22,6 @@ Mesh::Mesh(const char *filename, const char *texture_filename, glm::vec4 color)
 	buffer_data.reserve(1000);
 
 	color_data = color;
-	
 
 	load_obj(filename);
 	load_texture(texture_filename);
@@ -200,7 +199,6 @@ void Mesh::setup_buffers()
 void Mesh::draw(GLuint shader_program)
 {
 	glUseProgram(shader_program);
-
 	glBindTexture(GL_TEXTURE_2D, myTexture->get_texture());
 	// Draw mesh
 	glBindVertexArray(vao);

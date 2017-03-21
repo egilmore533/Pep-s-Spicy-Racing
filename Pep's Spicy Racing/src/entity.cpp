@@ -146,6 +146,7 @@ Entity *entity_new(char *json_file, glm::vec3 position, GLuint default_shader_pr
 		{
 			//for now if the shader-program isn't defined, use the standard one from the graphics class
 			entity_list[i].shader_program = default_shader_program;
+			entity_list[i].color_location = glGetUniformLocation(entity_list[i].shader_program, "object_color");
 		}
 		else //write code to compile and use shader here
 		{ }
@@ -193,6 +194,8 @@ void entity_update_all()
  */
 void Entity::draw()
 {
+	glUseProgram(shader_program);
+	glUniform4fv(color_location, 1, &mesh->color_data[0]);
 	mesh->Mesh::draw(shader_program);
 }
 
