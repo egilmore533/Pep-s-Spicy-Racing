@@ -85,5 +85,11 @@
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\vs1.glsl">
       <Filter>Shader</Filter>
     </None>
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\light_fs.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\texture_fs.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

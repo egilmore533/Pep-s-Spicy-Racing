@@ -2,6 +2,8 @@
 #include <windows.hpp>
 #endif
 
+#include <SFML\Graphics.hpp>
+
 #include <GL/glew.h>
 
 #include <glm\glm.hpp>
@@ -9,6 +11,7 @@
 
 #include <simple_logger.h>
 
+#include "shader.h"
 #include "graphics.h"
 #include "camera.h"
 #include "mesh.h"
@@ -35,6 +38,14 @@ int main()
 	projection_location = glGetUniformLocation(graphics->Graphics::get_shader_program(), "projection");
 	
 	Entity *my_entity = entity_new("json/entities/example-entity.json", glm::vec3(0,0,0), graphics->Graphics::get_shader_program());
+
+	//TODO Make a light class using implementing this code for lights
+	GLuint light_shader = glCreateProgram();
+	light_shader = build_shader_program("shader/vs1.glsl", "shader/light_fs.glsl");
+	GLint light_color_location = glGetUniformLocation(light_shader, "light_color");
+	glUniform3f(light_color_location, 1.0f, 1.0f, 1.0f);
+
+	//END TODO
 
 	while(running)
 	{
