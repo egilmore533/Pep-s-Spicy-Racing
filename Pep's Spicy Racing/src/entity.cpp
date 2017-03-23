@@ -4,6 +4,7 @@
 
 #include "json_helper.h"
 #include "entity.h"
+#include "entity_manager.h"
 #include "graphics.h"
 
 static Entity *entity_list = NULL;
