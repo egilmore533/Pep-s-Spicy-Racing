@@ -207,7 +207,6 @@ void Mesh::draw(GLuint shader_program)
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-	
 }
 
 /**

@@ -42,8 +42,8 @@ void main()
 	float spec = pow(max(dot(view_direction, reflect_direction), 0.0), shininess_strength);
 	vec4 specular = specular_strength * spec * light_color; 
 
-    //color = texture(ourTexture, TexCoord);
+    //color = (ambient + diffuse + specular) * texture(ourTexture, TexCoord);
 
 	//add our ambient, diffuse, and specular values to make whats called a Phong lightning model
-	color = (ambient + diffuse + specular) * object_color;
+	color = floor(((ambient + diffuse + specular) * object_color) * 4) / 4;
 } 
