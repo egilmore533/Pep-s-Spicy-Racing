@@ -20,7 +20,7 @@ Entity::Entity()
 	think_rate = 0.0f;
 	next_think = 0.0f;
 
-	shader_program = 0;
+	shader = NULL;
 
 	world_position = glm::vec3(0.0f);
 	rotation_angle = 0.0f;
@@ -47,11 +47,11 @@ void Entity::think()
  */
 void Entity::draw()
 {
-	glUseProgram(shader_program);
+	glUseProgram(shader->program);
 	glUniform4fv(color_location, 1, &color_data[0]);
 	glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
 
-	mesh->Mesh::draw(shader_program);
+	mesh->Mesh::draw(shader->program);
 }
 
 /**

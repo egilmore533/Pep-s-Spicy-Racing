@@ -6,6 +6,7 @@
 
 #include "graphics.h"
 #include "json_helper.h"
+#include "shader_manager.h"
 #include "entity_manager.h"
 
 /**
@@ -77,14 +78,12 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 		new_entity->think_rate = (float)entity_def["think-rate"];
 		new_entity->rotation_speed = (float)entity_def["rotation-speed"];
 
-		//TODO implement a shader resource manager so this isn't so ugly
-		if (entity_def["shader-program"] == "")
-		{
-			//for now if the shader-program isn't defined, use the standard one from the graphics class
-			new_entity->shader_program = temp_default_shader;
-			new_entity->model_location = glGetUniformLocation(new_entity->shader_program, "model");
-			new_entity->color_location = glGetUniformLocation(new_entity->shader_program, "object_color");
-		}
+		std::string shader_filepath = entity_def["shader-program"];
+
+		new_entity->shader = Shader_Manager::create_shader((char *)shader_filepath.c_str());
+		new_entity->model_location = glGetUniformLocation(new_entity->shader->program, "model");
+		new_entity->color_location = glGetUniformLocation(new_entity->shader->program, "object_color");
+
 		this->entity_list[i] = new_entity;
 		return this->entity_list[i];
 	}

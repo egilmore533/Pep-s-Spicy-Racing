@@ -2,15 +2,30 @@
 
 #include "shader_manager.h"
 
+static Shader_Manager *manager = NULL;
+
+/**
+* @brief quick check to see if the sttaic manager has already been created
+* @return true if manager is already set, false if manager is NULL
+*/
+bool check_manager_exists();
+
 
 void Shader_Manager::initialize()
 {
+	if (check_manager_exists())
+	{
+		slog("manager already exists");
+		return;
+	}
+
 	for (int i = 0; i < MAX_SHADERS; i++)
 	{
 		Shader *shader = new Shader();
 		this->shader_list[i] = shader;
 	}
 	num_shaders = 0;
+	manager = this;
 }
 
 /**
@@ -18,36 +33,99 @@ void Shader_Manager::initialize()
 *		increment the reference count and return that shader else build the new
 *		shader in the first available shader position, also check if room
 *		available in the shader_list, if not exit program
-* @param *shader_def_file
+* @param shader_def_file path to the shader definition file
 * @return a pointer to the shader program that is defined by the given def file
 */
-Shader *Shader_Manager::create_shader(char *shader_def_file)
+Shader *Shader_Manager::create_shader(std::string shader_def_file)
 {
+	if (!check_manager_exists())
+	{
+		return NULL;
+	}
+
 	int first_empty = -1;
 	for (int i = 0; i < MAX_SHADERS; i++)
 	{
-		if (this->shader_list[i]->shader_def_file == shader_def_file)
+		if (manager->shader_list[i]->shader_def_file == shader_def_file)
 		{
-			this->shader_list[i]->reference_count++;
-			return this->shader_list[i];
+			manager->shader_list[i]->reference_count++;
+			return manager->shader_list[i];
 		}
 		//while searching for this shader in the list, save the position of the first unused shader in the list
-		if (first_empty == -1 && this->shader_list[i]->reference_count == 0)
+		if (first_empty == -1 && manager->shader_list[i]->reference_count == 0)
 		{
 			first_empty = i;
 		}
 	}
-	if (num_shaders + 1 > MAX_SHADERS)
+	if (manager->num_shaders + 1 > MAX_SHADERS)
 	{
 		slog("Maximum Shaders Reached.");
 		exit(1);
 	}
 
-	Shader *new_shader = new Shader();
-	new_shader->build_shader(shader_def_file);
-	new_shader->reference_count = 1;
-	this->shader_list[first_empty] = new_shader;
-	num_shaders++;
-	return this->shader_list[first_empty];
+	if (first_empty == -1)
+	{
+		slog("error: couldn't find an empty slot and there is apparently still space");
+		return NULL;
+	}
 
+	Shader *new_shader = new Shader();
+	new_shader->build_shader(shader_def_file.c_str());
+	new_shader->reference_count = 1;
+	manager->shader_list[first_empty] = new_shader;
+	manager->num_shaders++;
+	return manager->shader_list[first_empty];
+}
+
+/**
+* @brief decrement the reference count of the given shader, enabling it
+*		(if the reference count has reached 0) to be replaced by the creation
+*		of another shader
+* @param *shader_def_file the name of the shader to be dereferenced
+*/
+void Shader_Manager::dereference_shader(std::string shader_def_file)
+{
+	if (!check_manager_exists())
+	{
+		return;
+	}
+
+	for (int i = 0; i < MAX_SHADERS; i++)
+	{
+		if (manager->shader_list[i]->shader_def_file == shader_def_file)
+		{
+			manager->shader_list[i]->reference_count--;
+			if (manager->shader_list[i]->reference_count == 0)
+			{
+				manager->num_shaders--;
+			}
+		}
+	}
+}
+
+/**
+* @brief clears the shader list by setting all reference counts equal to zero
+*/
+void Shader_Manager::clear()
+{
+	if (!check_manager_exists())
+	{
+		return;
+	}
+
+	for (int i = 0; i < MAX_SHADERS; i++)
+	{
+		manager->shader_list[i]->reference_count = 0;
+	}
+	num_shaders = 0;
+}
+
+bool check_manager_exists()
+{
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return false;
+	}
+	return true;
 }

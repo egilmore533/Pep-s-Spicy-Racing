@@ -8,26 +8,26 @@
 
 Shader::Shader()
 {
-	shader = 0;
+	program = 0;
 	shader_def_file = "";
 	reference_count = 0;
 }
 
 Shader::~Shader()
 {
-	shader = 0;
+	program = 0;
 	shader_def_file = "";
 	reference_count = 0;
 }
 
 void Shader::Use()
 {
-	glUseProgram(shader);
+	glUseProgram(program);
 }
 
-void Shader::build_shader(char *def_file)
+void Shader::build_shader(const char *def_file)
 {
-	json def = load_from_def(def_file);
+	json def = load_from_def((char *)def_file);
 	json shader_def = get_element_data(def, "Shader");
 
 	//we cannot count on this def file to contain the proper data
@@ -40,7 +40,7 @@ void Shader::build_shader(char *def_file)
 	//get the vertex and fragment filepaths and build the shader program using them
 	std::string vsPath = shader_def["vertex-shader-filepath"];
 	std::string fsPath = shader_def["fragment-shader-filepath"];
-	shader = build_shader_program(vsPath.c_str(), fsPath.c_str());
+	program = build_shader_program(vsPath.c_str(), fsPath.c_str());
 
 	//get the name and store it to ID the shader
 	std::string name = shader_def["name"];

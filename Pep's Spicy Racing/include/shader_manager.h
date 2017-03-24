@@ -14,18 +14,18 @@ public:
 	*		increment the reference count and return that shader else build the new 
 	*		shader in the first available shader position, also check if room 
 	*		available in the shader_list, if not exit program
-	* @param *shader_def_file
+	* @param shader_def_file path to the shader definition file
 	* @return a pointer to the shader program that is defined by the given def file
 	*/
-	Shader *create_shader(char *shader_def_file);
+	static Shader *create_shader(std::string shader_def_file);
 
 	/**
 	* @brief decrement the reference count of the given shader, enabling it 
 	*		(if the reference count has reached 0) to be replaced by the creation 
 	*		of another shader
-	* @param *shader_name the name of the shader to be dereferenced
+	* @param shader_def_file the name of the shader to be dereferenced
 	*/
-	void dereference_shader(const char *shader_name);
+	static void dereference_shader(std::string shader_def_file);
 
 	/**
 	* @brief initialize the shader manager by filling the shader_list with new shaders and setting the shader_count

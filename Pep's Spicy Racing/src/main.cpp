@@ -28,6 +28,7 @@ int main()
 {
 	model_viewer_mode();
 	return 0;
+
 }
 
 void model_viewer_mode()
@@ -43,10 +44,6 @@ void model_viewer_mode()
 	ent_manager.initialize();
 
 	Graphics *graphics = new Graphics();
-
-	Shader *toon_shader = shader_manager.create_shader("json/shaders/toon_shader.json");
-	Shader *toon_shader2 = shader_manager.create_shader("json/shaders/toon_shader.json");
-	Shader *light_shader = shader_manager.create_shader("json/shaders/light_shader.json");
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
@@ -68,6 +65,7 @@ void model_viewer_mode()
 
 	//this will be our "player" which we can move
 	Entity *wood_monkey = ent_manager.create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0), "", graphics->Graphics::get_shader_program());
+
 
 	while (running)
 	{

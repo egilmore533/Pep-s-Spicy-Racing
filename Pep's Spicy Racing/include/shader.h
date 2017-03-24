@@ -8,10 +8,10 @@ public:
 	Shader();
 	~Shader();
 	void Use();
-	void build_shader(char *def_file);
+	void build_shader(const char *def_file);
 
-	GLuint shader;					/**< the shader program itself */
-	char *shader_def_file;	/**< filepath to this shader's def file, used to uniquely identify each shader in the shader list */
+	GLuint program;					/**< the shader program itself */
+	std::string shader_def_file;	/**< filepath to this shader's def file, used to uniquely identify each shader in the shader list */
 	int reference_count;			/**< number of times this shader has been referenced, if it isn't referenced it can be used as the next slot in the shader manager's list */
 };
 

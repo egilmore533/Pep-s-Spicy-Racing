@@ -2,11 +2,11 @@
 "Entity": {
   "name": "Wood Monkey",
   "model-filepath": "models/monkey.obj",
-  "color": [1.0, 0.5, 0.2, 1.0],
+  "color": [0.5, 1.0, 0.2, 1.0],
   "think-rate": 100,
   "move-speed": 6.0,
   "rotation-speed": 6.0,
-  "shader-program": "",
+  "shader-program": "json/shaders/toon_shader.json",
   "texture-filepath": "images/wood.jpg"
 }
 }

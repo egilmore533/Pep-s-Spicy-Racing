@@ -6,8 +6,7 @@
   "think-rate": 100,
   "move-speed": 0.0,
   "rotation-speed": 0.0,
-  "shader-program": "",
-  "draw function": "",
+  "shader-program": "json/shaders/light_shader.json",
   "texture-filepath": "images/wood.jpg"
 }
 }
