@@ -12,7 +12,7 @@
 * @param	filepath	the path to the .obj file from the working directory
 * @param	texture_filename	the path to the texture file
 */
-Mesh::Mesh(const char *filename, const char *texture_filename, glm::vec4 color)
+Mesh::Mesh(const char *filename, const char *texture_filename)
 {
 	vertices.reserve(1000);
 	uvs.reserve(1000);
@@ -20,8 +20,6 @@ Mesh::Mesh(const char *filename, const char *texture_filename, glm::vec4 color)
 
 	unique_triplets.reserve(3000);
 	buffer_data.reserve(1000);
-
-	color_data = color;
 
 	load_obj(filename);
 	load_texture(texture_filename);

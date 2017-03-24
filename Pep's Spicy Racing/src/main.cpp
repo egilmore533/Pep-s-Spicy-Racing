@@ -1,5 +1,5 @@
 #ifndef _DEBUG
-#include <windows.hpp>
+#include <windows.hpp>		//TODO ASK BO WHY I CAN'T FIMD THIS FILE IN RELEASE MODE
 #endif
 
 #include <SFML\Graphics.hpp>
@@ -18,20 +18,22 @@
 #include "entity.h"
 #include "entity_manager.h"
 
+void initialize_systems();
+void clear_systems();
+
+
 int main()
 {
 	int running = 1;
 	
 	init_logger("game_log.log");
-	entity_initialize_system(10);
 
 	Entity_Manager ent_manager;
 	ent_manager.initialize();
 
-	Graphics *graphics = new Graphics;
+	Graphics *graphics = new Graphics();
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
-	glm::mat4 model = glm::mat4(1.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
 	GLuint  view_location, projection_location, light_color_location, light_posiiton_location, view_position_location;
@@ -48,8 +50,6 @@ int main()
 
 	//test new entity system here
 	Entity *test_cube = ent_manager.create_entity("json/entities/light-cube.json", glm::vec3(8, 1, -10), "", graphics->Graphics::get_shader_program());
-
-	//END TODO
 
 	//this will be our "player" which we can move
 	Entity *wood_monkey = ent_manager.create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0), "", graphics->Graphics::get_shader_program());
@@ -71,7 +71,6 @@ int main()
 
 		graphics->Graphics::frame_begin();
 
-		//entity_update_all();
 		ent_manager.update_all();
 
 		/*Drawing Code Start*/

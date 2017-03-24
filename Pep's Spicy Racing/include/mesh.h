@@ -37,9 +37,8 @@ public:
 	 * @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
 	 * @param	filepath	the path to the .obj file from the working directory
 	 * @param	color		the colors of the mesh, if NULL not used
-	 * @param	texture_filename	the path to the texture file
 	 */
-	Mesh(const char *filename, const char *texture_filename, glm::vec4 color);
+	Mesh(const char *filename, const char *texture_filename);
 
 	/**
 	* @brief deconstructor for the mesh, destroys the data from the vertices, texels, normals, and triangles
@@ -51,8 +50,6 @@ public:
 	 * @param shader_program	id of the shader program to use in drawing
 	 */
 	void draw(GLuint shader_program);
-
-	glm::vec4 color_data;			/**< the colors of which this mesh will be drawn with */
 
 private:
 	/**

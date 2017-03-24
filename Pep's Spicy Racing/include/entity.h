@@ -54,8 +54,9 @@ public:
 	float scale;				/**< the scale of the entity's model */
 
 	glm::mat4 model;			/**< the model matrix of this entity, used to draw the entity in world position */
+	glm::vec4 color_data;		/**< the colors this entity will be drawn in, unique to entity's now not mesh's that way I can set up a mesh resource manager */
 
-	GLuint model_location;		
+	GLuint model_location;		/**< the location of the uniform model */
 	GLuint color_location;		/**< location of the uniform color data */
 
 };

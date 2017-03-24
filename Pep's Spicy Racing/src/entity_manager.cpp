@@ -59,9 +59,9 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 		//since this json object we can count on being formated properly for an entity assume the data is there
 		std::string model_filepath = entity_def["model-filepath"];
 		std::string texture_filepath = entity_def["texture-filepath"];
-		glm::vec4 color_data = glm::vec4(entity_def["color"][0], entity_def["color"][1], entity_def["color"][2], entity_def["color"][3]);
+		new_entity->color_data = glm::vec4(entity_def["color"][0], entity_def["color"][1], entity_def["color"][2], entity_def["color"][3]);
 
-		new_entity->mesh = new Mesh(model_filepath.c_str(), texture_filepath.c_str(), color_data);
+		new_entity->mesh = new Mesh(model_filepath.c_str(), texture_filepath.c_str());
 		new_entity->move_speed = (float)entity_def["move-speed"];
 		new_entity->think_rate = (float)entity_def["think-rate"];
 		new_entity->rotation_speed = (float)entity_def["rotation-speed"];
