@@ -11,6 +11,7 @@ static Entity *entity_list = NULL;
 static int entity_num = 0;
 static int entity_max = 0;
 
+
 /**
 * @brief intializes the entity system to be used as a resource manager, sets all pointers to NULL
 * @param num_entities the number of entities the game will allocated memory for
@@ -200,6 +201,41 @@ void entity_update_all()
 		}
 		entity_list[i].update();
 	}
+}
+
+Entity::Entity()
+{
+	in_use = false;
+	id = -1;
+
+	mesh = NULL;
+
+	move_speed = 0.0f;
+	rotation_speed = 0.0f;
+
+	think_rate = 0.0f;
+	next_think = 0.0f;
+
+	shader_program = 0;
+
+	world_position = glm::vec3(0.0f);
+	rotation_angle = 0.0f;
+	scale = 1.0f;
+
+	model = glm::mat4(1.0f);
+
+	model_location = 0;
+	color_location = 0;
+}
+
+Entity::~Entity()
+{
+	//decrement the mesh/model, shader, etc. here
+}
+
+void Entity::think()
+{
+
 }
 
 /**

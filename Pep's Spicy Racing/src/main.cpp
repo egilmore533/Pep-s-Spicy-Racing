@@ -16,6 +16,7 @@
 #include "camera.h"
 #include "mesh.h"
 #include "entity.h"
+#include "entity_manager.h"
 
 int main()
 {
@@ -23,6 +24,9 @@ int main()
 	
 	init_logger("game_log.log");
 	entity_initialize_system(10);
+
+	Entity_Manager ent_manager;
+	ent_manager.initialize();
 
 	Graphics *graphics = new Graphics;
 
@@ -40,17 +44,15 @@ int main()
 	
 	//TODO Make a light class using implementing this code for lights
 	//this will be our light temporarily, it will only be stationary we will move the monkey
-	Entity *test_cube = entity_new("json/entities/light-cube.json", glm::vec3(8, 1, -10), graphics->Graphics::get_shader_program());
+	//Entity *test_cube = entity_new("json/entities/light-cube.json", glm::vec3(8, 1, -10), graphics->Graphics::get_shader_program());
 
-	//this light entity will be using a different shader thats the same vertex shader but a different fragment shader so we need to compile it and remake some uniform variables
-	//GLuint light_shader = glCreateProgram();
-	//light_shader = build_shader_program("shader/vs1.glsl", "shader/light_fs.glsl");
-	//test_cube->shader_program = light_shader;
+	//test new entity system here
+	Entity *test_cube = ent_manager.create_entity("json/entities/light-cube.json", glm::vec3(8, 1, -10), "", graphics->Graphics::get_shader_program());
 
 	//END TODO
 
 	//this will be our "player" which we can move
-	Entity *wood_monkey = entity_new("json/entities/wood-monkey.json", glm::vec3(0, 0, 0), graphics->Graphics::get_shader_program());
+	Entity *wood_monkey = ent_manager.create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0), "", graphics->Graphics::get_shader_program());
 
 	while(running)
 	{
@@ -69,7 +71,8 @@ int main()
 
 		graphics->Graphics::frame_begin();
 
-		entity_update_all();
+		//entity_update_all();
+		ent_manager.update_all();
 
 		/*Drawing Code Start*/
 
@@ -81,7 +84,8 @@ int main()
 		glUniform3f(light_posiiton_location, test_cube->world_position.x, test_cube->world_position.y, test_cube->world_position.z);
 		glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 
-		entitiy_draw_all();
+		//entitiy_draw_all();
+		ent_manager.draw_all();
 
 		/*Drawing Code End*/
 

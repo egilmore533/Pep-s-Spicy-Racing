@@ -1,0 +1,13 @@
+{
+"Entity": {
+  "name": "Light Cube",
+  "model-filepath": "models/cube.obj",
+  "color": [1.0, 1.0, 1.0, 1.0],
+  "think-rate": 100,
+  "move-speed": 0.0,
+  "rotation-speed": 0.0,
+  "shader-program": "",
+  "draw function": "",
+  "texture-filepath": "images/wood.jpg"
+}
+}

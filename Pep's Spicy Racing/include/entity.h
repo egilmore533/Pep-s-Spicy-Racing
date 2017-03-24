@@ -1,6 +1,10 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
 
+#define MAX_ENTITIES	100
+
+#include <array>
+
 #include "mesh.h"
 
 class Entity
@@ -32,14 +36,16 @@ public:
 	void draw();
 
 	bool in_use;				/**< in use flag to determine if this entity is in use */
+	int id;						/**< the id of the entity */
 
 	//Soundpack *soundpack;		/**< the soundpak that belongs to this entity */
 	Mesh *mesh;					/**< mesh that belongs to this entity */
-	
-	int think_rate;				/**< the rate at which the entity will think */
 
 	float move_speed;			/**< the movement speed of the entity */
 	float rotation_speed;		/**< the speed at which the entity rotates */
+
+	float think_rate;			/**< the rate at which the entity will think (in seconds) */
+	float next_think;			/**< the next time this entity will perform its think function (sf::Time asSeconds)*/
 
 	GLuint shader_program;		/**< this entity's shader (might need to move this to be somewhere else, I really don't know what I'm getting involved in here) */
 
@@ -89,6 +95,7 @@ void entity_update_all();
  * @brief closes the entity system by freeing all entities in the entity_list and then resetting the entity_num and entity_max
  */
 void entity_close_system();
+
 
 
 #endif
