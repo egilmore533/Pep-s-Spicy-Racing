@@ -47,10 +47,6 @@ void Entity::think()
  */
 void Entity::draw()
 {
-	glUseProgram(shader->program);
-	glUniform4fv(color_location, 1, &color_data[0]);
-	glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
-
 	mesh->Mesh::draw(shader->program);
 }
 

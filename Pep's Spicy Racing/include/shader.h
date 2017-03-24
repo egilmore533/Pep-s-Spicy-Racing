@@ -7,7 +7,7 @@ class Shader {
 public:
 	Shader();
 	~Shader();
-	void Use();
+	void use();
 	void build_shader(const char *def_file);
 
 	GLuint program;					/**< the shader program itself */

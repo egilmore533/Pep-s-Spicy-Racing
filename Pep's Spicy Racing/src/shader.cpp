@@ -20,7 +20,7 @@ Shader::~Shader()
 	reference_count = 0;
 }
 
-void Shader::Use()
+void Shader::use()
 {
 	glUseProgram(program);
 }

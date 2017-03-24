@@ -16,7 +16,7 @@ uniform sampler2D ourTexture;	/**< the texture being used to color this mesh */
 void main()
 {
 	//AMBIENT CALCULATION
-	float ambient_strength = 0.1f;
+	float ambient_strength = 0.2f;
     vec4 ambient = ambient_strength * light_color;
 
 	//DIFFUSE CALCULATION

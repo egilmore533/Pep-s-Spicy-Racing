@@ -51,7 +51,10 @@
   <ItemGroup>
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\fs1.glsl" />
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\light_fs.glsl" />
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\light_vs.glsl" />
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\texture_fs.glsl" />
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\toon_fs.glsl" />
+    <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\toon_vs.glsl" />
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\vs1.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

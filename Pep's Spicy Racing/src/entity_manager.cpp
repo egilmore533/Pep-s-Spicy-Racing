@@ -7,7 +7,10 @@
 #include "graphics.h"
 #include "json_helper.h"
 #include "shader_manager.h"
+#include "camera.h"
 #include "entity_manager.h"
+
+static Entity_Manager *manager = NULL;
 
 /**
 * @brief initializes the entity manager by filling the entity_list with empty entities and setting the number of current entities to none
@@ -16,10 +19,12 @@ void Entity_Manager::initialize()
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
+		//memset
 		Entity *ent = new Entity();
 		this->entity_list[i] = ent;
 	}
 	num_entities = 0;
+	manager = this;
 }
 
 /**
@@ -30,18 +35,18 @@ void Entity_Manager::initialize()
 * @param default_shader_program	(temporary parameter) default shader program from the graphics class, only used if no shader defined
 * @return a pointer to the next entity to be used
 */
-Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 position, char *shader_json_filepath, GLuint temp_default_shader)
+Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 position)
 {
 	int i;
 	//makesure we have the room for a new entity
-	if (num_entities + 1 > MAX_ENTITIES)
+	if (manager->num_entities + 1 > MAX_ENTITIES)
 	{
 		slog("Maximum Entity Reached.");
 		exit(1);
 	}
 	for (i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (this->entity_list[i]->in_use)
+		if (manager->entity_list[i]->in_use)
 		{
 			continue;
 		}
@@ -55,7 +60,7 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 		new_entity->model = glm::mat4(1.0f);
 		new_entity->rotation_angle = 0;
 		glm::translate(new_entity->model, new_entity->world_position);
-		num_entities++;
+		manager->num_entities++;
 
 		//create the entity using &entity_list[i]
 		json def = load_from_def(entity_json_filepath);
@@ -64,8 +69,8 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 		//we cannot count on this def file to contain the proper data
 		if (entity_def == NULL)
 		{
-			this->entity_list[i] = new_entity;
-			return this->entity_list[i];
+			manager->entity_list[i] = new_entity;
+			return manager->entity_list[i];
 		}
 
 		//since this json object we can count on being formated properly for an entity assume the data is there
@@ -84,8 +89,18 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 		new_entity->model_location = glGetUniformLocation(new_entity->shader->program, "model");
 		new_entity->color_location = glGetUniformLocation(new_entity->shader->program, "object_color");
 
-		this->entity_list[i] = new_entity;
-		return this->entity_list[i];
+		new_entity->view_location = glGetUniformLocation(new_entity->shader->program, "view");
+		new_entity->projection_location = glGetUniformLocation(new_entity->shader->program, "projection");
+
+		if (entity_def["shader-program"] != "json/shaders/light_shader.json")
+		{
+			new_entity->light_color_location = glGetUniformLocation(new_entity->shader->program, "light_color");
+			new_entity->light_position_location = glGetUniformLocation(new_entity->shader->program, "light_position");
+			new_entity->view_position_location = glGetUniformLocation(new_entity->shader->program, "view_position");
+		}
+
+		manager->entity_list[i] = new_entity;
+		return manager->entity_list[i];
 	}
 	return NULL;
 }
@@ -98,12 +113,12 @@ void Entity_Manager::delete_entity(int entity_id)
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (this->entity_list[i]->id != entity_id)
+		if (manager->entity_list[i]->id != entity_id)
 		{
 			continue;
 		}
 
-		this->entity_list[i]->in_use = false;
+		manager->entity_list[i]->in_use = false;
 		return;
 	}
 }
@@ -144,14 +159,14 @@ void Entity_Manager::think_all()
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (!this->entity_list[i]->in_use)
+		if (!manager->entity_list[i]->in_use)
 		{
 			continue;
 		}
-		if (this->entity_list[i]->next_think >= Graphics::get_delta_time().asSeconds())
+		if (manager->entity_list[i]->next_think >= Graphics::get_delta_time().asSeconds())
 		{
-			this->entity_list[i]->think();
-			this->entity_list[i]->next_think = Graphics::get_delta_time().asSeconds() + this->entity_list[i]->think_rate;
+			manager->entity_list[i]->think();
+			manager->entity_list[i]->next_think = Graphics::get_delta_time().asSeconds() + manager->entity_list[i]->think_rate;
 		}
 	}
 }
@@ -163,27 +178,42 @@ void Entity_Manager::update_all()
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (!this->entity_list[i]->in_use)
+		if (!manager->entity_list[i]->in_use)
 		{
 			continue;
 		}
-		this->entity_list[i]->update();
+		manager->entity_list[i]->update();
 	}
 }
 
 /**
-* @brief draws all entities that are in use
+* @brief draws all entities that are in use from the perspective of the given camera
+* @param *camera the camera that will determine the perspective these entities will be drawn from
+* @param *single_light (TODO make a light resource manager) temporary light in the world, there can only be one right now
 */
-void Entity_Manager::draw_all()
+void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 {
-	int i;
-	Entity *cam = NULL; //get the camera
-	for (i = 0; i < MAX_ENTITIES; i++)
+	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (!this->entity_list[i]->in_use)
+		if (!manager->entity_list[i]->in_use)
 		{
 			continue;
 		}
-		this->entity_list[i]->draw();
+
+		glUseProgram(manager->entity_list[i]->shader->program);
+		glUniform4fv(manager->entity_list[i]->color_location, 1, &manager->entity_list[i]->color_data[0]);
+		glUniformMatrix4fv(manager->entity_list[i]->model_location, 1, GL_FALSE, &manager->entity_list[i]->model[0][0]);
+
+		glUniformMatrix4fv(manager->entity_list[i]->view_location, 1, GL_FALSE, &camera->Camera::get_view_matrix()[0][0]);
+		glUniformMatrix4fv(manager->entity_list[i]->projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
+
+		if (manager->entity_list[i]->shader->shader_def_file != "json/shaders/light_shader.json")
+		{
+			glUniform4f(manager->entity_list[i]->light_color_location, single_light->color_data.x, single_light->color_data.y, single_light->color_data.z, single_light->color_data.w);
+			glUniform3f(manager->entity_list[i]->light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
+			glUniform3f(manager->entity_list[i]->view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
+		}
+
+		manager->entity_list[i]->draw();
 	}
 }
