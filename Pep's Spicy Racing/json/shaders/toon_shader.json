@@ -1,7 +1,7 @@
 {
 "Shader": {
   "name": "Toon Shader",
-  "vertex-shader-filepath": "shader/toon_vs1.glsl",
-  "fragment-shader-filepath": "shader/toon_fs1.glsl"
+  "vertex-shader-filepath": "shader/toon_vs.glsl",
+  "fragment-shader-filepath": "shader/toon_fs.glsl"
 }
 }

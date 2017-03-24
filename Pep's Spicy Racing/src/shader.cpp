@@ -9,13 +9,15 @@
 Shader::Shader()
 {
 	shader = 0;
-	shader_name = "";
+	shader_def_file = "";
 	reference_count = 0;
 }
 
 Shader::~Shader()
 {
 	shader = 0;
+	shader_def_file = "";
+	reference_count = 0;
 }
 
 void Shader::Use()
@@ -26,7 +28,7 @@ void Shader::Use()
 void Shader::build_shader(char *def_file)
 {
 	json def = load_from_def(def_file);
-	json shader_def = get_element_data(shader_def, "Shader");
+	json shader_def = get_element_data(def, "Shader");
 
 	//we cannot count on this def file to contain the proper data
 	if (shader_def == NULL)
@@ -42,7 +44,7 @@ void Shader::build_shader(char *def_file)
 
 	//get the name and store it to ID the shader
 	std::string name = shader_def["name"];
-	shader_name = name.c_str();
+	shader_def_file = def_file;
 }
 
 GLuint build_shader_program(const char *vsPath, const char *fsPath)

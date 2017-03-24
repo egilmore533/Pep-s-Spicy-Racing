@@ -8,6 +8,9 @@
 #include "json_helper.h"
 #include "entity_manager.h"
 
+/**
+* @brief initializes the entity manager by filling the entity_list with empty entities and setting the number of current entities to none
+*/
 void Entity_Manager::initialize()
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
@@ -18,6 +21,14 @@ void Entity_Manager::initialize()
 	num_entities = 0;
 }
 
+/**
+* @brief gets a pointer to the next free entity that we can use in the entity_list, and defines an entity using the given json file
+* @param *entity_json_filepath definition file for this entity to be created from
+* @param position  the position the entity is in the world space (model matrix)
+* @param *shader_json_filepath the filepath to the shader definition file
+* @param default_shader_program	(temporary parameter) default shader program from the graphics class, only used if no shader defined
+* @return a pointer to the next entity to be used
+*/
 Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 position, char *shader_json_filepath, GLuint temp_default_shader)
 {
 	int i;
@@ -80,6 +91,10 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 	return NULL;
 }
 
+/**
+* @brief deletes the given entity from the entity_list
+* @param entity_id the id of the entity to delete
+*/
 void Entity_Manager::delete_entity(int entity_id)
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
@@ -94,6 +109,9 @@ void Entity_Manager::delete_entity(int entity_id)
 	}
 }
 
+/**
+* @brief empties the entity_list useful to load a new level
+*/
 void Entity_Manager::clear()
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
@@ -120,6 +138,9 @@ void Entity_Manager::clear()
 	}
 }
 
+/**
+* @brief perform the think function of all the entities that are currently in use
+*/
 void Entity_Manager::think_all()
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
@@ -136,6 +157,9 @@ void Entity_Manager::think_all()
 	}
 }
 
+/**
+* @brief perform the updates of all entities that are currently in use
+*/
 void Entity_Manager::update_all()
 {
 	for (int i = 0; i < MAX_ENTITIES; i++)
@@ -148,6 +172,9 @@ void Entity_Manager::update_all()
 	}
 }
 
+/**
+* @brief draws all entities that are in use
+*/
 void Entity_Manager::draw_all()
 {
 	int i;

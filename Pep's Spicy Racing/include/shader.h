@@ -11,7 +11,7 @@ public:
 	void build_shader(char *def_file);
 
 	GLuint shader;					/**< the shader program itself */
-	const char *shader_name;		/**< name of this shader, found in the shader's definition file */
+	char *shader_def_file;	/**< filepath to this shader's def file, used to uniquely identify each shader in the shader list */
 	int reference_count;			/**< number of times this shader has been referenced, if it isn't referenced it can be used as the next slot in the shader manager's list */
 };
 
