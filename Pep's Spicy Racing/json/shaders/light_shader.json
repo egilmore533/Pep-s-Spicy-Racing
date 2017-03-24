@@ -1,0 +1,7 @@
+{
+"Shader": {
+  "name": "Light Shader",
+  "vertex-shader-filepath": "shader/light_vs.glsl",
+  "fragment-shader-filepath": "shader/light_fs.glsl"
+}
+}
