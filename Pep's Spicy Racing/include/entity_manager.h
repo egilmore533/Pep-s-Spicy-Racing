@@ -11,7 +11,7 @@ public:
 	* @brief gets a pointer to the next free entity that we can use in the entity_list, and defines an entity using the given json file
 	* @param *entity_json_filepath definition file for this entity to be created from
 	* @param position  the position the entity is in the world space (model matrix)
-	* @param shader_json_filepath the filepath to the shader definition file
+	* @param *shader_json_filepath the filepath to the shader definition file
 	* @param default_shader_program	(temporary parameter) default shader program from the graphics class, only used if no shader defined
 	* @return a pointer to the next entity to be used
 	*/
@@ -23,21 +23,44 @@ public:
 	*/
 	void delete_entity(int entity_id);
 
-	//might not need this one
+	/**
+	* @brief initializes the entity manager by filling the entity_list with empty entities and setting the number of current entities to none
+	*/
 	void initialize();
 
-	//Might not need this one
+	/**
+	* @brief TODO	should be set up to empty the entity_list of all entities and freeing the data used by them, similar to clear, not implemented because I don't believe its needed
+	*/
 	void close();
+
+	/**
+	* @brief empties the entity_list useful to load a new level
+	*/
 	void clear();
 
+	/**
+	* @brief perform the think function of all the entities that are currently in use
+	*/
 	void think_all();
+
+	/**
+	* @brief perform the updates of all entities that are currently in use 
+	*/
 	void update_all();
+
+	/**
+	* @brief draws all entities that are in use
+	*/
 	void draw_all();
+
+	/**
+	* @brief check collisions for all entities, if collision perform the touch functions of each
+	*/
 	void intersect_all();
 
 private:
-	std::array<class Entity*, MAX_ENTITIES> entity_list;
-	int num_entities;
+	std::array<class Entity*, MAX_ENTITIES> entity_list;	/**< the list of all entities in the game, allocates space for the number of entities defined by the macro MAX_ENTITIES */
+	int num_entities;										/**< the number of entities currently in the game */
 };
 
 

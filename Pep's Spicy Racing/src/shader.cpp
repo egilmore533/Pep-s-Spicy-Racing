@@ -2,7 +2,48 @@
 
 #include <simple_logger.h>
 
+#include "json_helper.h"
 #include "shader.h"
+
+
+Shader::Shader()
+{
+	shader = 0;
+	shader_name = "";
+	reference_count = 0;
+}
+
+Shader::~Shader()
+{
+	shader = 0;
+}
+
+void Shader::Use()
+{
+	glUseProgram(shader);
+}
+
+void Shader::build_shader(char *def_file)
+{
+	json def = load_from_def(def_file);
+	json shader_def = get_element_data(shader_def, "Shader");
+
+	//we cannot count on this def file to contain the proper data
+	if (shader_def == NULL)
+	{
+		slog("%s: is not a Shader Definition JSON file");
+		return;
+	}
+
+	//get the vertex and fragment filepaths and build the shader program using them
+	std::string vsPath = shader_def["vertex-shader-filepath"];
+	std::string fsPath = shader_def["fragment-shader-filepath"];
+	shader = build_shader_program(vsPath.c_str(), fsPath.c_str());
+
+	//get the name and store it to ID the shader
+	std::string name = shader_def["name"];
+	shader_name = name.c_str();
+}
 
 GLuint build_shader_program(const char *vsPath, const char *fsPath)
 {
