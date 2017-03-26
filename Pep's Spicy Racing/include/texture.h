@@ -8,6 +8,11 @@ class Texture
 {
 public: 
 	/**
+	* @brief default texture constructor setting all data to default values
+	*/
+	Texture();
+
+	/**
 	* @brief creates the texture from a given filepath, sets the smoothing and repeating flags, uses the whole image given
 	* @param *filepath	path to the image in from our working directory
 	* @param repeated	boolean flag to set whether or not to repeat the texture when mapping to our model
@@ -27,9 +32,9 @@ public:
 	GLuint get_texture();
 
 private:
-	GLuint texture; /**< the index for the texture */
-
-
+	GLuint texture;				/**< the index for the texture */
+	std::string filepath;		/**< the filepath to this texture, used to identify different textures */
+	int reference_count;		/**< the number of times this texture is being referenced */
 };
 
 #endif

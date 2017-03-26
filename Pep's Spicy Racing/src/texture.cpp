@@ -4,6 +4,11 @@
 
 #include "texture.h"
 
+Texture::Texture()
+{
+	texture = 0;
+}
+
 Texture::Texture(const char *filepath, bool repeated, bool smoothed)
 {
 	sf::Image image;

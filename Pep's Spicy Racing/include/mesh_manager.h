@@ -42,7 +42,7 @@ public:
 	void clear();
 
 private:
-	std::array<class Mesh *, MAX_MESHES> mesh_list;			/**< the list meshes in the program, allocates pace for the number of shaders defined by the macro MAX_MESHES  */
+	std::array<class Mesh *, MAX_MESHES> mesh_list;			/**< the list of meshes in the program, allocates pace for the number of meshes defined by the macro MAX_MESHES  */
 	int num_meshes;											/**< the number of unique meshes currently in the mesh_list (based on if meshes have a reference_count of over 1) */
 };
 

@@ -1,0 +1,12 @@
+{
+"Entity": {
+  "name": "Test Tile",
+  "model-filepath": "models/perfect_tile.obj",
+  "color": [1.0, 0.2, 0.5, 1.0],
+  "think-rate": 100,
+  "move-speed": 0.0,
+  "rotation-speed": 0.0,
+  "shader-program": "json/shaders/toon_shader.json",
+  "texture-filepath": "images/wood.jpg"
+}
+}
