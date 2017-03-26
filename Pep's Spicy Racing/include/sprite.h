@@ -7,6 +7,16 @@
 #include <SFML/Graphics.hpp>
 
 class Sprite {
+public:
+	Sprite();
+	Sprite(std::string filepath);
+
+	
+	//DATA 
+public:
+
+
+private:
 
 };
 

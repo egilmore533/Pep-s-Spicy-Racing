@@ -55,10 +55,10 @@ void model_viewer_mode()
 	//TODO move all this stuff around so it isn't in the main function and is instead used in the entity or light stuff
 
 	//this will be our light
-	Entity *test_cube = ent_manager.create_entity("json/entities/light-cube.json", glm::vec3(8, 1, -10));
+	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(8, 1, -10));
 
 	//this will be our "player" which we can move
-	Entity *wood_monkey = ent_manager.create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0));
+	Entity_Manager::create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0));
 
 	while (running)
 	{
@@ -77,11 +77,11 @@ void model_viewer_mode()
 
 		graphics->Graphics::frame_begin();
 
-		ent_manager.update_all();
+		Entity_Manager::update_all();
 
 		/*Drawing Code Start*/
 
-		ent_manager.draw_all(camera, test_cube);
+		Entity_Manager::draw_all(camera, test_cube);
 
 		/*Drawing Code End*/
 

@@ -7,7 +7,6 @@
   "move-speed": 6.0,
   "rotation-speed": 6.0,
   "shader-program": "",
-  "draw function": "",
   "texture-filepath": "images/wood.jpg"
 }
 }
