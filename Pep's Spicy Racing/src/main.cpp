@@ -18,6 +18,7 @@
 #include "mesh.h"
 #include "entity.h"
 #include "entity_manager.h"
+#include "mesh_manager.h"
 
 void initialize_systems();
 void clear_systems();
@@ -39,6 +40,9 @@ void model_viewer_mode()
 
 	Shader_Manager shader_manager;
 	shader_manager.initialize();
+
+	Mesh_Manager mesh_manager;
+	mesh_manager.initialize();
 
 	Entity_Manager ent_manager;
 	ent_manager.initialize();
@@ -77,10 +81,6 @@ void model_viewer_mode()
 
 		/*Drawing Code Start*/
 
-
-		//TODO add camera to the draw all call that way we can pass this info for each draw all for each player :)
-		
-		//entitiy_draw_all();
 		ent_manager.draw_all(camera, test_cube);
 
 		/*Drawing Code End*/

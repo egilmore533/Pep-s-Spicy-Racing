@@ -19,11 +19,35 @@ Mesh::Mesh(const char *filename, const char *texture_filename)
 	normals.reserve(1000);
 
 	unique_triplets.reserve(3000);
+	ind.reserve(1000);
 	buffer_data.reserve(1000);
 
 	load_obj(filename);
 	load_texture(texture_filename);
 	setup_buffers();
+}
+
+/**
+* @brief creates a mesh to be used with all data set to default values
+*/
+Mesh::Mesh()
+{
+	filepath = "";
+	texture_filepath = "";
+	reference_count = 0;
+
+	vertices.reserve(1000);
+	uvs.reserve(1000);
+	normals.reserve(1000);
+
+	unique_triplets.reserve(3000);
+	ind.reserve(1000);
+	buffer_data.reserve(1000);
+
+	myTexture = NULL;
+	vao = 0;
+	vbo = 0;
+	ebo = 0;
 }
 
 /**

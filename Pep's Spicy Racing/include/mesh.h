@@ -41,6 +41,11 @@ public:
 	Mesh(const char *filename, const char *texture_filename);
 
 	/**
+	* @brief creates a mesh to be used with all data set to default values
+	*/
+	Mesh();
+
+	/**
 	* @brief deconstructor for the mesh, destroys the data from the vertices, texels, normals, and triangles
 	*/
 	~Mesh();
@@ -72,6 +77,13 @@ private:
 
 /////////////////Data Structures////////////////////
 
+public:
+	//Mesh_Manager data
+	std::string filepath;				/**< path to the mesh's file used with the texture_filepath to uniquely id each mesh */
+	std::string texture_filepath;		/**< path to the mesh's texture's file used with the filepath to uniquely id each mesh */
+	int reference_count;				/**< number of times this mesh is being used */
+
+private:
 	//data from the file, unchanged in order
 	std::vector<glm::vec3> vertices;	/**< vertices from the obj file */
 	std::vector<glm::vec2> uvs;			/**< uvs/texels from the obj file */
