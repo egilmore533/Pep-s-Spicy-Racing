@@ -1,13 +1,9 @@
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
-#include <map>
-#include <string>
-
-#include <SFML/Graphics.hpp>
-
-#include <glm\common.hpp>
-
+#include <glm/glm.hpp>
+#include "texture.h"
+#include "shader.h"
 #include "json_helper.h"
 
 class Sprite {
@@ -19,32 +15,41 @@ public:
 
 	/**
 	* @brief constructor to make a Sprite from an image file
-	* @param filepath	the path to the image file, also used to identify the sprite
+	* @param filepath	the path to the image file
 	*/
 	Sprite(std::string filepath);
 
 	/**
-	* @brief configures how to draw the sprite, needs to be set everytime the sprite is drawn
+	* @brief configures how to draw the sprite
 	* @param screen_position the position on the window to draw the sprite
-	* @param color			 the color the sprite needs to be color modded to become
-	* @param scale			 the scale the sprite will be drawn using
+	* @param color			 the color components the sprite will draw
+	* @param size			 the scale the sprite will be drawn using and also used to define the center of the sprite in rotation
 	* @param rotation		 the rotation of the sprite in degrees
-	* @param rectangle		 the rectangle the sprite will use from the texture
-	* @param smoothed		 should the sprite be scaled and drawn smoothly and a little blurry or just upscaled and pixelated
 	*/
-	void set_data(glm::vec2 screen_position, glm::u32vec4 color, glm::vec2 scale, float rotation, glm::u32vec4 rectangle, bool smoothed);
+	void set_data(glm::vec2 screen_position, glm::vec2 size, float rotation = 0.0f, glm::vec4 color = glm::vec4(1.0f));
+
+	/**
+	* @brief loads shader and the uniform locations
+	* @param shader_def the definition file for the shader program
+	*/
+	void set_shader(std::string shader_def);
 
 	/**
 	* @brief draws the sprite to the screen with its current configuration
 	*/
 	void draw();
-	
-	//DATA
-	std::string image_filepath;
 
 private:
-	sf::Sprite sprite;
-	sf::Texture texture;
+	Texture *texture;			/**< the texture the sprite will use to draw */
+	Shader *shader;
+	int id;						/**< the id of the sprite */
+	glm::vec2 screen_position;
+	glm::vec4 color;
+	glm::vec2 size;
+	float rotation;
+
+	GLuint model_location;
+	GLuint sprite_color_location;
 };
 
 #endif

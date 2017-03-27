@@ -12,8 +12,6 @@ public:
 	* @brief gets a pointer to the next free entity that we can use in the entity_list, and defines an entity using the given json file
 	* @param *entity_json_filepath definition file for this entity to be created from
 	* @param position  the position the entity is in the world space (model matrix)
-	* @param *shader_json_filepath the filepath to the shader definition file
-	* @param default_shader_program	(temporary parameter) default shader program from the graphics class, only used if no shader defined
 	* @return a pointer to the next entity to be used
 	*/
 	static Entity *create_entity(char *entity_json_filepath, glm::vec3 position);

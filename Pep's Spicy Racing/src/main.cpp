@@ -20,6 +20,7 @@
 #include "entity_manager.h"
 #include "mesh_manager.h"
 #include "texture_manager.h"
+#include "sprite.h"
 
 void initialize_systems();
 void clear_systems();
@@ -63,6 +64,10 @@ void model_viewer_mode()
 
 	//this will be our "player" which we can move
 	Entity_Manager::create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0));
+
+	Sprite *my_sprite = new Sprite("images/joe.png");
+	my_sprite->set_data(glm::vec2(0.0f), glm::vec2(720.0f));
+	my_sprite->set_shader("json/shaders/basic_sprite_shader.json");
 
 	while (running)
 	{
