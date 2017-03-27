@@ -1,6 +1,14 @@
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
+#include <string>
+
+#include <GL/glew.h>
+
+#include <SFML\Graphics.hpp>
+
+#include <glm\common.hpp>
+
 #include <glm/glm.hpp>
 #include "texture.h"
 #include "shader.h"
@@ -14,10 +22,10 @@ public:
 	Sprite();
 
 	/**
-	* @brief constructor to make a Sprite from an image file
+	* @brief loads the texture from an image file
 	* @param filepath	the path to the image file
 	*/
-	Sprite(std::string filepath);
+	void set_sprite_texture(std::string filepath);
 
 	/**
 	* @brief configures how to draw the sprite
@@ -39,17 +47,21 @@ public:
 	*/
 	void draw();
 
-private:
-	Texture *texture;			/**< the texture the sprite will use to draw */
-	Shader *shader;
+	//Data
+	bool in_use;				/**< in use flag */
 	int id;						/**< the id of the sprite */
-	glm::vec2 screen_position;
-	glm::vec4 color;
-	glm::vec2 size;
-	float rotation;
 
-	GLuint model_location;
-	GLuint sprite_color_location;
+	Texture *texture;			/**< the texture the sprite will use to draw */
+	Shader *shader;				/**< the shader used to draw the sprite */
+
+	glm::vec2 screen_position;	/**< the screen position to draw the sprite to */
+	glm::vec4 color;			/**< the color to draw the sprite */
+	glm::vec2 size;				/**< the size of the sprite */
+	float rotation;				/**< how much to rotate the sprite in degrees */
+
+	GLuint model_location;			/**< uniform location of the model in the shader */
+	GLuint projection_location;		/**< the uniform projection location in the shader */
+	GLuint sprite_color_location;	/**< uniform location of the sprite color in the shader */
 };
 
 #endif

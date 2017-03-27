@@ -30,6 +30,12 @@ public:
 	glm::mat4 get_projection_matrix();
 
 	/**
+	* @brief gets the camera's projection matrix, used for drawing 2d HUD/UI elements
+	* @return glm::mat4 the camera's ortho_projection_matrix member
+	*/
+	glm::mat4 get_ortho_projection_matrix();
+
+	/**
 	* @brief handles keyboard input and updates the camera's position accordingly, uses delta_time from graphics in an 
 	*		 attempt to keep movement smooth, it is still janky
 	*/
@@ -61,9 +67,10 @@ private:
 	float horizontal_angle;		/**< (yaw) the angle that the camera will be looking horizontally, used to update the forward and right vectors, and indirectly the up vector */
 	float vertical_angle;		/**< (pitch) the angle that the camera will be looking vertically, used to update the forward and right vectors, and indirectly the up vector */
 
-	glm::mat4 view_matrix;			/**< the view matrix that will be used to draw all game obejcts in the world */
-	glm::mat4 projection_matrix;	/**< the projection matrix that the world will be draw from */
-	glm::vec2 screen_dimensions;	/**< dimensions of the screen, used to handle mouse input in geT_mouse_input */
+	glm::mat4 view_matrix;				/**< the view matrix that will be used to draw all game obejcts in the world */
+	glm::mat4 projection_matrix;		/**< the projection matrix that the world will be draw from */
+	glm::mat4 ortho_projection_matrix;	/**< the projection matrix that the UI/HUD will be drawn from */
+	glm::vec2 screen_dimensions;		/**< dimensions of the screen, used to handle mouse input in geT_mouse_input */
 };
 
 #endif

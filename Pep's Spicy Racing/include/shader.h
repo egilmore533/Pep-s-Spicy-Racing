@@ -1,11 +1,20 @@
 #ifndef __SHADER_H__
 #define __SHADER_H__
 
+#include <string>
 #include <GL/glew.h>
 
 class Shader {
 public:
+
+	/**
+	* @brief default constructor for Shader
+	*/
 	Shader();
+
+	/**
+	* @brief 
+	*/
 	~Shader();
 	void use();
 	void build_shader(const char *def_file);

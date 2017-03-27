@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+
 #include <glm\gtx\transform.hpp>
 #include <SFML/Window.hpp>
 
@@ -18,6 +20,7 @@ Camera::Camera(glm::vec2 screen_size, glm::vec3 pos)
 	view_matrix = glm::lookAt(position, position + forward, up);
 
 	projection_matrix = glm::perspective(glm::radians(45.0f), screen_size.x / screen_size.y, NEAR_CLIPPING_PLANE, FAR_CLIPPING_PLANE);
+	ortho_projection_matrix = glm::ortho(0.0f, screen_size.x, screen_size.y, 0.0f, -1.0f, 1.0f);
 
 	horizontal_angle = 3.14f;
 	vertical_angle = 0.0f;
@@ -34,6 +37,11 @@ glm::mat4 Camera::get_view_matrix()
 glm::mat4 Camera::get_projection_matrix()
 {
 	return projection_matrix;
+}
+
+glm::mat4 Camera::get_ortho_projection_matrix()
+{
+	return ortho_projection_matrix;
 }
 
 void Camera::get_keyboard_input()

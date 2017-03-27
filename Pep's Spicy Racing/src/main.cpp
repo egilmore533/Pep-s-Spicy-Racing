@@ -2,8 +2,6 @@
 #include <windows.hpp>		//TODO ASK BO WHY I CAN'T FIMD THIS FILE IN RELEASE MODE
 #endif
 
-#include <SFML\Graphics.hpp>
-
 #include <GL/glew.h>
 
 #include <glm\glm.hpp>
@@ -20,15 +18,15 @@
 #include "entity_manager.h"
 #include "mesh_manager.h"
 #include "texture_manager.h"
-#include "sprite.h"
+#include "sprite_manager.h"
 
-void initialize_systems();
-void clear_systems();
 void model_viewer_mode();
 
 
 int main()
 {
+	init_logger("game_log.log");
+
 	model_viewer_mode();
 	return 0;
 
@@ -38,7 +36,7 @@ void model_viewer_mode()
 {
 	int running = 1;
 
-	init_logger("game_log.log");
+	Graphics *graphics = new Graphics();
 
 	Shader_Manager shader_manager;
 	shader_manager.initialize();
@@ -52,7 +50,8 @@ void model_viewer_mode()
 	Entity_Manager ent_manager;
 	ent_manager.initialize();
 
-	Graphics *graphics = new Graphics();
+	Sprite_Manager sprite_manager;
+	sprite_manager.initialize();
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
@@ -65,9 +64,7 @@ void model_viewer_mode()
 	//this will be our "player" which we can move
 	Entity_Manager::create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0));
 
-	Sprite *my_sprite = new Sprite("images/joe.png");
-	my_sprite->set_data(glm::vec2(0.0f), glm::vec2(720.0f));
-	my_sprite->set_shader("json/shaders/basic_sprite_shader.json");
+	Sprite *my_sprite = Sprite_Manager::create_sprite("json/sprites/joe_sprite.json");
 
 	while (running)
 	{
@@ -91,6 +88,8 @@ void model_viewer_mode()
 		/*Drawing Code Start*/
 
 		Entity_Manager::draw_all(camera, test_cube);
+
+		Sprite_Manager::draw(camera, my_sprite->id);
 
 		/*Drawing Code End*/
 

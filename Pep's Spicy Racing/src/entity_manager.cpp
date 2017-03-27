@@ -19,6 +19,12 @@ static Entity_Manager *manager = NULL;
 */
 void Entity_Manager::initialize()
 {
+	if (manager)
+	{
+		slog("manager currently exists");
+		return;
+	}
+
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
 		//memset
@@ -38,6 +44,13 @@ void Entity_Manager::initialize()
 Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 position)
 {
 	int i;
+
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return NULL;
+	}
+
 	//makesure we have the room for a new entity
 	if (manager->num_entities + 1 > MAX_ENTITIES)
 	{
@@ -51,7 +64,8 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 			continue;
 		}
 
-		Entity *new_entity = new Entity();
+		//create the entity using &entity_list[i]
+		Entity *new_entity = manager->entity_list[i];
 
 		new_entity->in_use = true;
 		new_entity->id = i;
@@ -62,13 +76,13 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 		glm::translate(new_entity->model, new_entity->world_position);
 		manager->num_entities++;
 
-		//create the entity using &entity_list[i]
 		json def = load_from_def(entity_json_filepath);
 		json entity_def = get_element_data(def, "Entity");
 
 		//we cannot count on this def file to contain the proper data
 		if (entity_def == NULL)
 		{
+			manager->num_entities++;
 			manager->entity_list[i] = new_entity;
 			return manager->entity_list[i];
 		}
@@ -112,19 +126,26 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 */
 void Entity_Manager::delete_entity(int entity_id)
 {
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return;
+	}
+
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (manager->entity_list[i]->id != entity_id)
+		if (manager->entity_list[i]->in_use == false || manager->entity_list[i]->id != entity_id)
 		{
 			continue;
 		}
 
 		manager->entity_list[i]->in_use = false;
+		manager->num_entities--;
 		
 		//any resources contained in the entity need to be dereferenced here
 		Shader_Manager::dereference_shader(manager->entity_list[i]->shader->shader_def_file);
 		Mesh_Manager::dereference_mesh(manager->entity_list[i]->mesh->filepath);
-		Texture_Manager::dereference_texture(manager->entity_list[i]->mesh->filepath);
+		Texture_Manager::dereference_texture(manager->entity_list[i]->texture->filepath);
 		return;
 	}
 }
@@ -134,6 +155,12 @@ void Entity_Manager::delete_entity(int entity_id)
 */
 void Entity_Manager::clear()
 {
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return;
+	}
+
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
 		if (this->entity_list[i]->in_use)
@@ -163,6 +190,12 @@ void Entity_Manager::clear()
 */
 void Entity_Manager::think_all()
 {
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return;
+	}
+
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
 		if (!manager->entity_list[i]->in_use)
@@ -182,6 +215,12 @@ void Entity_Manager::think_all()
 */
 void Entity_Manager::update_all()
 {
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return;
+	}
+
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
 		if (!manager->entity_list[i]->in_use)
@@ -199,6 +238,12 @@ void Entity_Manager::update_all()
 */
 void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 {
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return;
+	}
+
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
 		if (!manager->entity_list[i]->in_use)

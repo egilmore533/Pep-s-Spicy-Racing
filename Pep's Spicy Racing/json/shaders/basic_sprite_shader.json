@@ -1,0 +1,7 @@
+{
+"Shader": {
+  "name": "Basic Sprite Shader",
+  "vertex-shader-filepath": "shader/vs1.glsl",
+  "fragment-shader-filepath": "shader/fs1.glsl"
+}
+}

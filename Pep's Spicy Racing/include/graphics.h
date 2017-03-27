@@ -1,6 +1,8 @@
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__
 
+#include <GL/glew.h>
+
 #include <SFML\OpenGL.hpp>
 #include <SFML\Graphics.hpp>
 
