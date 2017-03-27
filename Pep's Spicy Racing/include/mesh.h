@@ -55,7 +55,6 @@ public:
 	 */
 	void draw(GLuint shader_program);
 
-private:
 	/**
 	 * @brief loads data from an obj file into this mesh, looking for vertices, uvs, normals, and faces
 	 *			also loads indices and sets up the buffer_data for the mesh

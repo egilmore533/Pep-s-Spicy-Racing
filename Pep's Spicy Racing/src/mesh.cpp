@@ -55,13 +55,6 @@ void Mesh::load_obj(const char *filename)
 {
 	FILE *file;
 	char buf[512];
-	std::vector<glm::vec3> temp_vertices;
-	std::vector<glm::vec2> temp_uvs;
-	std::vector<glm::vec3> temp_normals;
-
-	temp_vertices.reserve(1000);
-	temp_uvs.reserve(1000);
-	temp_normals.reserve(1000);
 
 	int current_index = 0;
 

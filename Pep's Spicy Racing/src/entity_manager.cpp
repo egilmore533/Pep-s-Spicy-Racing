@@ -165,7 +165,6 @@ void Entity_Manager::clear()
 	{
 		if (this->entity_list[i]->in_use)
 		{
-			//TODO ASK BO IF THIS IS A BAD IDEA
 			Entity *ent = new Entity();
 
 			//specifically this, should I just set them all to false and let 

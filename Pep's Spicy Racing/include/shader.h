@@ -23,8 +23,6 @@ public:
 	int reference_count;			/**< number of times this shader has been referenced, if it isn't referenced it can be used as the next slot in the shader manager's list */
 };
 
-
-//TODO REMOVE THESE AND DO SOMETHING A BIT MORE ELEGANT
 /**
 * @brief creates our simple shader program that only handles one vertex and one fragment shader
 *		 attaches them to link the program, handles errors by slogging the error returning

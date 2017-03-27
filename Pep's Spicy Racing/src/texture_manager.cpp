@@ -43,7 +43,11 @@ Texture *Texture_Manager::create_texture(std::string texture_filepath, bool repe
 	}
 
 	//TODO use the texture_list[first_empty] instead of a new texture by making a new texture function that loads data
-	Texture *new_texture = new Texture(texture_filepath.c_str(), repeated, smoothed);
+	//Texture *new_texture = new Texture(texture_filepath.c_str(), repeated, smoothed);
+
+	Texture *new_texture = manager->texture_list[first_empty];
+	new_texture->load_texture(texture_filepath.c_str(), repeated, smoothed);
+
 	new_texture->filepath = texture_filepath;
 	new_texture->reference_count = 1;
 	manager->texture_list[first_empty] = new_texture;

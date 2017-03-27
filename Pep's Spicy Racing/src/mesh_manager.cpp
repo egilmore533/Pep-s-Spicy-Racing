@@ -24,7 +24,6 @@ Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath)
 	for (int i = 0; i < MAX_MESHES; i++)
 	{
 		//if both the mesh file and the texture file match then just reuse this mesh 
-		//(TODO move texture into entity and make a resource manager for that to allow me to reuse mesh's without having to have matching textures)
 		if (manager->mesh_list[i]->filepath == mesh_filepath)
 		{
 			if (manager->mesh_list[i]->reference_count == 0)
@@ -54,7 +53,10 @@ Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath)
 		return NULL;
 	}
 
-	Mesh *new_mesh = new Mesh(mesh_filepath.c_str());
+	Mesh *new_mesh = manager->mesh_list[first_empty];
+
+	new_mesh->load_obj(mesh_filepath.c_str());
+	new_mesh->setup_buffers();
 
 	//save filepath here because const char is used in the mesh constructor and we want a string
 	new_mesh->filepath = mesh_filepath;
