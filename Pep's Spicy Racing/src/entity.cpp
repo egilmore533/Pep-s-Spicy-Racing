@@ -13,6 +13,7 @@ Entity::Entity()
 	id = -1;
 
 	mesh = NULL;
+	texture = NULL;
 
 	move_speed = 0.0f;
 	rotation_speed = 0.0f;

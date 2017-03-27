@@ -7,6 +7,6 @@
   "move-speed": 0.0,
   "rotation-speed": 0.0,
   "shader-program": "json/shaders/light_shader.json",
-  "texture-filepath": "images/wood.jpg"
+  "texture-filepath": "images/wood.png"
 }
 }

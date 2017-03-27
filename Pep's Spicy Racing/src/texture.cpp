@@ -7,6 +7,8 @@
 Texture::Texture()
 {
 	texture = 0;
+	filepath = "";
+	reference_count = 0;
 }
 
 Texture::Texture(const char *filepath, bool repeated, bool smoothed)

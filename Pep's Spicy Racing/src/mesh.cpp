@@ -10,9 +10,8 @@
 /**
 * @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
 * @param	filepath	the path to the .obj file from the working directory
-* @param	texture_filename	the path to the texture file
 */
-Mesh::Mesh(const char *filename, const char *texture_filename)
+Mesh::Mesh(const char *filename)
 {
 	vertices.reserve(1000);
 	uvs.reserve(1000);
@@ -23,7 +22,6 @@ Mesh::Mesh(const char *filename, const char *texture_filename)
 	buffer_data.reserve(1000);
 
 	load_obj(filename);
-	load_texture(texture_filename);
 	setup_buffers();
 }
 
@@ -33,7 +31,6 @@ Mesh::Mesh(const char *filename, const char *texture_filename)
 Mesh::Mesh()
 {
 	filepath = "";
-	texture_filepath = "";
 	reference_count = 0;
 
 	vertices.reserve(1000);
@@ -178,14 +175,6 @@ void Mesh::load_obj(const char *filename)
 }
 
 /**
-* @brief loads a texture to be used for the mesh
-*/
-void Mesh::load_texture(const char *filepath)
-{
-	myTexture = new Texture(filepath, true, true);
-}
-
-/**
 * @brief sets up the appropriate vertex array object and buffers for the mesh
 */
 void Mesh::setup_buffers()
@@ -224,7 +213,6 @@ void Mesh::setup_buffers()
 void Mesh::draw(GLuint shader_program)
 {
 	glUseProgram(shader_program);
-	glBindTexture(GL_TEXTURE_2D, myTexture->get_texture());
 	// Draw mesh
 	glBindVertexArray(vao);
 	glDrawElements(GL_TRIANGLES, ind.size(), GL_UNSIGNED_INT, 0);

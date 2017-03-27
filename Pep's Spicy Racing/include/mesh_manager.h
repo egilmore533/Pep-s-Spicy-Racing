@@ -16,19 +16,17 @@ public:
 	*		mesh in the first available mesh position, also check if room 
 	*		available in the mesh_list, if not exit program
 	* @param mesh_filepath path to the mesh obj file
-	* @param texture_filepath path to the texture file
 	* @return a pointer to the mesh that is defined by the given files
 	*/
-	static Mesh *create_mesh(std::string mesh_filepath, std::string texture_filepath);
+	static Mesh *create_mesh(std::string mesh_filepath);
 
 	/**
 	* @brief decrement the reference count of the given mesh, enabling it 
 	*		(if the reference count has reached 0) to be replaced by the creation 
 	*		of another mesh
 	* @param mesh_filepath the file of the mesh to be dereferenced
-	* @param texture_filepath the texture file of the mesh to be dereferenced
 	*/
-	static void dereference_mesh(std::string mesh_filepath, std::string texture_filepath);
+	static void dereference_mesh(std::string mesh_filepath);
 
 	/**
 	* @brief allocates and sets default data for the meshes in the mesh_manager's list 

@@ -8,6 +8,7 @@
 #include "json_helper.h"
 #include "shader_manager.h"
 #include "mesh_manager.h"
+#include "texture_manager.h"
 #include "camera.h"
 #include "entity_manager.h"
 
@@ -79,7 +80,8 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 		std::string texture_filepath = entity_def["texture-filepath"];
 		new_entity->color_data = glm::vec4(entity_def["color"][0], entity_def["color"][1], entity_def["color"][2], entity_def["color"][3]);
 
-		new_entity->mesh = Mesh_Manager::create_mesh(model_filepath.c_str(), texture_filepath.c_str());
+		new_entity->texture = Texture_Manager::create_texture(texture_filepath.c_str(), true, true);
+		new_entity->mesh = Mesh_Manager::create_mesh(model_filepath.c_str());
 		new_entity->move_speed = (float)entity_def["move-speed"];
 		new_entity->think_rate = (float)entity_def["think-rate"];
 		new_entity->rotation_speed = (float)entity_def["rotation-speed"];
@@ -123,7 +125,8 @@ void Entity_Manager::delete_entity(int entity_id)
 		
 		//any resources contained in the entity need to be dereferenced here
 		Shader_Manager::dereference_shader(manager->entity_list[i]->shader->shader_def_file);
-		Mesh_Manager::dereference_mesh(manager->entity_list[i]->mesh->filepath, manager->entity_list[i]->mesh->texture_filepath);
+		Mesh_Manager::dereference_mesh(manager->entity_list[i]->mesh->filepath);
+		Texture_Manager::dereference_texture(manager->entity_list[i]->mesh->filepath);
 		return;
 	}
 }
@@ -218,6 +221,8 @@ void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 			glUniform3f(manager->entity_list[i]->light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
 			glUniform3f(manager->entity_list[i]->view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 		}
+
+		glBindTexture(GL_TEXTURE_2D, manager->entity_list[i]->texture->get_texture());
 
 		manager->entity_list[i]->draw();
 	}

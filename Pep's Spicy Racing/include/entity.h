@@ -6,6 +6,7 @@
 #include <array>
 
 #include "shader.h"
+#include "texture.h"
 #include "mesh.h"
 
 class Entity
@@ -43,6 +44,7 @@ public:
 
 	//Soundpack *soundpack;		/**< the soundpak that belongs to this entity */
 	Mesh *mesh;					/**< mesh that belongs to this entity */
+	Texture *texture;			/**< the entity's texture */
 
 	float move_speed;			/**< the movement speed of the entity */
 	float rotation_speed;		/**< the speed at which the entity rotates */

@@ -15,9 +15,11 @@ public:
 	*		texture in the first available texture position, also check if room
 	*		available in the texture_list, if not exit program
 	* @param texture_filepath path to the texture file
+	* @param repeated	whether or not the texture should be repeated (doesn't matter if the texture has been loaded)
+	* @param smoothed	whether or not the texture should be smoothed (doesn't matter if the texture has been loaded)
 	* @return a pointer to the texture from the given files
 	*/
-	static Texture *create_texture(std::string texture_filepath);
+	static Texture *create_texture(std::string texture_filepath, bool repeated, bool smoothed);
 
 	/**
 	* @brief decrement the reference count of the given texture, enabling the manager

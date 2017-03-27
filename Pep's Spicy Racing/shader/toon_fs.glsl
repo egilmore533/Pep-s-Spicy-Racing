@@ -31,7 +31,7 @@ void main()
 	vec4 diffuse = diff * light_color;
 
 	//SPECULAR CALCULATION
-	float specular_strength = 0.2f;								/**< this is the impact of the highlight */
+	float specular_strength = 0.1f;								/**< this is the impact of the highlight */
 	int shininess_strength = 32;								/**< the higher the shininess the more it properly reflects the light instead of scattering it around (needs to be powers of 2) */
 	vec3 view_direction = normalize(view_position - FragPos);	
 

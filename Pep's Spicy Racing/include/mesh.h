@@ -36,9 +36,8 @@ public:
 	/**
 	 * @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
 	 * @param	filepath	the path to the .obj file from the working directory
-	 * @param	color		the colors of the mesh, if NULL not used
 	 */
-	Mesh(const char *filename, const char *texture_filename);
+	Mesh(const char *filename);
 
 	/**
 	* @brief creates a mesh to be used with all data set to default values
@@ -65,12 +64,6 @@ private:
 	void load_obj(const char *filename);
 
 	/**
-	 * @brief loads a texture to be used for the mesh
-	 * @param filepath	path to the texture file
-	 */
-	void load_texture(const char *filepath);
-
-	/**
 	 * @brief sets up the appropriate vertex array object and buffers for the mesh
 	 */
 	void setup_buffers();
@@ -80,7 +73,6 @@ private:
 public:
 	//Mesh_Manager data
 	std::string filepath;				/**< path to the mesh's file used with the texture_filepath to uniquely id each mesh */
-	std::string texture_filepath;		/**< path to the mesh's texture's file used with the filepath to uniquely id each mesh */
 	int reference_count;				/**< number of times this mesh is being used */
 
 private:

@@ -30,11 +30,13 @@ public:
 	 * @return GLuint texture
 	 */
 	GLuint get_texture();
+	
+public:
+	std::string filepath;		/**< the filepath to this texture, used to identify different textures */
+	int reference_count;		/**< the number of times this texture is being referenced */
 
 private:
 	GLuint texture;				/**< the index for the texture */
-	std::string filepath;		/**< the filepath to this texture, used to identify different textures */
-	int reference_count;		/**< the number of times this texture is being referenced */
 };
 
 #endif

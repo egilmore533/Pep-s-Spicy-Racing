@@ -10,10 +10,9 @@ static Mesh_Manager *manager = NULL;
 *		mesh in the first available mesh position, also check if room
 *		available in the mesh_list, if not exit program
 * @param mesh_filepath path to the mesh obj file
-* @param texture_filepath path to the texture file
 * @return a pointer to the mesh that is defined by the given files
 */
-Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath, std::string texture_filepath)
+Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath)
 {
 	if (!manager)
 	{
@@ -26,7 +25,7 @@ Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath, std::string texture_f
 	{
 		//if both the mesh file and the texture file match then just reuse this mesh 
 		//(TODO move texture into entity and make a resource manager for that to allow me to reuse mesh's without having to have matching textures)
-		if (manager->mesh_list[i]->filepath == mesh_filepath && manager->mesh_list[i]->texture_filepath == texture_filepath)
+		if (manager->mesh_list[i]->filepath == mesh_filepath)
 		{
 			if (manager->mesh_list[i]->reference_count == 0)
 			{
@@ -55,11 +54,10 @@ Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath, std::string texture_f
 		return NULL;
 	}
 
-	Mesh *new_mesh = new Mesh(mesh_filepath.c_str(), texture_filepath.c_str());
+	Mesh *new_mesh = new Mesh(mesh_filepath.c_str());
 
-	//save filepaths here because const char are used in the mesh constructors and we want strings
+	//save filepath here because const char is used in the mesh constructor and we want a string
 	new_mesh->filepath = mesh_filepath;
-	new_mesh->texture_filepath = texture_filepath;
 
 	new_mesh->reference_count = 1;					//referenced once
 	manager->mesh_list[first_empty] = new_mesh;		//make this new mesh the mesh at this position
@@ -72,9 +70,8 @@ Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath, std::string texture_f
 *		(if the reference count has reached 0) to be replaced by the creation
 *		of another mesh
 * @param mesh_filepath the file of the mesh to be dereferenced
-* @param texture_filepath the texture file of the mesh to be dereferenced
 */
-void Mesh_Manager::dereference_mesh(std::string mesh_filepath, std::string texture_filepath)
+void Mesh_Manager::dereference_mesh(std::string mesh_filepath)
 {
 	if (!manager)
 	{
@@ -84,7 +81,7 @@ void Mesh_Manager::dereference_mesh(std::string mesh_filepath, std::string textu
 
 	for (int i = 0; i < MAX_MESHES; i++)
 	{
-		if (manager->mesh_list[i]->filepath == mesh_filepath && manager->mesh_list[i]->texture_filepath == texture_filepath)
+		if (manager->mesh_list[i]->filepath == mesh_filepath)
 		{
 			manager->mesh_list[i]->reference_count--;
 			if (manager->mesh_list[i]->reference_count == 0)

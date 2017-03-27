@@ -7,6 +7,6 @@
   "move-speed": 6.0,
   "rotation-speed": 6.0,
   "shader-program": "json/shaders/toon_shader.json",
-  "texture-filepath": "images/wood.jpg"
+  "texture-filepath": "images/wood.png"
 }
 }

@@ -19,6 +19,7 @@
 #include "entity.h"
 #include "entity_manager.h"
 #include "mesh_manager.h"
+#include "texture_manager.h"
 
 void initialize_systems();
 void clear_systems();
@@ -43,6 +44,9 @@ void model_viewer_mode()
 
 	Mesh_Manager mesh_manager;
 	mesh_manager.initialize();
+
+	Texture_Manager texture_manager;
+	texture_manager.initialize();
 
 	Entity_Manager ent_manager;
 	ent_manager.initialize();
