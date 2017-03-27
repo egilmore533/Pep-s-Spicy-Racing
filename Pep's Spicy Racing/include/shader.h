@@ -13,10 +13,9 @@ public:
 	Shader();
 
 	/**
-	* @brief 
+	* @brief loads a Shader's files and compiles them, also saves the Shader's def file 
+	* @param *def_file	path to the file to load from
 	*/
-	~Shader();
-	void use();
 	void build_shader(const char *def_file);
 
 	GLuint program;					/**< the shader program itself */

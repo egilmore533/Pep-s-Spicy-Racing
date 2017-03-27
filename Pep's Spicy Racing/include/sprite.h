@@ -16,6 +16,7 @@
 
 class Sprite {
 public:
+
 	/**
 	* @brief the default constructor for a sprite, setting all data to default values, used by sprite manager to create an empty list of sprites
 	*/
@@ -48,16 +49,16 @@ public:
 	void draw();
 
 	//Data
-	bool in_use;				/**< in use flag */
+	bool in_use;				/**< flag for manager to understand if sprite is in use */
 	int id;						/**< the id of the sprite */
 
 	Texture *texture;			/**< the texture the sprite will use to draw */
 	Shader *shader;				/**< the shader used to draw the sprite */
 
-	glm::vec2 screen_position;	/**< the screen position to draw the sprite to */
-	glm::vec4 color;			/**< the color to draw the sprite */
-	glm::vec2 size;				/**< the size of the sprite */
-	float rotation;				/**< how much to rotate the sprite in degrees */
+	glm::vec2 screen_position;		/**< the screen position to draw the sprite to */
+	glm::vec4 color;				/**< the color to draw the sprite */
+	glm::vec2 size;					/**< the size of the sprite */
+	float rotation;					/**< how much to rotate the sprite */
 
 	GLuint model_location;			/**< uniform location of the model in the shader */
 	GLuint projection_location;		/**< the uniform projection location in the shader */

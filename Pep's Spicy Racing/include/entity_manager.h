@@ -45,12 +45,12 @@ public:
 	/**
 	* @brief draws all entities that are in use from the perspective of the given camera
 	* @param *camera the camera that will determine the perspective these entities will be drawn from
-	* @param
+	* @param *single_light the only light source to draw this entity using (TODO add a light system to draw using multiple lights)
 	*/
 	static void draw_all(Camera *camera, Entity *single_light);
 
 	/**
-	* @brief check collisions for all entities, if collision perform the touch functions of each
+	* @brief check collisions for all entities, if collision perform the touch functions of each passing the two entities that touched
 	*/
 	static void intersect_all();
 

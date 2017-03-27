@@ -32,22 +32,7 @@ Graphics::Graphics()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	graphics_shader_program = glCreateProgram();
-
-	graphics_shader_program = build_shader_program("shader/vs1.glsl", "shader/fs1.glsl");
-	if (graphics_shader_program == -1)
-	{
-		exit(0);
-	}
-
-	slog("Using program %d\n", graphics_shader_program);
-
 	game_delta_time.restart();
-}
-
-GLuint Graphics::get_shader_program()
-{
-	return graphics_shader_program;
 }
 
 sf::RenderWindow *Graphics::get_game_window()

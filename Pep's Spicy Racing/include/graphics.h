@@ -14,6 +14,7 @@
 class Graphics
 {
 public:
+
 	/**
 	* @brief creates our Graphics context for the window, shader program, and begins our delta_time clock
 	*/

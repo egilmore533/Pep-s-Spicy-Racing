@@ -69,19 +69,19 @@ void Entity::update()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		world_position.x +=  delta_time * move_speed;
+		world_position.x += move_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		world_position.x -=  delta_time * move_speed;
+		world_position.x -= move_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
 	{
-		rotation_angle -= delta_time * rotation_speed;
+		rotation_angle -= rotation_speed *delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 	{
-		rotation_angle += delta_time * rotation_speed;
+		rotation_angle += rotation_speed * delta_time;
 	}
 
 	model = glm::mat4(1.0f);

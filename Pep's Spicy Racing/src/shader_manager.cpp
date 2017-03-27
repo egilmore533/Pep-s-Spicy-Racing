@@ -5,15 +5,11 @@
 static Shader_Manager *manager = NULL;
 
 /**
-* @brief quick check to see if the sttaic manager has already been created (template the resource manager and place this in it)
-* @return true if manager is already set, false if manager is NULL
+* @brief initialize the shader manager by filling the shader_list with new shaders and setting the shader_count
 */
-bool check_manager_exists();
-
-
 void Shader_Manager::initialize()
 {
-	if (check_manager_exists())
+	if (manager)
 	{
 		slog("manager already exists");
 		return;
@@ -38,7 +34,7 @@ void Shader_Manager::initialize()
 */
 Shader *Shader_Manager::create_shader(std::string shader_def_file)
 {
-	if (!check_manager_exists())
+	if (!manager)
 	{
 		slog("manager doesn't currently exist");
 		return NULL;
@@ -74,7 +70,7 @@ Shader *Shader_Manager::create_shader(std::string shader_def_file)
 		return NULL;
 	}
 
-	Shader *new_shader = new Shader();
+	Shader *new_shader = manager->shader_list[first_empty];
 	new_shader->build_shader(shader_def_file.c_str());
 	new_shader->reference_count = 1;
 	manager->shader_list[first_empty] = new_shader;
@@ -90,7 +86,7 @@ Shader *Shader_Manager::create_shader(std::string shader_def_file)
 */
 void Shader_Manager::dereference_shader(std::string shader_def_file)
 {
-	if (!check_manager_exists())
+	if (!manager)
 	{
 		slog("manager doesn't currently exist");
 		return;
@@ -114,7 +110,7 @@ void Shader_Manager::dereference_shader(std::string shader_def_file)
 */
 void Shader_Manager::clear()
 {
-	if (!check_manager_exists())
+	if (!manager)
 	{
 		slog("manager doesn't currently exist");
 		return;
@@ -125,13 +121,4 @@ void Shader_Manager::clear()
 		manager->shader_list[i]->reference_count = 0;
 	}
 	num_shaders = 0;
-}
-
-bool check_manager_exists()
-{
-	if (!manager)
-	{
-		return false;
-	}
-	return true;
 }

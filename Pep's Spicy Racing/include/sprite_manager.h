@@ -30,6 +30,7 @@ public:
 
 	/**
 	* @brief performs the rendering of the given sprite
+	* @param *cam	the camera used to determine the orthographic projection for the sprite shader
 	* @param the id of the sprite to draw
 	*/
 	static void draw(Camera *cam, int sprite_id);

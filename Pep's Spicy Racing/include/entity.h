@@ -33,9 +33,7 @@ public:
 	void think();
 
 	/**
-	* @brief draws an entity, using its shader program
-	* @param *cam	the camera perspective to draw this entity from
-	* @param *light	the single light source that this entity using in their shader
+	* @brief draws an entity's mesh
 	*/
 	void draw();
 

@@ -5,7 +5,9 @@
 #include "json_helper.h"
 #include "shader.h"
 
-
+/**
+* @brief default constructor for Shader
+*/
 Shader::Shader()
 {
 	program = 0;
@@ -13,18 +15,9 @@ Shader::Shader()
 	reference_count = 0;
 }
 
-Shader::~Shader()
-{
-	program = 0;
-	shader_def_file = "";
-	reference_count = 0;
-}
-
-void Shader::use()
-{
-	glUseProgram(program);
-}
-
+/**
+* @brief load a shader program from a def file
+*/
 void Shader::build_shader(const char *def_file)
 {
 	json def = load_from_def((char *)def_file);
@@ -42,8 +35,7 @@ void Shader::build_shader(const char *def_file)
 	std::string fsPath = shader_def["fragment-shader-filepath"];
 	program = build_shader_program(vsPath.c_str(), fsPath.c_str());
 
-	//get the name and store it to ID the shader
-	std::string name = shader_def["name"];
+	//save the filepath to id the shader
 	shader_def_file = def_file;
 }
 
