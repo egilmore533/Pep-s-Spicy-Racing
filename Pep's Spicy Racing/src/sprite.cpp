@@ -29,6 +29,15 @@ void Sprite::set_sprite_texture(std::string filepath)
 }
 
 /**
+* @brief loads the texture from a json object for text
+* @param text_json	the defintion object containing information for a text sprite
+*/
+void Sprite::set_sprite_texture(json text_object)
+{
+	texture = Texture_Manager::create_text_texture(text_object["text"], (unsigned int)text_object["font_size"], text_object["font_filepath"]);
+}
+
+/**
 * @brief defines how to draw the sprite, needs to be reset everytime the sprite is drawn
 * @param screen_position the position on the window to draw the sprite
 * @param size			the size of the sprite

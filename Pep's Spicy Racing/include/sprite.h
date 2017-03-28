@@ -29,6 +29,12 @@ public:
 	void set_sprite_texture(std::string filepath);
 
 	/**
+	* @brief loads the texture from a json object for text
+	* @param text_json	the defintion object containing information for a text sprite
+	*/
+	void set_sprite_texture(json text_object);
+
+	/**
 	* @brief configures how to draw the sprite
 	* @param screen_position the position on the window to draw the sprite
 	* @param color			 the color components the sprite will draw

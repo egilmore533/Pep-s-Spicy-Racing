@@ -66,6 +66,16 @@ void model_viewer_mode()
 
 	Sprite *my_sprite2 = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
 
+	Sprite *my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
+
+	//TODO this is apparently a very long and wasteful process see if we can replace
+	sf::Font font;
+	if (!font.loadFromFile("fonts/Spicy.ttf"))
+	{
+		slog("error loading font");
+		return;
+	}
+
 	while (running)
 	{
 		sf::Event event;
@@ -92,6 +102,8 @@ void model_viewer_mode()
 		Sprite_Manager::draw(camera, my_sprite->id);
 
 		Sprite_Manager::draw(camera, my_sprite2->id);
+
+		Sprite_Manager::draw(camera, my_text->id);
 
 		/*Drawing Code End*/
 

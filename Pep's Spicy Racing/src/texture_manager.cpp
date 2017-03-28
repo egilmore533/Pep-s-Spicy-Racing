@@ -56,6 +56,59 @@ Texture *Texture_Manager::create_texture(std::string texture_filepath, bool repe
 }
 
 /**
+* @brief loads a text sprite using sf::Text from the given font with the given font size, checks if the text already exists and uses it instead if available and increases the reference_count
+*			(TODO load text stuff that is need from a json def file)
+* @param text_string the text to create a texture for
+* @param font_size the size of the font to use for the text
+* @param font_filepath the path to the font to use
+* @return a pointer to the loaded texture
+*/
+Texture *Texture_Manager::create_text_texture(std::string text_string, unsigned int font_size, std::string font_filepath)
+{
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return NULL;
+	}
+
+	int first_empty = -1;
+	for (int i = 0; i < MAX_TEXTURES; i++)
+	{
+		//if the data matches another texture use that instead
+		if (manager->texture_list[i]->font_name == font_filepath && manager->texture_list[i]->font_size == font_size && manager->texture_list[i]->text_string == text_string)
+		{
+			if (manager->texture_list[i]->reference_count == 0)
+			{
+				manager->num_textures++;
+			}
+			manager->texture_list[i]->reference_count++;
+			return manager->texture_list[i];
+		}
+
+		//while searching for this texture in the list, save the position of the texture in the list
+		if (first_empty == -1 && manager->texture_list[i]->reference_count == 0)
+		{
+			first_empty = i;
+		}
+	}
+
+	//TODO use the texture_list[first_empty] instead of a new texture by making a new texture function that loads data
+	//Texture *new_texture = new Texture(texture_filepath.c_str(), repeated, smoothed);
+
+	Texture *new_texture = manager->texture_list[first_empty];
+	new_texture->load_text_texture(text_string, font_size, font_filepath);
+
+	new_texture->text_string = text_string;
+	new_texture->font_size = font_size;
+	new_texture->font_name = font_filepath;
+
+	new_texture->reference_count = 1;
+	manager->texture_list[first_empty] = new_texture;
+	manager->num_textures++;
+	return manager->texture_list[first_empty];
+}
+
+/**
 * @brief decrement the reference count of the given texture, enabling the manager
 *		(if the reference count has reached 0) to replace the texture by loading
 *		another texture

@@ -72,34 +72,33 @@ void Sprite_Manager::draw(Camera *cam, int sprite_id)
 		return;
 	}
 
-	for (int i = 0; i < MAX_SPRITES; i++)
+	if (!manager->sprite_list[sprite_id]->in_use)
 	{
-		if (manager->sprite_list[i]->id == sprite_id)
-		{
-			glUseProgram(manager->sprite_list[i]->shader->program);
-			glm::mat4 model;
-
-			model = glm::translate(model, glm::vec3(manager->sprite_list[i]->screen_position, 0.0f));  // First translate (transformations are: scale happens first, then rotation and then finally translation happens; reversed order)
-
-			model = glm::translate(model, glm::vec3(0.5f * manager->sprite_list[i]->size.x, 0.5f * manager->sprite_list[i]->size.y, 0.0f)); // Move origin of rotation to center of quad
-			model = glm::rotate(model, manager->sprite_list[i]->rotation, glm::vec3(0.0f, 0.0f, 1.0f)); // Then rotate (TODO FIX THE SPRITE ROTATION)
-			model = glm::translate(model, glm::vec3(-0.5f * manager->sprite_list[i]->size.x, -0.5f * manager->sprite_list[i]->size.y, 0.0f)); // Move origin back
-
-			model = glm::scale(model, glm::vec3(manager->sprite_list[i]->size, 1.0f)); // Last scale
-
-			glUniformMatrix4fv(manager->sprite_list[i]->model_location, 1, GL_FALSE, &model[0][0]);
-			glUniformMatrix4fv(manager->sprite_list[i]->projection_location, 1, GL_FALSE, &cam->Camera::get_ortho_projection_matrix()[0][0]);
-			glUniform4f(manager->sprite_list[i]->sprite_color_location, manager->sprite_list[i]->color.x, manager->sprite_list[i]->color.y, manager->sprite_list[i]->color.z, manager->sprite_list[i]->color.w);
-
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, manager->sprite_list[i]->texture->get_texture());
-
-			glBindVertexArray(manager->quad_vao);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
-			break;
-		}
+		slog("sprite not in use");
+		return;
 	}
+	
+	glUseProgram(manager->sprite_list[sprite_id]->shader->program);
+	glm::mat4 model;
+
+	model = glm::translate(model, glm::vec3(manager->sprite_list[sprite_id]->screen_position, 0.0f));  // First translate (transformations are: scale happens first, then rotation and then finally translation happens; reversed order)
+
+	model = glm::translate(model, glm::vec3(0.5f * manager->sprite_list[sprite_id]->size.x, 0.5f * manager->sprite_list[sprite_id]->size.y, 0.0f)); // Move origin of rotation to center of quad
+	model = glm::rotate(model, manager->sprite_list[sprite_id]->rotation, glm::vec3(0.0f, 0.0f, 1.0f)); // Then rotate (TODO FIX THE SPRITE ROTATION)
+	model = glm::translate(model, glm::vec3(-0.5f * manager->sprite_list[sprite_id]->size.x, -0.5f * manager->sprite_list[sprite_id]->size.y, 0.0f)); // Move origin back
+
+	model = glm::scale(model, glm::vec3(manager->sprite_list[sprite_id]->size, 1.0f)); // Last scale
+
+	glUniformMatrix4fv(manager->sprite_list[sprite_id]->model_location, 1, GL_FALSE, &model[0][0]);
+	glUniformMatrix4fv(manager->sprite_list[sprite_id]->projection_location, 1, GL_FALSE, &cam->Camera::get_ortho_projection_matrix()[0][0]);
+	glUniform4f(manager->sprite_list[sprite_id]->sprite_color_location, manager->sprite_list[sprite_id]->color.x, manager->sprite_list[sprite_id]->color.y, manager->sprite_list[sprite_id]->color.z, manager->sprite_list[sprite_id]->color.w);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, manager->sprite_list[sprite_id]->texture->get_texture());
+
+	glBindVertexArray(manager->quad_vao);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 }
 
 /**
@@ -135,20 +134,37 @@ Sprite *Sprite_Manager::create_sprite(char *sprite_json_filepath)
 		//load json objects
 		json def = load_from_def(sprite_json_filepath);
 		json sprite_def = get_element_data(def, "Sprite");
+		json text_sprite_def = get_element_data(def, "Text_Sprite");
 
 		//we cannot count on this def file to contain the proper data
 		//need to write it as == NULL because just using ! crashes the json object
-		if (sprite_def == NULL)
+		if (sprite_def == NULL && text_sprite_def == NULL)
 		{
 			manager->num_sprites++;
 			manager->sprite_list[i] = new_sprite;
 			return manager->sprite_list[i];
 		}
 
-		std::string shader_filepath = sprite_def["shader_def_filepath"];
-		std::string texture_filepath = sprite_def["texture_filepath"];
+		//this isn't a text sprite so it must be a normal image sprite
+		if (text_sprite_def == NULL)
+		{
+			std::string texture_filepath = sprite_def["texture_filepath"];
+			new_sprite->set_sprite_texture(texture_filepath);
+		}
 
-		new_sprite->set_sprite_texture(texture_filepath);
+		//this isn't a normal image psrite so it must be a text sprite
+		else if (sprite_def == NULL)
+		{
+			json text_data = text_sprite_def["text_data"];
+			new_sprite->set_sprite_texture(text_data);
+
+			//the only difference bewtween the two has been dealt with so we can just move on using 
+			//the same json object as sprite, but we need to copy it over first to do that
+			sprite_def = text_sprite_def;
+		}
+		
+
+		std::string shader_filepath = sprite_def["shader_def_filepath"];
 		new_sprite->set_shader(shader_filepath);
 
 		glm::vec2 position = glm::vec2(sprite_def["screen_position"][0], sprite_def["screen_position"][1]);
