@@ -15,7 +15,7 @@ public:
 	/**
 	* @brief creates the texture from a given filepath, sets the smoothing and repeating flags, uses the whole image given
 	*/
-	Texture(const char *filepath, bool repeated, bool smoothed);
+	Texture(std::string filepath, bool repeated, bool smoothed);
 
 	/**
 	* @brief loads texture from given file path, sets smoothing and repeating accordingly, uses the whole image given so it can be reused multiple times 
@@ -25,7 +25,7 @@ public:
 	* @param repeated	boolean flag to set whether or not to repeat the texture when mapping to our model
 	* @param smoothed	boolean flag to set how we handle the drawing of the texture
 	*/
-	void load_texture(const char *filepath, bool repeated, bool smoothed);
+	void load_texture(std::string filepath, bool repeated, bool smoothed);
 
 	/**
 	* @brief loads a texture that contains the text string given using sfml to load the text from the given font with the given font_size 

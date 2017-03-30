@@ -18,9 +18,9 @@ Shader::Shader()
 /**
 * @brief load a shader program from a def file
 */
-void Shader::build_shader(const char *def_file)
+void Shader::build_shader(std::string def_file)
 {
-	json def = load_from_def((char *)def_file);
+	json def = load_from_def(def_file);
 	json shader_def = get_element_data(def, "Shader");
 
 	//we cannot count on this def file to contain the proper data
@@ -33,13 +33,13 @@ void Shader::build_shader(const char *def_file)
 	//get the vertex and fragment filepaths and build the shader program using them
 	std::string vsPath = shader_def["vertex-shader-filepath"];
 	std::string fsPath = shader_def["fragment-shader-filepath"];
-	program = build_shader_program(vsPath.c_str(), fsPath.c_str());
+	program = build_shader_program(vsPath, fsPath);
 
 	//save the filepath to id the shader
 	shader_def_file = def_file;
 }
 
-GLuint build_shader_program(const char *vsPath, const char *fsPath)
+GLuint build_shader_program(std::string vsPath, std::string fsPath)
 {
 	GLint infoLogLength;
 	GLuint vertexShader;
@@ -75,7 +75,7 @@ GLuint build_shader_program(const char *vsPath, const char *fsPath)
 	return tempProgram;
 }
 
-GLuint create_shader(GLenum eShaderType, const char *strShaderFile)
+GLuint create_shader(GLenum eShaderType, std::string strShaderFile)
 {
 	char shaderSource[4096];
 	char inChar;
@@ -88,7 +88,7 @@ GLuint create_shader(GLenum eShaderType, const char *strShaderFile)
 	char strShaderType[16];
 	const char *ss;
 
-	shaderFile = fopen(strShaderFile, "r");
+	shaderFile = fopen(strShaderFile.c_str(), "r");
 	if (!shaderFile)
 	{
 		slog("failed to open shader file: %s\n", strShaderFile);

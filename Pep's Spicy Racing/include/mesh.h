@@ -35,9 +35,9 @@ class Mesh
 public:
 	/**
 	 * @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
-	 * @param	filepath	the path to the .obj file from the working directory
+	 * @param filepath	the path to the .obj file from the working directory
 	 */
-	Mesh(const char *filename);
+	Mesh(std::string filename);
 
 	/**
 	* @brief creates a mesh to be used with all data set to default values
@@ -60,7 +60,7 @@ public:
 	 *			also loads indices and sets up the buffer_data for the mesh
 	 * @param filename		the filepath to the obj file to load from
 	 */
-	void load_obj(const char *filename);
+	void load_obj(std::string filename);
 
 	/**
 	 * @brief sets up the appropriate vertex array object and buffers for the mesh

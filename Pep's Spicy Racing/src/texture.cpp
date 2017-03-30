@@ -22,11 +22,11 @@ Texture::Texture()
 * @brief loads texture from given file path, sets smoothing and repeating accordingly, uses the whole image given so it can be reused multiple times
 *			for instance one sprite might only want the texture's blue values to be drawn while another wants all the colors, this should all be
 *			done on the sprite end, not the texture
-* @param *filepath	path to the image in from our working directory
+* @param filepath	path to the image in from our working directory
 * @param repeated	boolean flag to set whether or not to repeat the texture when mapping to our model
 * @param smoothed	boolean flag to set how we handle the drawing of the texture
 */
-void Texture::load_texture(const char *filepath, bool repeated, bool smoothed)
+void Texture::load_texture(std::string filepath, bool repeated, bool smoothed)
 {
 	sf::Image image;
 	std::string file = filepath;
@@ -73,6 +73,7 @@ void Texture::load_texture(const char *filepath, bool repeated, bool smoothed)
 void Texture::load_text_texture(std::string text, unsigned int font_size, std::string font_filepath)
 {
 	//TODO this is apparently a very long and wasteful process see if we can replace
+	//TODO this sfml thing isn't working either
 	sf::Font font;
 	if (!font.loadFromFile(font_filepath))
 	{
@@ -94,6 +95,8 @@ void Texture::load_text_texture(std::string text, unsigned int font_size, std::s
 	sf::RenderTexture target;
 
 	target.create(sfml_text.getGlobalBounds().width, sfml_text.getGlobalBounds().height);
+	target.draw(sfml_text);
+	target.display();
 	target.clear(sf::Color::Transparent);
 	target.draw(sfml_text);
 	target.display();

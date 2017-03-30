@@ -1,0 +1,7 @@
+{
+"Button": {
+  "name": "Singleplayer",
+  "sprite_def_filepath": "json/sprites/single_player_button.json",
+  "text": "Singleplayer"
+}
+}

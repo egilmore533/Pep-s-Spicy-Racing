@@ -9,7 +9,7 @@
 * @param *element_name name of the element to look for
 * @return json data of the element requested or NULL if the element doesn't exist in the data
 */
-json get_element_data(json def, char *element_name)
+json get_element_data(json def, std::string element_name)
 {
 	if (def == NULL)
 	{
@@ -33,7 +33,7 @@ json get_element_data(json def, char *element_name)
 * @param *filename path to the file that will be opened
 * @return json object or NULL if the file fails to open
 */
-json load_from_def(char *filename)
+json load_from_def(std::string filename)
 {
 	json def;
 	char buf[512];

@@ -41,7 +41,7 @@ void Entity_Manager::initialize()
 * @param position  the position the entity is in the world space (model matrix)
 * @return a pointer to the next entity to be used
 */
-Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 position)
+Entity *Entity_Manager::create_entity(std::string entity_json_filepath, glm::vec3 position)
 {
 	int i;
 
@@ -100,7 +100,7 @@ Entity *Entity_Manager::create_entity(char *entity_json_filepath, glm::vec3 posi
 
 		std::string shader_filepath = entity_def["shader-program"];
 
-		new_entity->shader = Shader_Manager::create_shader((char *)shader_filepath.c_str());
+		new_entity->shader = Shader_Manager::create_shader(shader_filepath);
 		new_entity->model_location = glGetUniformLocation(new_entity->shader->program, "model");
 		new_entity->color_location = glGetUniformLocation(new_entity->shader->program, "object_color");
 

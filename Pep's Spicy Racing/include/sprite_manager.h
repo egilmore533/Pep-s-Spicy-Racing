@@ -14,7 +14,7 @@ public:
 	* @param *sprite_json_filepath definition file for this entity to be created from
 	* @return a pointer to the next entity to be used
 	*/
-	static Sprite *create_sprite(char *sprite_json_filepath);
+	static Sprite *create_sprite(std::string sprite_json_filepath);
 
 	/**
 	* @brief deletes the given sprite from the sprite_list

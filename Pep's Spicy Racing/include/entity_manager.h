@@ -14,7 +14,7 @@ public:
 	* @param position  the position the entity is in the world space (model matrix)
 	* @return a pointer to the next entity to be used
 	*/
-	static Entity *create_entity(char *entity_json_filepath, glm::vec3 position);
+	static Entity *create_entity(std::string entity_json_filepath, glm::vec3 position);
 
 	/**
 	* @brief deletes the given entity from the entity_list

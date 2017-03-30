@@ -9,9 +9,9 @@
 
 /**
 * @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
-* @param	filepath	the path to the .obj file from the working directory
+* @param filepath	the path to the .obj file from the working directory
 */
-Mesh::Mesh(const char *filename)
+Mesh::Mesh(std::string filename)
 {
 	vertices.reserve(1000);
 	uvs.reserve(1000);
@@ -51,20 +51,14 @@ Mesh::Mesh()
  * @brief loads data from an obj file into this mesh, looking for vertices, uvs, normals, and faces
  * @param filename		the filepath to the obj file to load from
  */
-void Mesh::load_obj(const char *filename)
+void Mesh::load_obj(std::string filename)
 {
 	FILE *file;
 	char buf[512];
 
 	int current_index = 0;
 
-	if (!filename)
-	{
-		slog("no filename provided");
-		return;
-	}
-
-	file = fopen(filename, "r");
+	file = fopen(filename.c_str(), "r");
 	if (!file)
 	{
 		slog("failed to open file: %s", filename);
