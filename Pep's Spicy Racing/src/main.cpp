@@ -95,7 +95,7 @@ void level_editor()
 		Graphics::next_frame();
 	}
 
-	editor.save_and_exit("level.json");
+	editor.save_and_exit("json/levels/created_level.json");
 
 	return;
 }

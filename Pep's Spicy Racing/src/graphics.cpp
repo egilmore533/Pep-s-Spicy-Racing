@@ -7,6 +7,7 @@
 
 sf::Clock Graphics::game_delta_time;
 sf::RenderWindow *Graphics::game_window;
+glm::vec4 Graphics::clear_color;
 
 Graphics::Graphics()
 {
@@ -28,6 +29,7 @@ Graphics::Graphics()
 
 	game_window->setMouseCursorGrabbed(true);
 	game_window->setVerticalSyncEnabled(true);
+	clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -43,7 +45,7 @@ sf::RenderWindow *Graphics::get_game_window()
 
 void Graphics::frame_begin()
 {
-	glClearColor(0.0, 0.0, 0.6, 0.0);
+	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -51,6 +53,11 @@ void Graphics::next_frame()
 {
 	game_window->display();
 	game_delta_time.restart();
+}
+
+void Graphics::set_clear_color(glm::vec4 new_clear_color)
+{
+	clear_color = new_clear_color;
 }
 
 sf::Time Graphics::get_delta_time()
