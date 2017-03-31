@@ -37,6 +37,7 @@ private:
 	Sprite *grid_tile_sprite;						/**< empty tile sprite */
 	Sprite *activated_tile_sprite;					/**< tile that has been clicked on and added to the list of activated tiles (added to the stage) */
 	Sprite *highlighted_tile_sprite;				/**< the tile that has the cursor over it */
+	Sprite *start_tile;								/**< the start tile for the race */
 
 	sf::Vector2i mouse_position;					/**< stores the player's cursor position to determine which tile is highlighted and add that to the activated positions*/
 	std::vector<glm::vec2> grid_positions;			/**< just standard grid used to determine where to place the tiles (highlighted, activated, empty) */
@@ -49,6 +50,7 @@ private:
 
 	bool clicked;					/**< flag to help the update function, prevents from clicking every frame because thats not built into sfml */
 	bool draw_highlighted_tile;		/**< flag to determine whether or not to draw the highlighted tile */
+	bool start_tile_set;			/**< flag to determine if the start tile has been set */
 };
 
 

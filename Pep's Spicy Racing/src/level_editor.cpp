@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "sprite_manager.h"
 #include "level_editor.h"
 #include "graphics.h"
@@ -17,8 +19,10 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 	grid_tile_sprite = Sprite_Manager::create_sprite("json/sprites/grid_sprite.json");						//empty tile sprite
 	activated_tile_sprite = Sprite_Manager::create_sprite("json/sprites/activated_grid_sprite.json");		//tile that has been clicked on and added to the list of activated tiles (added to the stage)
 	highlighted_tile_sprite = Sprite_Manager::create_sprite("json/sprites/highlighted_grid_sprite.json");	//the tile that has the cursor over it
-
-																											//lets fill the grid positions with the configuration we have
+	start_tile = Sprite_Manager::create_sprite("json/sprites/start_sprite.json");							//the sprite for the start position in the race
+	start_tile_set = false;
+	
+	//lets fill the grid positions with the configuration we have
 	for (int i = 0; i < max_grid_columns; i++)
 	{
 		for (int j = 0; j < max_grid_rows; j++)
@@ -59,6 +63,10 @@ void Level_Editor::update_editor()
 							if (activated_positions[j] == grid_positions[i])
 							{
 								activated_positions.erase(activated_positions.begin() + j);
+								if (start_tile->screen_position == grid_positions[i])
+								{
+									start_tile_set = false;
+								}
 								found_tile = true;
 								break;
 							}
@@ -67,6 +75,28 @@ void Level_Editor::update_editor()
 						{
 							activated_positions.push_back(grid_positions[i]);
 						}
+						clicked = true;
+					}
+				}
+				else if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+				{
+					if (!clicked)
+					{
+						bool found_tile = false;
+						for (int j = 0; j < activated_positions.size(); j++)
+						{
+							if (activated_positions[j] == grid_positions[i])
+							{
+								found_tile = true;
+								break;
+							}
+						}
+						if (!found_tile)
+						{
+							activated_positions.push_back(grid_positions[i]);
+						}
+						start_tile->screen_position = grid_positions[i];
+						start_tile_set = true;
 						clicked = true;
 					}
 				}
@@ -95,6 +125,11 @@ void Level_Editor::draw_editor(Camera *camera)
 		Sprite_Manager::draw(camera, highlighted_tile_sprite->id);
 	}
 
+	if (start_tile_set)
+	{
+		Sprite_Manager::draw(camera, start_tile->id);
+	}
+
 	//draw all activated tiles
 	for (int i = 0; i < activated_positions.size(); i < i++)
 	{
@@ -116,5 +151,23 @@ void Level_Editor::draw_editor(Camera *camera)
 */
 void Level_Editor::save_and_exit(std::string filename)
 {
+	json def = {
+		{ "pi", 3.141 },
+		{ "happy", true },
+		{ "name", "Niels" },
+		{ "nothing", nullptr },
+		{ "answer",{
+			{ "everything", 42 }
+		} },
+		{ "list",{ 1, 0, 2 } },
+		{ "object",{
+			{ "currency", "USD" },
+			{ "value", 42.99 }
+		} }
+	};
 
+
+	std::ofstream o(filename);
+	o << std::setw(4) << def << std::endl;
+	o.close();
 }
