@@ -152,19 +152,16 @@ void Level_Editor::draw_editor(Camera *camera)
 void Level_Editor::save_and_exit(std::string filename)
 {
 	json def = {
-		{ "pi", 3.141 },
-		{ "happy", true },
-		{ "name", "Niels" },
-		{ "nothing", nullptr },
-		{ "answer",{
-			{ "everything", 42 }
-		} },
-		{ "list",{ 1, 0, 2 } },
-		{ "object",{
-			{ "currency", "USD" },
-			{ "value", 42.99 }
+		{ "Level",{
+			{ "theme", "json/stage_themes/spicy.json" },
+			{ "start_tile", { start_tile->screen_position.x, start_tile->screen_position.y} }
 		} }
 	};
+
+	for (int i = 0; i < activated_positions.size(); i++)
+	{
+		def["Level"]["tiles"].push_back({ activated_positions[i].x, activated_positions[i].y });
+	}
 
 
 	std::ofstream o(filename);
