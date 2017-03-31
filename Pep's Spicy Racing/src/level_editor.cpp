@@ -119,15 +119,11 @@ void Level_Editor::update_editor()
 */
 void Level_Editor::draw_editor(Camera *camera)
 {
-	//only draw the highlighted tile, if the cursor is on the grid
-	if (draw_highlighted_tile)
+	//draw all grid tiles
+	for (int i = 0; i < max_grid_columns * max_grid_rows; i < i++)
 	{
-		Sprite_Manager::draw(camera, highlighted_tile_sprite->id);
-	}
-
-	if (start_tile_set)
-	{
-		Sprite_Manager::draw(camera, start_tile->id);
+		grid_tile_sprite->screen_position = grid_positions[i];
+		Sprite_Manager::draw(camera, grid_tile_sprite->id);
 	}
 
 	//draw all activated tiles
@@ -137,11 +133,15 @@ void Level_Editor::draw_editor(Camera *camera)
 		Sprite_Manager::draw(camera, activated_tile_sprite->id);
 	}
 
-	//draw all grid tiles
-	for (int i = 0; i < max_grid_columns * max_grid_rows; i < i++)
+	if (start_tile_set)
 	{
-		grid_tile_sprite->screen_position = grid_positions[i];
-		Sprite_Manager::draw(camera, grid_tile_sprite->id);
+		Sprite_Manager::draw(camera, start_tile->id);
+	}
+
+	//only draw the highlighted tile, if the cursor is on the grid
+	if (draw_highlighted_tile)
+	{
+		Sprite_Manager::draw(camera, highlighted_tile_sprite->id);
 	}
 }
 

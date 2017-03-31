@@ -8,5 +8,5 @@ uniform vec4 sprite_color;
 
 void main()
 {
-	color = sprite_color * texture(image, TexCoords);
+	color = vec4(sprite_color.xyz * texture(image, TexCoords).xyz, texture(image, TexCoords).w);
 }

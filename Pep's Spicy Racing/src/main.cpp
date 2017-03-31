@@ -25,6 +25,23 @@ void singleplayer_mode();
 void level_editor();
 
 
+/*
+?s
+
+Why do my sprites show the window as the transparency not what I just drew?
+How do I set it up so I can draw things on top of one another?
+
+Why doesn't my RenderTexture work with the sf::text stuff?
+I cannot seem to render my text to this RenderTexture to use it.
+
+Is this level editor a bad idea?
+How else could I implement the stage itself?
+How should I set up my level data for later use in the game, should i use the vertices 
+of the track itself to determine where the ai and the  player are and keep track of the race?
+
+*/
+
+
 int main()
 {
 	init_logger("game_log.log");
@@ -60,6 +77,9 @@ void level_editor()
 	Level_Editor editor;
 
 	editor.configure_editor(7, 10, glm::vec2(10, 20));
+
+	//turn off depth test for UI/HUD elements
+	glDisable(GL_DEPTH_TEST);
 
 	//this should all be 2d so we dont need to enable this for sprites only and disable for 3d assets
 	glEnable(GL_BLEND);
@@ -147,6 +167,9 @@ void singleplayer_mode()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		//this should be disabled for UI and HUD stuffs, but enabled for 3D
+		glDisable(GL_DEPTH_TEST);
+
 		Sprite_Manager::draw(camera, my_sprite->id);
 
 		Sprite_Manager::draw(camera, my_sprite2->id);
@@ -156,6 +179,10 @@ void singleplayer_mode()
 		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
 		//opengl is hard :(
 		glDisable(GL_BLEND);
+
+
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
 
 		/*Drawing Code End*/
 

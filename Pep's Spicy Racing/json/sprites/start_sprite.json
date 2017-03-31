@@ -1,0 +1,11 @@
+{
+"Sprite": {
+  "name": "Start Tile",
+  "shader_def_filepath": "json/shaders/basic_sprite_shader.json",
+  "texture_filepath": "images/sprites/start_tile.png",
+  "screen_position": [0,0],
+  "color": [1,1,1,1],
+  "size": [100, 100],
+  "rotation": 0
+}
+}
