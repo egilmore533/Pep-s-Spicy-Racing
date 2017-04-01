@@ -86,6 +86,7 @@ int main()
 			{
 				singleplayer_mode();
 				ent_manager.clear();
+				sprite_manager.clear();
 			}
 		}
 		else
@@ -117,7 +118,7 @@ void level_editor()
 	//turn off depth test for UI/HUD elements
 	glDisable(GL_DEPTH_TEST);
 
-	//this should all be 2d so we dont need to enable this for sprites only and disable for 3d assets
+	//this should all be 2d so we dont need to switch in the loop
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -139,10 +140,7 @@ void level_editor()
 
 		editor.update_editor();
 
-		//TODO ask bo/garry/google about alpha blending, am i thinking about this the wrong way or is there something else I should eb doing entirely?
 		/*Drawing Code Start*/
-
-		//because I don't understand alpha blending for now it doesn't matter so I'll just draw things in a weird order
 
 		editor.draw_editor(camera);
 
@@ -180,16 +178,9 @@ void singleplayer_mode()
 	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(8, 1, -10));
 
+	//test UI elements
 	Sprite *my_sprite = Sprite_Manager::create_sprite("json/sprites/joe_sprite.json");
-
 	Sprite *my_sprite2 = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
-
-	//turn off depth test for UI/HUD elements
-	glDisable(GL_DEPTH_TEST);
-
-	//this should all be 2d so we dont need to enable this for sprites only and disable for 3d assets
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	Sprite *my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
 
@@ -225,9 +216,7 @@ void singleplayer_mode()
 		glDisable(GL_DEPTH_TEST);
 
 		Sprite_Manager::draw(camera, my_sprite->id);
-
 		Sprite_Manager::draw(camera, my_sprite2->id);
-
 		Sprite_Manager::draw(camera, my_text->id);
 
 		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly

@@ -192,7 +192,7 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 			new_sprite->set_sprite_texture(texture_filepath);
 		}
 
-		//this isn't a normal image psrite so it must be a text sprite
+		//this isn't a normal image sprite so it must be a text sprite
 		else if (sprite_def == NULL)
 		{
 			json text_data = text_sprite_def["text_data"];
