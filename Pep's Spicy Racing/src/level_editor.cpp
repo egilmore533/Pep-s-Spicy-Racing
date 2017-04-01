@@ -154,13 +154,14 @@ void Level_Editor::save_and_exit(std::string filename)
 	json def = {
 		{ "Level",{
 			{ "theme", "json/stage_themes/spicy.json" },
-			{ "start_tile", { start_tile->screen_position.x, start_tile->screen_position.y} }
+			{ "start_tile", { start_tile->screen_position.x / 10, start_tile->screen_position.y / 10} },
+			{ "number_tiles", activated_positions.size() }
 		} }
 	};
 
 	for (int i = 0; i < activated_positions.size(); i++)
 	{
-		def["Level"]["tiles"].push_back({ activated_positions[i].x, activated_positions[i].y });
+		def["Level"]["tiles"].push_back({ activated_positions[i].x / 10, activated_positions[i].y / 10 });
 	}
 
 

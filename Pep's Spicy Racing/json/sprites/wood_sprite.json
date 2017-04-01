@@ -2,7 +2,7 @@
 "Sprite": {
   "name": "Wood",
   "shader_def_filepath": "json/shaders/basic_sprite_shader.json",
-  "texture_filepath": "images/wood.png",
+  "texture_filepath": "images/sprites/highlighted_grid.png",
   "screen_position": [914,10],
   "color": [1,1,1,1],
   "size": [100, 100],

@@ -94,7 +94,7 @@ void Texture::load_text_texture(std::string text, unsigned int font_size, std::s
 	
 	sf::RenderTexture target;
 
-	target.create(sfml_text.getGlobalBounds().width, sfml_text.getGlobalBounds().height);
+	target.create(sfml_text.getGlobalBounds().width + sfml_text.getGlobalBounds().left, sfml_text.getGlobalBounds().height + sfml_text.getGlobalBounds().top);
 	target.draw(sfml_text);
 	target.display();
 	target.clear(sf::Color::Transparent);

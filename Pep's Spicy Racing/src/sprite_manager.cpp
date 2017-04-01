@@ -58,6 +58,41 @@ void Sprite_Manager::initialize()
 	manager = this;
 }
 
+/**
+* @brief empties the sprite_list useful to load a new game mode, not static because this shouldn't be done in any file beside one that has access to the actual sprite_manager object
+*/
+void Sprite_Manager::clear()
+{
+	if (!manager)
+	{
+		slog("manager doesn't currently exist");
+		return;
+	}
+
+	for (int i = 0; i < MAX_SPRITES; i++)
+	{
+		if (this->sprite_list[i]->in_use)
+		{
+			if (manager->sprite_list[i]->in_use == false)
+			{
+				continue;
+			}
+
+			manager->sprite_list[i]->in_use = false;
+			manager->num_sprites--;
+
+			//any resources contained in the entity need to be dereferenced here
+			Shader_Manager::dereference_shader(manager->sprite_list[i]->shader->shader_def_file);
+			Texture_Manager::dereference_texture(manager->sprite_list[i]->texture->filepath);
+
+			if (this->num_sprites == 0)
+			{
+				return;
+			}
+		}
+	}
+}
+
 
 /**
 * @brief performs the rendering of the given sprite

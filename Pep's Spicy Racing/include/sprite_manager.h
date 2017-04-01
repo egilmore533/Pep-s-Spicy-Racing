@@ -29,6 +29,11 @@ public:
 	void initialize();
 
 	/**
+	* @brief empties the sprite_list useful to load a new game mode, not static because this shouldn't be done in any file beside one that has access to the actual sprite_manager object
+	*/
+	void clear();
+
+	/**
 	* @brief performs the rendering of the given sprite
 	* @param *cam	the camera used to determine the orthographic projection for the sprite shader
 	* @param the id of the sprite to draw

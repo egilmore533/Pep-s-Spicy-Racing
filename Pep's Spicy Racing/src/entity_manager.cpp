@@ -165,16 +165,18 @@ void Entity_Manager::clear()
 	{
 		if (this->entity_list[i]->in_use)
 		{
-			Entity *ent = new Entity();
+			if (this->entity_list[i]->in_use == false)
+			{
+				continue;
+			}
 
-			//specifically this, should I just set them all to false and let 
-			//the create_entity replace the old automatically and would that 
-			//make the old entity pointer go out of scope and get deleted or is 
-			//that a memory leak or some shit, I NEED TO KNOW
-			delete this->entity_list[i];
-
-			this->entity_list[i] = ent;
+			this->entity_list[i]->in_use = false;
 			this->num_entities--;
+
+			//any resources contained in the entity need to be dereferenced here
+			Shader_Manager::dereference_shader(this->entity_list[i]->shader->shader_def_file);
+			Mesh_Manager::dereference_mesh(this->entity_list[i]->mesh->filepath);
+			Texture_Manager::dereference_texture(this->entity_list[i]->texture->filepath);
 
 			if (this->num_entities == 0)
 			{
