@@ -19,6 +19,7 @@
 #include "sprite_manager.h"
 
 #include "level_editor.h"
+#include "stage.h"
 
 void singleplayer_mode();
 
@@ -64,6 +65,10 @@ int main()
 	Sprite_Manager sprite_manager;
 	sprite_manager.initialize();
 
+	glm::vec4 menu_clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
+
+	Graphics::set_clear_color(menu_clear_color);
+
 	while (game_running)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -77,6 +82,7 @@ int main()
 			{
 				level_editor();
 				sprite_manager.clear();
+				Graphics::set_clear_color(menu_clear_color);
 			}
 				
 		}
@@ -86,7 +92,14 @@ int main()
 			{
 				singleplayer_mode();
 				ent_manager.clear();
-				sprite_manager.clear();
+				//sprite_manager.clear(); 
+				//so this the text only loads in the singleplayer mode if I have already run the singplayer mode
+				//it also will not work if I load the singpleayer mode, then the editor, then the singplayer mode
+				//it will however work if I run the editor, then the singpleayer mode several times, then I can switch between the two with no problems
+				//alternatively If I disable the sprite list clear here I'll be able to switch between the two no problems, but I still have to reload the singleplayer mode atleast once
+				
+				//i will temporarily leave it without clearing the sprites just for testing code, but I need to solve this issue
+				Graphics::set_clear_color(menu_clear_color);
 			}
 		}
 		else
@@ -111,6 +124,8 @@ void level_editor()
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
+	Graphics::set_clear_color(glm::vec4(0.0f, 0.0f, 0.6f, 1.0f));
+
 	Level_Editor editor;
 
 	editor.configure_editor(7, 10, glm::vec2(10, 20));
@@ -124,6 +139,7 @@ void level_editor()
 
 	while (editor_running)
 	{
+
 		sf::Event event;
 		while (Graphics::get_game_window()->pollEvent(event))
 		{
@@ -157,20 +173,12 @@ void level_editor()
 void singleplayer_mode()
 {
 	int singleplayer_running = 1;
+	Stage stage = Stage("json/levels/stage1.json");
 
-	//start by loading up the level data
-	json level_def = load_from_def("json/levels/created_level.json");
-	json level = get_element_data(level_def, "Level");
-
-	glm::vec2 start_position = glm::vec2(level["start_tile"][0], level["start_tile"][1]);
-	int number_tiles = (int)level["number_tiles"];
-	for (int i = 0; i < number_tiles; i++)
-	{
-		slog("tile #%d: %f %f", i+1, (float)level["tiles"][i][0], (float)level["tiles"][i][1]);
-	}
-
-	glm::vec3 cameraPosition = glm::vec3(start_position.x, 0.5f, start_position.y);
+	glm::vec3 cameraPosition = glm::vec3(stage.start_position.x, 0.5f, stage.start_position.y);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
+
+	Graphics::set_clear_color(glm::vec4(stage.background_color.x, stage.background_color.y, stage.background_color.z, 1.0f));
 
 	//this will be our "player" which we can move
 	Entity_Manager::create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0));
@@ -179,6 +187,14 @@ void singleplayer_mode()
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(8, 1, -10));
 
 	//test UI elements
+
+	//this should be enabled for 2d sprites to have their transparency
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//this should be disabled for UI and HUD stuffs, but enabled for 3D
+	glDisable(GL_DEPTH_TEST);
+
 	Sprite *my_sprite = Sprite_Manager::create_sprite("json/sprites/joe_sprite.json");
 	Sprite *my_sprite2 = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
 
@@ -205,6 +221,7 @@ void singleplayer_mode()
 		Entity_Manager::update_all();
 
 		/*Drawing Code Start*/
+		stage.draw_stage(camera, test_cube);
 
 		Entity_Manager::draw_all(camera, test_cube);
 

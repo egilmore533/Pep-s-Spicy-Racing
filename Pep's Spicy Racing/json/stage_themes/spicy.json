@@ -1,0 +1,9 @@
+{
+"Stage Theme": {
+  "name": "Spicy",
+  "tile-def-file": "json/stage-tiles/perfect-tile.json",
+  "wall-def-file": "json/stage-tiles/perfect-wall.json",
+  "shader-program": "json/shaders/toon_shader.json",
+  "background-color": [0.6, 0.0, 0.0, 1.0]
+}
+}
