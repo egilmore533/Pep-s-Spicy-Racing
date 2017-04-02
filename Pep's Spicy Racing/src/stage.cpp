@@ -48,7 +48,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, tile_positions[i]);
 		//model = glm::rotate(model, rotation_angle, glm::vec3(0, 1, 0));
-
+		//model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 0, 1));
 		//the start of one tile should be 10 units away from the start of another tile so scale by 5 to make the tiles touch put it slightly less than that for testing
 		model = glm::scale(model, glm::vec3(4.9f));
 

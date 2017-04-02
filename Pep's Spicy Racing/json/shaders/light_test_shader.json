@@ -1,0 +1,7 @@
+{
+"Shader": {
+  "name": "Lighting Test Shader",
+  "vertex-shader-filepath": "shader/light_test_vs.glsl",
+  "fragment-shader-filepath": "shader/light_test_fs.glsl"
+}
+}

@@ -119,7 +119,7 @@ void Sprite_Manager::draw(Camera *cam, int sprite_id)
 	model = glm::translate(model, glm::vec3(manager->sprite_list[sprite_id]->screen_position, 0.0f));  // First translate (transformations are: scale happens first, then rotation and then finally translation happens; reversed order)
 
 	model = glm::translate(model, glm::vec3(0.5f * manager->sprite_list[sprite_id]->size.x, 0.5f * manager->sprite_list[sprite_id]->size.y, 0.0f)); // Move origin of rotation to center of quad
-	model = glm::rotate(model, manager->sprite_list[sprite_id]->rotation, glm::vec3(0.0f, 0.0f, 1.0f)); // Then rotate (TODO FIX THE SPRITE ROTATION)
+	model = glm::rotate(model, glm::radians(manager->sprite_list[sprite_id]->rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // Then rotate
 	model = glm::translate(model, glm::vec3(-0.5f * manager->sprite_list[sprite_id]->size.x, -0.5f * manager->sprite_list[sprite_id]->size.y, 0.0f)); // Move origin back
 
 	model = glm::scale(model, glm::vec3(manager->sprite_list[sprite_id]->size, 1.0f)); // Last scale

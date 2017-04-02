@@ -5,7 +5,7 @@
   "color": [0.5, 1.0, 0.2, 1.0],
   "think-rate": 100,
   "move-speed": 16.0,
-  "rotation-speed": 3.0,
+  "rotation-speed": 200.0,
   "shader-program": "json/shaders/toon_shader.json",
   "texture-filepath": "images/wood.png"
 }

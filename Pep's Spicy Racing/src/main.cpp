@@ -175,7 +175,7 @@ void singleplayer_mode()
 	int singleplayer_running = 1;
 	Stage stage = Stage("json/levels/stage1.json");
 
-	glm::vec3 cameraPosition = glm::vec3(stage.start_position.x, 0.5f, stage.start_position.y);
+	glm::vec3 cameraPosition = glm::vec3(-3, 20, 28);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
 	Graphics::set_clear_color(glm::vec4(stage.background_color.x, stage.background_color.y, stage.background_color.z, 1.0f));
@@ -184,7 +184,7 @@ void singleplayer_mode()
 	Entity_Manager::create_entity("json/entities/wood-monkey.json", glm::vec3(0, 0, 0));
 
 	//this will be our light
-	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(8, 1, -10));
+	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
 
 	//test UI elements
 
