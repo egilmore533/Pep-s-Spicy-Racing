@@ -53,6 +53,19 @@ public:
 	void update_view_matrix();
 
 	/**
+	* @brief sets the view matrix based on the given data
+	* @param target_position	the position to look at
+	* @param up					the direction that is being used as the upward vector
+	*/
+	void set_view_matrix(glm::vec3 target_position, glm::vec3 up);
+
+	/**
+	* @brief sets the camera's position 
+	* @param cam_position the new camera position
+	*/
+	void Camera::set_camera_position(glm::vec3 cam_position);
+
+	/**
 	* @brief returns the camera's position in world space
 	*/
 	glm::vec3 get_position();

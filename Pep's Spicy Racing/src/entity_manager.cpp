@@ -70,6 +70,8 @@ Entity *Entity_Manager::create_entity(std::string entity_json_filepath, glm::vec
 		new_entity->in_use = true;
 		new_entity->id = i;
 		new_entity->world_position = position;
+		new_entity->draw = &default_draw;
+		new_entity->update = &default_update;
 
 		new_entity->model = glm::mat4(1.0f);
 		new_entity->rotation_angle = 0;
@@ -197,15 +199,16 @@ void Entity_Manager::think_all()
 		return;
 	}
 
+
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (!manager->entity_list[i]->in_use)
+		if (!manager->entity_list[i]->in_use || !manager->entity_list[i]->think)
 		{
 			continue;
 		}
 		if (manager->entity_list[i]->next_think >= Graphics::get_delta_time().asSeconds())
 		{
-			manager->entity_list[i]->think();
+			manager->entity_list[i]->think(manager->entity_list[i]);
 			manager->entity_list[i]->next_think = Graphics::get_delta_time().asSeconds() + manager->entity_list[i]->think_rate;
 		}
 	}
@@ -224,11 +227,11 @@ void Entity_Manager::update_all()
 
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (!manager->entity_list[i]->in_use)
+		if (!manager->entity_list[i]->in_use || !manager->entity_list[i]->update)
 		{
 			continue;
 		}
-		manager->entity_list[i]->update();
+		manager->entity_list[i]->update(manager->entity_list[i]);
 	}
 }
 
@@ -247,7 +250,7 @@ void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (!manager->entity_list[i]->in_use)
+		if (!manager->entity_list[i]->in_use || !manager->entity_list[i]->draw)
 		{
 			continue;
 		}
@@ -268,6 +271,6 @@ void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 
 		glBindTexture(GL_TEXTURE_2D, manager->entity_list[i]->texture->get_texture());
 
-		manager->entity_list[i]->draw();
+		manager->entity_list[i]->draw(manager->entity_list[i]);
 	}
 }

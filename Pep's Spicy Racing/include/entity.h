@@ -23,19 +23,19 @@ public:
 	~Entity();
 
 	/**
-	 * @brief the update function for entities
+	 * @brief the entity's update function
 	 */
-	void update();
+	void (*update)(Entity *ent);
 
 	/**
 	 * @brief the think function for entities, used to process information regarding the entity
 	 */
-	void think();
+	void (*think)(Entity *ent);
 
 	/**
-	* @brief draws an entity's mesh
+	* @brief the entity's draw function
 	*/
-	void draw();
+	void (*draw)(Entity *ent);
 
 	bool in_use;				/**< in use flag to determine if this entity is in use */
 	int id;						/**< the id of the entity */
@@ -68,5 +68,16 @@ public:
 	GLuint light_position_location;		/**< location of the light position uniform */
 	GLuint view_position_location;		/**< location of the camera position uniform */
 };
+
+/**
+* @brief deadult draw for entities
+* @param the entity to draw
+*/
+void default_draw(Entity *ent);
+
+/**
+* @brief default update for entities
+*/
+void default_update(Entity *ent);
 
 #endif

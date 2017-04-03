@@ -15,6 +15,10 @@ Entity::Entity()
 	mesh = NULL;
 	texture = NULL;
 
+	update = NULL;
+	draw = NULL;
+	think = NULL;
+
 	move_speed = 0.0f;
 	rotation_speed = 0.0f;
 
@@ -38,24 +42,12 @@ Entity::~Entity()
 	//decrement the mesh/model, shader, etc. here
 }
 
-void Entity::think()
-{
-
-}
-
-/**
- * @brief draws an entity, using its shader program
- */
-void Entity::draw()
-{
-	mesh->Mesh::draw(shader->program);
-}
 
 /**
  * @brief temporary update for what will soon become the player entity, updates the players model 
  *			by getting input and using it to determine the entity's position in world space
- */
-void Entity::update()
+ *//*
+void update()
 {
 	float delta_time = Graphics::get_delta_time().asSeconds();
 
@@ -89,3 +81,22 @@ void Entity::update()
 	model = glm::rotate(model, glm::radians(rotation_angle), glm::vec3(0,1,0));
 	model = glm::scale(model, glm::vec3(scale));
 }
+*/
+
+/**
+* @brief deadult draw for entities
+* @param the entity to draw
+*/
+void default_draw(Entity *ent)
+{
+	ent->mesh->draw(ent->shader->program);
+}
+
+void default_update(Entity *ent)
+{
+	ent->model = glm::mat4(1.0f);
+	ent->model = glm::translate(ent->model, ent->world_position);
+	ent->model = glm::rotate(ent->model, glm::radians(ent->rotation_angle), glm::vec3(0, 1, 0));
+	ent->model = glm::scale(ent->model, glm::vec3(ent->scale));
+}
+

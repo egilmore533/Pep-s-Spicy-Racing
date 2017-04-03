@@ -103,6 +103,25 @@ void Camera::update_view_matrix()
 }
 
 /**
+* @brief sets the view matrix based on the given data, needs to give the calculated forward vector
+* @param target_position	the position to look at (calculate the forward vector and give it to this)
+* @param up					the direction that is being used as the upward vector
+*/
+void Camera::set_view_matrix(glm::vec3 target_position, glm::vec3 up)
+{
+	view_matrix = glm::lookAt(position, target_position, up);
+}
+
+/**
+* @brief sets the camera's position
+* @param cam_position the new camera position
+*/
+void Camera::set_camera_position(glm::vec3 cam_position)
+{
+	position = cam_position;
+}
+
+/**
 * @brief returns the camera's position in world space
 * @return the camera's position
 */

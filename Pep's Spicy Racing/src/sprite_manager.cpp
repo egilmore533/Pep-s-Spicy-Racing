@@ -124,11 +124,6 @@ void Sprite_Manager::draw(Camera *cam, int sprite_id)
 
 	model = glm::scale(model, glm::vec3(manager->sprite_list[sprite_id]->size, 1.0f)); // Last scale
 
-	if (manager->sprite_list[sprite_id]->screen_position.x == 0.0f && manager->sprite_list[sprite_id]->screen_position.y == 0.0f)
-	{
-		slog("sheet");
-	}
-
 	glUniformMatrix4fv(manager->sprite_list[sprite_id]->model_location, 1, GL_FALSE, &model[0][0]);
 	glUniformMatrix4fv(manager->sprite_list[sprite_id]->projection_location, 1, GL_FALSE, &cam->Camera::get_ortho_projection_matrix()[0][0]);
 	glUniform4f(manager->sprite_list[sprite_id]->sprite_color_location, manager->sprite_list[sprite_id]->color.x, manager->sprite_list[sprite_id]->color.y, manager->sprite_list[sprite_id]->color.z, manager->sprite_list[sprite_id]->color.w);
