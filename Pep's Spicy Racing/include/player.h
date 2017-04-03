@@ -1,3 +1,7 @@
+#ifndef __PLAYER_H__
+#define __PLAYER_H__
+
+
 #include "entity_manager.h"
 #include "camera.h"
 
@@ -27,3 +31,5 @@ void think(Entity *ent);
 * @brief draws the player
 */
 void draw(Entity *ent);
+
+#endif

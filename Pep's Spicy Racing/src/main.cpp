@@ -12,7 +12,6 @@
 #include "shader_manager.h"
 #include "graphics.h"
 #include "camera.h"
-
 #include "entity_manager.h"
 #include "mesh_manager.h"
 #include "texture_manager.h"
@@ -21,6 +20,8 @@
 #include "player.h"
 #include "level_editor.h"
 #include "stage.h"
+
+#include "button.h"
 
 void singleplayer_mode();
 
@@ -68,7 +69,13 @@ int main()
 
 	glm::vec4 menu_clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
 
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
+	Camera *cam = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
+
 	Graphics::set_clear_color(menu_clear_color);
+
+	//Button *my_button = new Button("json/buttons/singleplayer.json");
+	//my_button->callback = &singleplayer_mode;
 
 	while (game_running)
 	{
@@ -108,7 +115,11 @@ int main()
 			pressed = false;
 		}
 
+		//my_button->update();
+
 		Graphics::frame_begin();
+
+		//my_button->draw(cam);
 
 		Graphics::next_frame();
 	}

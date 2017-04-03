@@ -1,5 +1,5 @@
-#ifndef __BUTTON_H__
-#define __BUTTON_H__
+#ifndef __LEVEL_EDITOR_H__
+#define __LEVEL_EDITOR_H__
 
 #include "sprite.h"
 #include "camera.h"

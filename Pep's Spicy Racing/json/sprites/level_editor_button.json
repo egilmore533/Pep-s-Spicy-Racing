@@ -1,8 +1,8 @@
 {
 "Sprite": {
-  "name": "Joe",
+  "name": "Level Editor",
   "shader_def_filepath": "json/shaders/basic_sprite_shader.json",
-  "texture_filepath": "images/sprites/buttons/singleplayer.png",
+  "texture_filepath": "images/sprites/buttons/level_editor.png",
   "screen_position": [200,200],
   "color": [1,1,1,1],
   "size": [256, 128],

@@ -1,0 +1,12 @@
+{
+"Entity": {
+  "name": "Racer",
+  "model-filepath": "models/new_lowpolycar.obj",
+  "color": [0.0, 1.0, 0.0, 1.0],
+  "think-rate": 100,
+  "move-speed": 64.0,
+  "rotation-speed": 200.0,
+  "shader-program": "json/shaders/toon_shader.json",
+  "texture-filepath": "images/wood.png"
+}
+}
