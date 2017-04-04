@@ -1,7 +1,7 @@
 {
 "Button": {
   "name": "Level Editor",
-  "sprite_def_filepath": "json/sprites/level_editor.json",
+  "sprite_def_filepath": "json/sprites/level_editor_button.json",
   "text": "Level Editor"
 }
 }

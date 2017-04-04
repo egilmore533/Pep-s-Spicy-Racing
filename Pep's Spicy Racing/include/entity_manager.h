@@ -28,9 +28,9 @@ public:
 	void initialize();
 
 	/**
-	* @brief empties the entity_list useful to load a new level, not static because this shouldn't be done in any file beside one that has access to the actual entity_manager object
+	* @brief empties the entity_list useful to load a new level
 	*/
-	void clear();
+	static void clear();
 
 	/**
 	* @brief perform the think function of all the entities that are currently in use

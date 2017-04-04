@@ -165,22 +165,22 @@ void Entity_Manager::clear()
 
 	for (int i = 0; i < MAX_ENTITIES; i++)
 	{
-		if (this->entity_list[i]->in_use)
+		if (manager->entity_list[i]->in_use)
 		{
-			if (this->entity_list[i]->in_use == false)
+			if (manager->entity_list[i]->in_use == false)
 			{
 				continue;
 			}
 
-			this->entity_list[i]->in_use = false;
-			this->num_entities--;
+			manager->entity_list[i]->in_use = false;
+			manager->num_entities--;
 
 			//any resources contained in the entity need to be dereferenced here
-			Shader_Manager::dereference_shader(this->entity_list[i]->shader->shader_def_file);
-			Mesh_Manager::dereference_mesh(this->entity_list[i]->mesh->filepath);
-			Texture_Manager::dereference_texture(this->entity_list[i]->texture->filepath);
+			Shader_Manager::dereference_shader(manager->entity_list[i]->shader->shader_def_file);
+			Mesh_Manager::dereference_mesh(manager->entity_list[i]->mesh->filepath);
+			Texture_Manager::dereference_texture(manager->entity_list[i]->texture->filepath);
 
-			if (this->num_entities == 0)
+			if (manager->num_entities == 0)
 			{
 				return;
 			}

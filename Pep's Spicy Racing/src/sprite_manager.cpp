@@ -71,7 +71,7 @@ void Sprite_Manager::clear()
 
 	for (int i = 0; i < MAX_SPRITES; i++)
 	{
-		if (this->sprite_list[i]->in_use)
+		if (manager->sprite_list[i]->in_use)
 		{
 			if (manager->sprite_list[i]->in_use == false)
 			{
@@ -85,7 +85,7 @@ void Sprite_Manager::clear()
 			Shader_Manager::dereference_shader(manager->sprite_list[i]->shader->shader_def_file);
 			Texture_Manager::dereference_texture(manager->sprite_list[i]->texture->filepath);
 
-			if (this->num_sprites == 0)
+			if (manager->num_sprites == 0)
 			{
 				return;
 			}

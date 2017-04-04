@@ -16,6 +16,7 @@ public:
 	Sprite *background;
 	Sprite *text;
 	int state;
+	bool clicked;
 
 	void (*callback)();
 

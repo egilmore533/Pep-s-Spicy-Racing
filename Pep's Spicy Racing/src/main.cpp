@@ -43,7 +43,29 @@ of the track itself to determine where the ai and the  player are and keep track
 
 */
 
+Button *singleplayer_button;
+Button *level_editor_button;
+
+glm::vec4 menu_clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
+
 static bool pressed = false;
+
+void reload_buttons()
+{
+	singleplayer_button = new Button("json/buttons/singleplayer.json");
+	singleplayer_button->callback = &singleplayer_mode;
+
+	level_editor_button = new Button("json/buttons/level_editor.json");
+	level_editor_button->callback = &level_editor;
+}
+
+void clean_up_scene()
+{
+	Entity_Manager::clear();
+	Sprite_Manager::clear();
+	reload_buttons();
+	Graphics::set_clear_color(menu_clear_color);
+}
 
 int main()
 {
@@ -67,15 +89,12 @@ int main()
 	Sprite_Manager sprite_manager;
 	sprite_manager.initialize();
 
-	glm::vec4 menu_clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
-
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	Camera *cam = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
 	Graphics::set_clear_color(menu_clear_color);
 
-	//Button *my_button = new Button("json/buttons/singleplayer.json");
-	//my_button->callback = &singleplayer_mode;
+	reload_buttons();
 
 	while (game_running)
 	{
@@ -84,42 +103,19 @@ int main()
 			if(!pressed)
 				game_running = 0;
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-		{
-			if (!pressed)
-			{
-				level_editor();
-				sprite_manager.clear();
-				Graphics::set_clear_color(menu_clear_color);
-			}
-				
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			if (!pressed)
-			{
-				singleplayer_mode();
-				ent_manager.clear();
-				//sprite_manager.clear(); 
-				//so this the text only loads in the singleplayer mode if I have already run the singplayer mode
-				//it also will not work if I load the singpleayer mode, then the editor, then the singplayer mode
-				//it will however work if I run the editor, then the singpleayer mode several times, then I can switch between the two with no problems
-				//alternatively If I disable the sprite list clear here I'll be able to switch between the two no problems, but I still have to reload the singleplayer mode atleast once
-				
-				//i will temporarily leave it without clearing the sprites just for testing code, but I need to solve this issue
-				Graphics::set_clear_color(menu_clear_color);
-			}
-		}
 		else
 		{
 			pressed = false;
 		}
+		
 
-		//my_button->update();
+		singleplayer_button->update();
+		level_editor_button->update();
 
 		Graphics::frame_begin();
 
-		//my_button->draw(cam);
+		singleplayer_button->draw(cam);
+		level_editor_button->draw(cam);
 
 		Graphics::next_frame();
 	}
@@ -178,6 +174,8 @@ void level_editor()
 	}
 
 	editor.save_and_exit("json/levels/created_level.json");
+
+	clean_up_scene();
 
 	return;
 }
@@ -257,5 +255,8 @@ void singleplayer_mode()
 		Graphics::next_frame();
 	}
 
+	clean_up_scene();
+
 	return;
 }
+
