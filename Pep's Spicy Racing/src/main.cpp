@@ -187,6 +187,9 @@ void singleplayer_mode()
 
 	Graphics::set_clear_color(glm::vec4(stage.background_color.x, stage.background_color.y, stage.background_color.z, 1.0f));
 
+	glm::vec3 cameraPosition = glm::vec3(-3, 20, 28);
+	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
+
 	Player *player = new Player(glm::vec3(stage.start_position.x, stage.start_position.y + 0.5f, stage.start_position.z));
 
 	//this will be our light
@@ -206,7 +209,6 @@ void singleplayer_mode()
 
 	Sprite *my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
 
-
 	while (singleplayer_running)
 	{
 		sf::Event event;
@@ -218,8 +220,14 @@ void singleplayer_mode()
 				pressed = true;
 			}
 		}
+		/*
 		player->player_cam->Camera::get_mouse_input();
 		player->player_cam->Camera::get_keyboard_input();
+		*/
+
+		camera->Camera::get_mouse_input();
+		camera->Camera::get_keyboard_input();
+		camera->Camera::update_view_matrix();
 
 		Entity_Manager::update_all();
 		player->update_player_cam();
@@ -227,9 +235,12 @@ void singleplayer_mode()
 		Graphics::frame_begin();
 
 		/*Drawing Code Start*/
-		stage.draw_stage(player->player_cam, test_cube);
+		
+		stage.draw_stage(camera, test_cube);
+		//stage.draw_stage(player->player_cam, test_cube);
 
-		Entity_Manager::draw_all(player->player_cam, test_cube);
+		Entity_Manager::draw_all(camera, test_cube);
+		//Entity_Manager::draw_all(player->player_cam, test_cube);
 
 		//this should be enabled for 2d sprites to have their transparency
 		glEnable(GL_BLEND);
@@ -238,9 +249,16 @@ void singleplayer_mode()
 		//this should be disabled for UI and HUD stuffs, but enabled for 3D
 		glDisable(GL_DEPTH_TEST);
 
+
+		Sprite_Manager::draw(camera, my_sprite->id);
+		Sprite_Manager::draw(camera, my_sprite2->id);
+		Sprite_Manager::draw(camera, my_text->id);
+
+		/*
 		Sprite_Manager::draw(player->player_cam, my_sprite->id);
 		Sprite_Manager::draw(player->player_cam, my_sprite2->id);
 		Sprite_Manager::draw(player->player_cam, my_text->id);
+		*/
 
 		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
 		//opengl is hard :(
