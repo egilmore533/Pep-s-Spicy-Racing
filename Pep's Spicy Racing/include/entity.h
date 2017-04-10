@@ -51,6 +51,8 @@ public:
 	float next_think;			/**< the next time this entity will perform its think function (sf::Time asSeconds)*/
 
 	glm::vec3 world_position;	/**< entity's position in world space */
+	glm::vec3 movement_vector;
+
 	float rotation_angle;		/**< the model's rotation (about the y axis, in )*/
 	float scale;				/**< the scale of the entity's model */
 

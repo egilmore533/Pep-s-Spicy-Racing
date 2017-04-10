@@ -14,14 +14,8 @@ Player::Player(glm::vec3 position)
 
 void Player::update_player_cam()
 {
-	player_cam->set_camera_position(glm::vec3(entity_component->world_position.x - 5.0f, entity_component->world_position.y + 1, entity_component->world_position.z));
-	glm::vec3 cam_position = player_cam->get_position();
-
-	glm::vec3 up = glm::vec3(0, 1, 0);
-
-	glm::vec3 target = glm::vec3(entity_component->world_position.x, entity_component->world_position.y, entity_component->world_position.z);
-
-	player_cam->set_view_matrix(target, up);
+	player_cam->follow_entity(entity_component);
+	player_cam->view_matrix_look_at_target();
 }
 
 /**
@@ -29,32 +23,34 @@ void Player::update_player_cam()
 */
 void update(Entity *ent)
 {
+	int forward;
+	forward = 0;
 	float delta_time = Graphics::get_delta_time().asSeconds();
+
+	//glm::vec3(-5 * cos(glm::radians(entity->rotation_angle)), 1.5f, 5 * sin(glm::radians(entity->rotation_angle)))
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		ent->world_position.x += ent->move_speed * delta_time;
+		forward = 1;
+		//ent->movement_vector.x += ent->move_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		ent->world_position.x -= ent->move_speed * delta_time;
+		forward = -1;
+		//ent->world_position.x -= ent->move_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		ent->world_position.z += ent->move_speed * delta_time;
+		ent->rotation_angle -= ent->rotation_speed *delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		ent->world_position.z -= ent->move_speed * delta_time;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
-	{
-		ent->rotation_angle -= ent->rotation_speed *delta_time;
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
-	{
 		ent->rotation_angle += ent->rotation_speed * delta_time;
 	}
+
+	
+	ent->movement_vector = ent->move_speed * glm::vec3(forward * cos(glm::radians(ent->rotation_angle)), 0, -forward * sin(glm::radians(ent->rotation_angle))) * delta_time;
+	ent->world_position = ent->world_position + ent->movement_vector;
 
 	ent->model = glm::mat4(1.0f);
 	ent->model = glm::translate(ent->model, ent->world_position);

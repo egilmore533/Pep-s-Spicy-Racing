@@ -9,9 +9,8 @@
 
 #include <simple_logger.h>
 
-#include "shader_manager.h"
 #include "graphics.h"
-#include "camera.h"
+#include "shader_manager.h"
 #include "entity_manager.h"
 #include "mesh_manager.h"
 #include "texture_manager.h"
@@ -33,8 +32,7 @@ void level_editor();
 
 Why doesn't my entity system allow me to load entities after loading my sprites
 
-Why doesn't my RenderTexture work with the sf::text stuff?
-I cannot seem to render my text to this RenderTexture to use it.
+Why does the set shader not work for the text in the single player loop on the first try, but on the second try it works
 
 Is this level editor a bad idea?
 How else could I implement the stage itself?
@@ -183,6 +181,7 @@ void level_editor()
 void singleplayer_mode()
 {
 	int singleplayer_running = 1;
+
 	Stage stage = Stage("json/levels/created_level.json");
 
 	Graphics::set_clear_color(glm::vec4(stage.background_color.x, stage.background_color.y, stage.background_color.z, 1.0f));
@@ -208,6 +207,13 @@ void singleplayer_mode()
 	Sprite *my_sprite2 = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
 
 	Sprite *my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
+
+	Sprite_Manager::delete_sprite(my_text->id);
+
+	my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
+
+	sf::Clock clock;
+	float lastTime = 0;
 
 	while (singleplayer_running)
 	{
@@ -269,6 +275,11 @@ void singleplayer_mode()
 		/*Drawing Code End*/
 
 		Graphics::next_frame();
+
+		float currentTime = clock.restart().asSeconds();
+		float fps = 1.f / (currentTime - lastTime);
+		lastTime = currentTime;
+		slog("FPS: %f",fps);
 	}
 
 	clean_up_scene();
