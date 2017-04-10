@@ -3,6 +3,7 @@
 
 #include "sprite.h"
 #include "camera.h"
+#include "button.h"
 
 class Level_Editor
 {
@@ -33,6 +34,10 @@ public:
 	*/
 	void save_and_exit(std::string filename);
 
+	static void cycle_theme_left();
+
+	static void cycle_theme_right();
+
 private:
 	Sprite *grid_tile_sprite;						/**< empty tile sprite */
 	Sprite *activated_tile_sprite;					/**< tile that has been clicked on and added to the list of activated tiles (added to the stage) */
@@ -51,7 +56,20 @@ private:
 	bool clicked;					/**< flag to help the update function, prevents from clicking every frame because thats not built into sfml */
 	bool draw_highlighted_tile;		/**< flag to determine whether or not to draw the highlighted tile */
 	bool start_tile_set;			/**< flag to determine if the start tile has been set */
+
+	std::map<std::string, Sprite *> theme_sprite_map;
+	std::vector<std::string> theme_key_list;
+
+	Button *theme_left_arrow;
+	Button *theme_right_arrow;
+
+	//Button *special_item_left_arrow;
+	//Button *special_item_right_arrow;
 };
+
+void theme_left_cycle();
+
+void theme_right_cycle();
 
 
 #endif

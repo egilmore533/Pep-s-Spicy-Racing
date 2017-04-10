@@ -4,6 +4,9 @@
 #include "level_editor.h"
 #include "graphics.h"
 
+int current_theme_index;
+int theme_list_size;
+
 /**
 * @brief configures the code for the editor, positioning the grid, and loading the sprites
 * @param rows		the number of rows the grid will have
@@ -31,6 +34,23 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 		}
 
 	}
+
+	theme_list_size = 0;
+
+	theme_sprite_map.insert(std::pair<std::string, Sprite *>("json/stage-themes/spicy.json", Sprite_Manager::create_sprite("json/sprites/spicy_theme_sprite.json")));
+	theme_list_size++;
+	theme_sprite_map.insert(std::pair<std::string, Sprite *>("json/stage-themes/water.json", Sprite_Manager::create_sprite("json/sprites/water_theme_sprite.json")));
+	theme_list_size++;
+	theme_key_list.push_back("json/stage-themes/spicy.json");
+	theme_key_list.push_back("json/stage-themes/water.json");
+
+	current_theme_index = 0;
+
+	theme_left_arrow = new Button("json/buttons/theme_left_arrow.json");
+	theme_left_arrow->callback = &theme_left_cycle;
+
+	theme_right_arrow = new Button("json/buttons/theme_right_arrow.json");
+	theme_right_arrow->callback = &theme_right_cycle;
 }
 
 /**
@@ -39,6 +59,9 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 void Level_Editor::update_editor()
 {
 	mouse_position = sf::Mouse::getPosition(*Graphics::get_game_window());
+
+	theme_left_arrow->update();
+	theme_right_arrow->update();
 
 	bool cursor_on_grid = false;
 	for (int i = 0; i < max_grid_columns * max_grid_rows; i++)
@@ -143,6 +166,10 @@ void Level_Editor::draw_editor(Camera *camera)
 	{
 		Sprite_Manager::draw(camera, highlighted_tile_sprite->id);
 	}
+
+	Sprite_Manager::draw(camera, theme_sprite_map[theme_key_list[current_theme_index]]->id);
+	theme_left_arrow->draw(camera);
+	theme_right_arrow->draw(camera);
 }
 
 /**
@@ -168,4 +195,22 @@ void Level_Editor::save_and_exit(std::string filename)
 	std::ofstream o(filename);
 	o << std::setw(4) << def << std::endl;
 	o.close();
+}
+
+void theme_left_cycle()
+{
+	current_theme_index--;
+	if (current_theme_index < 0)
+	{
+		current_theme_index = theme_list_size;
+	}
+}
+
+void theme_right_cycle()
+{
+	current_theme_index++;
+	if (current_theme_index > theme_list_size)
+	{
+		current_theme_index = 0;
+	}
 }

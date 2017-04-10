@@ -7,7 +7,7 @@
 #include <SFML\Graphics.hpp>
 
 #define WINDOW_WIDTH	1024
-#define WINDOW_HEIGHT	768
+#define WINDOW_HEIGHT	950
 
 #define FRAME_DELAY		33
 
