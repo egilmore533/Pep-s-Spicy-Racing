@@ -97,7 +97,30 @@ void Camera::get_mouse_input()
 	up = glm::cross(right, forward);
 }
 
-void Camera::update_view_matrix()
+/**
+* @brief update the camera's target, position, and up veector based on the given entity
+*		follows the entity from a certain away
+* @param *entity the entity to follow
+*/
+void Camera::follow_entity(Entity *entity)
+{
+	position = entity->world_position + glm::vec3(-5 * cos(glm::radians(entity->rotation_angle)), 1.5f, 5 * sin(glm::radians(entity->rotation_angle)));
+	target = entity->world_position;
+	up = glm::vec3(0,1,0);
+}
+
+/**
+* @brief updates the model matrix using the camera's target as the center
+*/
+void Camera::view_matrix_look_at_target()
+{
+	view_matrix = glm::lookAt(position, target, up);
+}
+
+/**
+* @brief update's the camera's view matrix using position + forward as the center
+*/
+void Camera::view_matrix_look_forward()
 {
 	view_matrix = glm::lookAt(position, position + forward, up);
 }

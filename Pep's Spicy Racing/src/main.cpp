@@ -158,7 +158,7 @@ void level_editor()
 			}
 		}
 		
-		camera->Camera::update_view_matrix();
+		camera->Camera::view_matrix_look_forward();
 
 		Graphics::frame_begin();
 
@@ -225,12 +225,10 @@ void singleplayer_mode()
 		player->player_cam->Camera::get_keyboard_input();
 		*/
 
-		camera->Camera::get_mouse_input();
-		camera->Camera::get_keyboard_input();
-		camera->Camera::update_view_matrix();
-
 		Entity_Manager::update_all();
-		player->update_player_cam();
+
+		camera->Camera::follow_entity(player->entity_component);
+		camera->Camera::view_matrix_look_at_target();
 
 		Graphics::frame_begin();
 

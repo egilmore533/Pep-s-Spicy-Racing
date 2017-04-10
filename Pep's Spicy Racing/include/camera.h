@@ -3,6 +3,8 @@
 
 #include <glm\gtx\transform.hpp>
 
+#include "entity.h"
+
 #define NEAR_CLIPPING_PLANE		0.1f
 #define FAR_CLIPPING_PLANE		100.0f
 
@@ -48,9 +50,21 @@ public:
 	void get_mouse_input();
 
 	/**
-	* @brief update's the camera's view matrix using position + forward as the center, could use target instead
+	* @brief update the camera's target, position, and up veector based on the given entity
+	*		follows the entity from a certain away
+	* @param *entity the entity to follow
 	*/
-	void update_view_matrix();
+	void follow_entity(Entity *entity);
+
+	/**
+	* @brief updates the model matrix using the camera's target as the center
+	*/
+	void view_matrix_look_at_target();
+
+	/**
+	* @brief update's the camera's view matrix using position + forward as the center
+	*/
+	void view_matrix_look_forward();
 
 	/**
 	* @brief sets the view matrix based on the given data
