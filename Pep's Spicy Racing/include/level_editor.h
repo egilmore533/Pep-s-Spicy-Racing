@@ -34,9 +34,7 @@ public:
 	*/
 	void save_and_exit(std::string filename);
 
-	static void cycle_theme_left();
-
-	static void cycle_theme_right();
+	void add_theme_to_list(std::string theme_filepath, std::string theme_sprite_filepath);
 
 private:
 	Sprite *grid_tile_sprite;						/**< empty tile sprite */
@@ -57,11 +55,11 @@ private:
 	bool draw_highlighted_tile;		/**< flag to determine whether or not to draw the highlighted tile */
 	bool start_tile_set;			/**< flag to determine if the start tile has been set */
 
-	std::map<std::string, Sprite *> theme_sprite_map;
-	std::vector<std::string> theme_key_list;
+	std::map<std::string, Sprite *> theme_sprite_map;		/**< map of themes and their repsective sprites */
+	std::vector<std::string> theme_key_list;				/**< list of the theme keys, used to index the theme sprite map */
 
-	Button *theme_left_arrow;
-	Button *theme_right_arrow;
+	Button *theme_left_arrow_button;				/**< button that will cycle through to the previous theme */
+	Button *theme_right_arrow_button;				/**< button that will cycle through to the next theme */
 
 	//Button *special_item_left_arrow;
 	//Button *special_item_right_arrow;

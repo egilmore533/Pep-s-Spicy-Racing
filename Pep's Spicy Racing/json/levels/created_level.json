@@ -1,24 +1,10 @@
 {
     "Level": {
-        "number_tiles": 3,
+        "number_tiles": 0,
         "start_tile": [
             0.0,
             0.0
         ],
-        "theme": "json/stage_themes/spicy.json",
-        "tiles": [
-            [
-                1.0,
-                42.0
-            ],
-            [
-                51.0,
-                2.0
-            ],
-            [
-                1.0,
-                62.0
-            ]
-        ]
+        "theme": "json/stage_themes/water.json"
     }
 }

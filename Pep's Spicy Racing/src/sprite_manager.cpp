@@ -162,6 +162,8 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 			continue;
 		}
 
+		printf("Sprite: %d\n", i);
+
 		Sprite *new_sprite = manager->sprite_list[i];
 		new_sprite->id = i;
 		new_sprite->in_use = true;

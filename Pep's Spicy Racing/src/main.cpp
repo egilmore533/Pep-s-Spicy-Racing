@@ -208,13 +208,6 @@ void singleplayer_mode()
 
 	Sprite *my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
 
-	Sprite_Manager::delete_sprite(my_text->id);
-
-	my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
-
-	sf::Clock clock;
-	float lastTime = 0;
-
 	while (singleplayer_running)
 	{
 		sf::Event event;
@@ -275,11 +268,6 @@ void singleplayer_mode()
 		/*Drawing Code End*/
 
 		Graphics::next_frame();
-
-		float currentTime = clock.restart().asSeconds();
-		float fps = 1.f / (currentTime - lastTime);
-		lastTime = currentTime;
-		slog("FPS: %f",fps);
 	}
 
 	clean_up_scene();

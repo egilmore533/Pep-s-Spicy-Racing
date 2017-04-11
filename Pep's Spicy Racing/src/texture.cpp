@@ -12,7 +12,8 @@ Texture::Texture()
 	texture = 0;
 	filepath = "";
 	reference_count = 0;
-
+	image = false;
+	text = false;
 	text_string = "";
 	font_name = "";
 	font_size = 0;

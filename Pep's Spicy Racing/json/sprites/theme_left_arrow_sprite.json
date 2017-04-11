@@ -1,0 +1,11 @@
+{
+"Sprite": {
+  "name": "Theme Left Arrow",
+  "shader_def_filepath": "json/shaders/basic_sprite_shader.json",
+  "texture_filepath": "images/sprites/buttons/left_arrow.png",
+  "screen_position": [550,770],
+  "color": [1,1,1,1],
+  "size": [64, 64],
+  "rotation": 0
+}
+}

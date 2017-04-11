@@ -47,9 +47,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, tile_positions[i]);
-		//model = glm::rotate(model, rotation_angle, glm::vec3(0, 1, 0));
-		//model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 0, 1));
-		//the start of one tile should be 10 units away from the start of another tile so scale by 5 to make the tiles touch put it slightly less than that for testing
+		
 		model = glm::scale(model, glm::vec3(4.9f));
 
 		glUniform4fv(color_location, 1, &tile_color_data[0]);
@@ -94,6 +92,8 @@ void Stage::load_theme_data(std::string theme_filepath)
 	tile_mesh = Mesh_Manager::create_mesh(tile["model-filepath"]);
 	tile_color_data = glm::vec4(tile["color"][0], tile["color"][1], tile["color"][2], tile["color"][3]);
 	tile_texture = Texture_Manager::create_texture(tile["texture-filepath"], true, true);
+
+	//wall_mesh = Mesh_Manager::create_mesh();
 
 	shader = Shader_Manager::create_shader(theme["shader-program"]);
 	model_location = glGetUniformLocation(shader->program, "model");

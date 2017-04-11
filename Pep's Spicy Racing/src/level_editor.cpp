@@ -1,5 +1,7 @@
 #include <fstream>
 
+#include <simple_logger.h>
+
 #include "sprite_manager.h"
 #include "level_editor.h"
 #include "graphics.h"
@@ -37,20 +39,23 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 
 	theme_list_size = 0;
 
-	theme_sprite_map.insert(std::pair<std::string, Sprite *>("json/stage-themes/spicy.json", Sprite_Manager::create_sprite("json/sprites/spicy_theme_sprite.json")));
-	theme_list_size++;
-	theme_sprite_map.insert(std::pair<std::string, Sprite *>("json/stage-themes/water.json", Sprite_Manager::create_sprite("json/sprites/water_theme_sprite.json")));
-	theme_list_size++;
-	theme_key_list.push_back("json/stage-themes/spicy.json");
-	theme_key_list.push_back("json/stage-themes/water.json");
+	this->add_theme_to_list("json/stage_themes/spicy.json", "json/sprites/spicy_theme_sprite.json");
+	this->add_theme_to_list("json/stage_themes/water.json", "json/sprites/water_theme_sprite.json");
 
 	current_theme_index = 0;
 
-	theme_left_arrow = new Button("json/buttons/theme_left_arrow.json");
-	theme_left_arrow->callback = &theme_left_cycle;
+	theme_left_arrow_button = new Button("json/buttons/theme_left_arrow.json");
+	theme_left_arrow_button->callback = &theme_left_cycle;
 
-	theme_right_arrow = new Button("json/buttons/theme_right_arrow.json");
-	theme_right_arrow->callback = &theme_right_cycle;
+	theme_right_arrow_button = new Button("json/buttons/theme_right_arrow.json");
+	theme_right_arrow_button->callback = &theme_right_cycle;
+}
+
+void Level_Editor::add_theme_to_list(std::string theme_filepath, std::string theme_sprite_filepath)
+{
+	theme_sprite_map.insert(std::pair<std::string, Sprite *>(theme_filepath, Sprite_Manager::create_sprite(theme_sprite_filepath)));
+	theme_list_size++;
+	theme_key_list.push_back(theme_filepath);
 }
 
 /**
@@ -60,8 +65,8 @@ void Level_Editor::update_editor()
 {
 	mouse_position = sf::Mouse::getPosition(*Graphics::get_game_window());
 
-	theme_left_arrow->update();
-	theme_right_arrow->update();
+	theme_left_arrow_button->update();
+	theme_right_arrow_button->update();
 
 	bool cursor_on_grid = false;
 	for (int i = 0; i < max_grid_columns * max_grid_rows; i++)
@@ -168,8 +173,8 @@ void Level_Editor::draw_editor(Camera *camera)
 	}
 
 	Sprite_Manager::draw(camera, theme_sprite_map[theme_key_list[current_theme_index]]->id);
-	theme_left_arrow->draw(camera);
-	theme_right_arrow->draw(camera);
+	theme_left_arrow_button->draw(camera);
+	theme_right_arrow_button->draw(camera);
 }
 
 /**
@@ -180,7 +185,7 @@ void Level_Editor::save_and_exit(std::string filename)
 {
 	json def = {
 		{ "Level",{
-			{ "theme", "json/stage_themes/spicy.json" },
+			{ "theme", theme_key_list[current_theme_index] },
 			{ "start_tile", { start_tile->screen_position.x / 10, start_tile->screen_position.y / 10} },
 			{ "number_tiles", activated_positions.size() }
 		} }
@@ -202,15 +207,17 @@ void theme_left_cycle()
 	current_theme_index--;
 	if (current_theme_index < 0)
 	{
-		current_theme_index = theme_list_size;
+		current_theme_index = theme_list_size - 1;
 	}
+	printf("%d\n", current_theme_index);
 }
 
 void theme_right_cycle()
 {
 	current_theme_index++;
-	if (current_theme_index > theme_list_size)
+	if (current_theme_index >= theme_list_size)
 	{
 		current_theme_index = 0;
 	}
+	printf("%d\n", current_theme_index);
 }

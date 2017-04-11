@@ -96,7 +96,7 @@ void Shader_Manager::dereference_shader(std::string shader_def_file)
 	{
 		if (manager->shader_list[i]->shader_def_file == shader_def_file)
 		{
-			manager->shader_list[i]->reference_count--;
+			if (manager->shader_list[i]->reference_count >= 1) manager->shader_list[i]->reference_count--;
 			if (manager->shader_list[i]->reference_count == 0)
 			{
 				manager->num_shaders--;

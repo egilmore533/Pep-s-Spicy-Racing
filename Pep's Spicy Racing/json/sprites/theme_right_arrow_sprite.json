@@ -1,0 +1,11 @@
+{
+"Sprite": {
+  "name": "Theme Right Arrow",
+  "shader_def_filepath": "json/shaders/basic_sprite_shader.json",
+  "texture_filepath": "images/sprites/buttons/right_arrow.png",
+  "screen_position": [892,770],
+  "color": [1,1,1,1],
+  "size": [64, 64],
+  "rotation": 0
+}
+}

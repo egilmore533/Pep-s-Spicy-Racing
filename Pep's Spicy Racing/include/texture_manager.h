@@ -1,7 +1,7 @@
 #ifndef __TEXTURE_MANAGER_H__
 #define __TEXTURE_MANAGER_H__
 
-#define MAX_TEXTURES	1000
+#define MAX_TEXTURES	15
 
 #include <array>
 #include "texture.h"

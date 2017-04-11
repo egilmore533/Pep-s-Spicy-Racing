@@ -85,7 +85,7 @@ void Mesh_Manager::dereference_mesh(std::string mesh_filepath)
 	{
 		if (manager->mesh_list[i]->filepath == mesh_filepath)
 		{
-			manager->mesh_list[i]->reference_count--;
+			if(manager->mesh_list[i]->reference_count >= 1) manager->mesh_list[i]->reference_count--;
 			if (manager->mesh_list[i]->reference_count == 0)
 			{
 				manager->num_meshes--;

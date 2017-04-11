@@ -50,6 +50,8 @@ public:
 
 	int reference_count;		/**< the number of times this texture is being referenced */
 
+	bool text, image;
+
 private:
 	GLuint texture;				/**< the index for the texture */
 };
