@@ -65,6 +65,28 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		tile_mesh->Mesh::draw(shader->program);
 	}
 
+	for (int i = 0; i < tile_positions.size(); i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, tile_positions[i]);
+
+		model = glm::scale(model, glm::vec3(4.9f, 2.0f, 4.9f));
+
+		glUniform4fv(color_location, 1, &wall_color_data[0]);
+		glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
+
+		glUniformMatrix4fv(view_location, 1, GL_FALSE, &camera->Camera::get_view_matrix()[0][0]);
+		glUniformMatrix4fv(projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
+
+		glUniform4f(light_color_location, single_light->color_data.x, single_light->color_data.y, single_light->color_data.z, single_light->color_data.w);
+		glUniform3f(light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
+		glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
+
+		glBindTexture(GL_TEXTURE_2D, tile_texture->get_texture());
+
+		wall_mesh->Mesh::draw(shader->program);
+	}
+
 	//then draw walls
 
 	//then draw extra stage bits
@@ -90,11 +112,19 @@ void Stage::load_theme_data(std::string theme_filepath)
 	json tile = get_element_data(tile_def, "Tile");
 
 	tile_mesh = Mesh_Manager::create_mesh(tile["model-filepath"]);
-	tile_color_data = glm::vec4(tile["color"][0], tile["color"][1], tile["color"][2], tile["color"][3]);
+	tile_color_data = glm::vec4(theme["tile-color"][0], theme["tile-color"][1], theme["tile-color"][2], theme["tile-color"][3]);
 	tile_texture = Texture_Manager::create_texture(tile["texture-filepath"], true, true);
 
-	//wall_mesh = Mesh_Manager::create_mesh();
+	//next lets handle the wall loading
+	json wall_def = load_from_def(wall_def_filepath);
+	json wall = get_element_data(wall_def, "Wall");
 
+	wall_mesh = Mesh_Manager::create_mesh(wall["model-filepath"]);
+	wall_color_data = glm::vec4(theme["wall-color"][0], theme["wall-color"][1], theme["wall-color"][2], theme["wall-color"][3]);
+	wall_texture = Texture_Manager::create_texture(wall["texture-filepath"], true, true);
+
+
+	//now lets set up the shader program
 	shader = Shader_Manager::create_shader(theme["shader-program"]);
 	model_location = glGetUniformLocation(shader->program, "model");
 	color_location = glGetUniformLocation(shader->program, "object_color");

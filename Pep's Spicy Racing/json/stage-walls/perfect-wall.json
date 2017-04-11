@@ -1,0 +1,8 @@
+{
+"Wall": {
+  "name": "Test Wall",
+  "model-filepath": "models/perfect_wall.obj",
+  "color": [0.8, 0.3, 0.0, 1.0],
+  "texture-filepath": "images/wood.jpg"
+}
+}

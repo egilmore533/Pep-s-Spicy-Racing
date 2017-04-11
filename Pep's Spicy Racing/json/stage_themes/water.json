@@ -2,9 +2,12 @@
 "Stage Theme": {
   "name": "Water",
   "tile-def-file": "json/stage-tiles/perfect-tile.json",
-  "tile-color": [1.0, 0.62, 0.0, 1.0],
-  "wall-def-file": "json/stage-tiles/perfect-wall.json",
+  "tile-color": [1.0, 0.97, 0.43, 1.0],
+  "tile-alt-color": [0.8, 0.77, 0.10, 1.0],
+  "wall-def-file": "json/stage-walls/perfect-wall.json",
+  "wall-color": [0.6, 0.45, 0.06, 1.0],
   "shader-program": "json/shaders/toon_shader.json",
-  "background-color": [0.0, 0.0, 0.6, 1.0]
+  "background-color": [0.02, 0.56, 0.8, 1.0],
+  "background-alt-color": [0.18, 0.38, 0.65, 1.0]
 }
 }
