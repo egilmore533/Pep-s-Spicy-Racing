@@ -4,7 +4,7 @@
   "tile-def-file": "json/stage-tiles/perfect-tile.json",
   "tile-color": [1.0, 0.63, 0.05, 1.0],
   "tile-alt-color": [0.11, 0.71, 0.15, 1.0],
-  "wall-def-file": "json/stage-tiles/perfect-wall.json",
+  "wall-def-file": "json/stage-walls/perfect-wall.json",
   "wall-color": [0.91, 0.46, 0.05, 1.0],
   "shader-program": "json/shaders/toon_shader.json",
   "background-color": [0.91, 0.20, 0.05, 1.0],

@@ -22,8 +22,65 @@ Stage::Stage(std::string stage_def_filepath)
 		tile_positions.push_back(glm::vec3(level["tiles"][i][0], 0.0f, level["tiles"][i][1]));
 	}
 
-	//then determine where to place walls
+	//now that we've loaded all the tiles we will now determine where to place walls
+	for (int i = 0; i < tile_positions.size(); i++)
+	{
+		bool north, south, east, west; //bools to know if we need corresponding walls
+		north = south = east = west = true; //assume we need a wall, unless we have a reason to not put a wall
 
+		//for each tile, look through each other tile determining whether or not to keep them
+		for (int j = 0; j < tile_positions.size(); j++)
+		{
+			if (i == j) continue; //don't compare the same tiles
+
+			//get the x and z differences to determine if we need some walls
+			float z_diff = tile_positions[i].z - tile_positions[j].z;
+			float x_diff = tile_positions[i].x - tile_positions[j].x;
+
+			bool z_aligned = z_diff == 0.0f;
+			bool x_aligned = x_diff == 0.0f;
+			//if we are on the same x or z axis we might have a connecting tile
+			if (z_aligned || x_aligned)
+			{
+				if (z_aligned && x_diff <= 10.0f && x_diff > 0.0f)
+				{
+					south = false;
+				}
+
+				else if (z_aligned && x_diff < 0.0f && x_diff >= -10.0f)
+				{
+					north = false;
+				}
+
+				else if (x_aligned && z_diff <= 10.0f && z_diff > 0.0f)
+				{
+					west = false;
+				}
+
+				else if (x_aligned && z_diff < 0.0f && z_diff >= -10.0f)
+				{
+					east = false;
+				}
+			}
+		}
+
+		if (north)
+		{
+			wall_position_data.push_back(glm::vec4(tile_positions[i].x + 5.0f, tile_positions[i].y, tile_positions[i].z , 90.0f));
+		}
+		if (south)
+		{
+			wall_position_data.push_back(glm::vec4(tile_positions[i].x - 5.0f, tile_positions[i].y, tile_positions[i].z, 90.0f));
+		}
+		if (east)
+		{
+			wall_position_data.push_back(glm::vec4(tile_positions[i].x, tile_positions[i].y, tile_positions[i].z + 5.0f, 0.0f));
+		}
+		if (west)
+		{
+			wall_position_data.push_back(glm::vec4(tile_positions[i].x, tile_positions[i].y, tile_positions[i].z - 5.0f, 0.0f));
+		}
+	}
 }
 
 Stage::~Stage()
@@ -48,7 +105,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, tile_positions[i]);
 		
-		model = glm::scale(model, glm::vec3(4.9f));
+		model = glm::scale(model, glm::vec3(5.0f));
 
 		glUniform4fv(color_location, 1, &tile_color_data[0]);
 		glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
@@ -65,12 +122,12 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		tile_mesh->Mesh::draw(shader->program);
 	}
 
-	for (int i = 0; i < tile_positions.size(); i++)
+	for (int i = 0; i < wall_position_data.size(); i++)
 	{
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, tile_positions[i]);
-
-		model = glm::scale(model, glm::vec3(4.9f, 2.0f, 4.9f));
+		model = glm::translate(model, glm::vec3(wall_position_data[i].x, wall_position_data[i].y, wall_position_data[i].z));
+		model = glm::rotate(model, glm::radians(wall_position_data[i].w), glm::vec3(0, 1, 0));
+		model = glm::scale(model, glm::vec3(5.0f, 1.0f, 5.0f));
 
 		glUniform4fv(color_location, 1, &wall_color_data[0]);
 		glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
