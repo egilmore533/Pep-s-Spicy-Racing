@@ -44,17 +44,21 @@ public:
 	Mesh *mesh;					/**< mesh that belongs to this entity */
 	Texture *texture;			/**< the entity's texture */
 
-	float move_speed;			/**< the movement speed of the entity */
-	float rotation_speed;		/**< the speed at which the entity rotates */
+
+	float current_speed;			/**< the movement speed of the entity */
+	float current_rotation;		/**< the model's rotation (about the y axis, in )*/
+	float scale;				/**< the scale of the entity's model */
 
 	float think_rate;			/**< the rate at which the entity will think (in seconds) */
 	float next_think;			/**< the next time this entity will perform its think function (sf::Time asSeconds)*/
 
 	glm::vec3 world_position;	/**< entity's position in world space */
-	glm::vec3 movement_vector;
+	glm::vec3 movement_velocity;	/**< the current velocity of the entity */
 
-	float rotation_angle;		/**< the model's rotation (about the y axis, in )*/
-	float scale;				/**< the scale of the entity's model */
+	float acceleration_rate;	/**< the rat at which this entity will accerlate */
+	float top_speed;			/**< the fastest speed this entity can move */
+	float deacceleration_rate;	/**< the rate at which this entity will deaccelerate */
+	float rotation_rate;		/**< the speed at which the entity rotates */
 
 	glm::mat4 model;			/**< the model matrix of this entity, used to draw the entity in world position */
 	glm::vec4 color_data;		/**< the colors this entity will be drawn in, unique to entity's now not mesh's that way I can set up a mesh resource manager */

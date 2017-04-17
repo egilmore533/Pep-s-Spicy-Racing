@@ -1,10 +1,21 @@
 #version 400
+
+struct Material
+{
+	vec4 ambient_strength;
+	vec4 diffuse_strength;
+	vec4 specular_strength;		/**< this is the impact of the highlight */
+	int shininess_strength;		/**< the higher the shininess the more it properly reflects the light instead of scattering it around (needs to be powers of 2) */
+};
+
 in vec2 TexCoord;				/**< UV of the vertex to color */
 
 in vec3 Normal;					/**< the normal of the vertex to color, calculated by the mesh's data and the model matrix */
 in vec3 FragPos;				/**< position of the vertex to color in world space */
 
 out vec4 color;					/**< the output color of this vertex */
+
+uniform Material material;
 
 uniform vec4 object_color;		/**< color of the object itself */
 uniform vec4 light_color;		/**< color of the light itself */
@@ -31,8 +42,8 @@ void main()
 	vec4 diffuse = diff * light_color;
 
 	//SPECULAR CALCULATION
-	float specular_strength = 0.1f;								/**< this is the impact of the highlight */
-	int shininess_strength = 32;								/**< the higher the shininess the more it properly reflects the light instead of scattering it around (needs to be powers of 2) */
+	float specular_strength = 0.1f;
+	int shininess_strength = 32;
 	vec3 view_direction = normalize(view_position - FragPos);	
 
 	//reflect expects the first var to point from the light source towards the fragment's position so negate view_direction

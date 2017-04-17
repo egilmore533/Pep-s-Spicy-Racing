@@ -19,8 +19,8 @@ Entity::Entity()
 	draw = NULL;
 	think = NULL;
 
-	move_speed = 0.0f;
-	rotation_speed = 0.0f;
+	current_speed = 0.0f;
+	rotation_rate = 0.0f;
 
 	think_rate = 0.0f;
 	next_think = 0.0f;
@@ -28,7 +28,7 @@ Entity::Entity()
 	shader = NULL;
 
 	world_position = glm::vec3(0.0f);
-	rotation_angle = 0.0f;
+	current_rotation = 0.0f;
 	scale = 1.0f;
 
 	model = glm::mat4(1.0f);
@@ -53,32 +53,32 @@ void update()
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		world_position.z += move_speed * delta_time;
+		world_position.z += current_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		world_position.z -= move_speed * delta_time;
+		world_position.z -= current_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		world_position.x += move_speed * delta_time;
+		world_position.x += current_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		world_position.x -= move_speed * delta_time;
+		world_position.x -= current_speed * delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
 	{
-		rotation_angle -= rotation_speed *delta_time;
+		current_rotation -= rotation_rate *delta_time;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 	{
-		rotation_angle += rotation_speed * delta_time;
+		current_rotation += rotation_rate * delta_time;
 	}
 
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, world_position);
-	model = glm::rotate(model, glm::radians(rotation_angle), glm::vec3(0,1,0));
+	model = glm::rotate(model, glm::radians(current_rotation), glm::vec3(0,1,0));
 	model = glm::scale(model, glm::vec3(scale));
 }
 */
@@ -96,7 +96,7 @@ void default_update(Entity *ent)
 {
 	ent->model = glm::mat4(1.0f);
 	ent->model = glm::translate(ent->model, ent->world_position);
-	ent->model = glm::rotate(ent->model, glm::radians(ent->rotation_angle), glm::vec3(0, 1, 0));
+	ent->model = glm::rotate(ent->model, glm::radians(ent->current_rotation), glm::vec3(0, 1, 0));
 	ent->model = glm::scale(ent->model, glm::vec3(ent->scale));
 }
 

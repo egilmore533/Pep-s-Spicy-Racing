@@ -30,6 +30,17 @@ typedef struct
 	glm::vec2 texel;	/**< normal data for the corner */
 }vertex;
 
+/**
+* @struct contains the data for a material, constructed when loading the mesh
+*/
+typedef struct
+{
+	glm::vec4 ambient_strength;
+	glm::vec4 diffuse_strength;
+	glm::vec4 specular_strength;
+	int shininess;
+}material;
+
 class Mesh
 {
 public:
@@ -86,6 +97,7 @@ private:
 	std::vector<vertex> buffer_data;						/**< the data being sent to the graphics card */
 
 	Texture *myTexture;				/**< Mesh's texture(s) */
+
 
 	//vertex buffer objects
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */

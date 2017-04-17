@@ -74,7 +74,7 @@ Entity *Entity_Manager::create_entity(std::string entity_json_filepath, glm::vec
 		new_entity->update = &default_update;
 
 		new_entity->model = glm::mat4(1.0f);
-		new_entity->rotation_angle = 0;
+		new_entity->current_rotation = 0;
 		glm::translate(new_entity->model, new_entity->world_position);
 		manager->num_entities++;
 
@@ -96,9 +96,9 @@ Entity *Entity_Manager::create_entity(std::string entity_json_filepath, glm::vec
 
 		new_entity->texture = Texture_Manager::create_texture(texture_filepath.c_str(), true, true);
 		new_entity->mesh = Mesh_Manager::create_mesh(model_filepath.c_str());
-		new_entity->move_speed = (float)entity_def["move-speed"];
+		new_entity->current_speed = (float)entity_def["move-speed"];
 		new_entity->think_rate = (float)entity_def["think-rate"];
-		new_entity->rotation_speed = (float)entity_def["rotation-speed"];
+		new_entity->rotation_rate = (float)entity_def["rotation-speed"];
 
 		std::string shader_filepath = entity_def["shader-program"];
 

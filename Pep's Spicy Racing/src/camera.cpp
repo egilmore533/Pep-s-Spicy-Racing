@@ -104,7 +104,7 @@ void Camera::get_mouse_input()
 */
 void Camera::follow_entity(Entity *entity)
 {
-	position = entity->world_position + glm::vec3(-5 * cos(glm::radians(entity->rotation_angle)), 1.5f, 5 * sin(glm::radians(entity->rotation_angle)));
+	position = entity->world_position + glm::vec3(-5 * cos(glm::radians(entity->current_rotation)), 1.5f, 5 * sin(glm::radians(entity->current_rotation)));
 	target = entity->world_position;
 	up = glm::vec3(0,1,0);
 }

@@ -1,7 +1,3 @@
-#ifndef _DEBUG
-#include <windows.hpp>		//TODO ASK BO WHY I CAN'T FIMD THIS FILE IN RELEASE MODE
-#endif
-
 #include <GL/glew.h>
 
 #include <glm\glm.hpp>
@@ -189,7 +185,7 @@ void singleplayer_mode()
 	glm::vec3 cameraPosition = glm::vec3(-3, 20, 28);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
-	Player *player = new Player(glm::vec3(stage.start_position.x, stage.start_position.y + 0.5f, stage.start_position.z));
+	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.start_position.x, stage.start_position.y + 0.5f, stage.start_position.z));
 
 	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
@@ -219,10 +215,6 @@ void singleplayer_mode()
 				pressed = true;
 			}
 		}
-		/*
-		player->player_cam->Camera::get_mouse_input();
-		player->player_cam->Camera::get_keyboard_input();
-		*/
 
 		Entity_Manager::update_all();
 
@@ -245,7 +237,6 @@ void singleplayer_mode()
 
 		//this should be disabled for UI and HUD stuffs, but enabled for 3D
 		glDisable(GL_DEPTH_TEST);
-
 
 		Sprite_Manager::draw(camera, my_sprite->id);
 		Sprite_Manager::draw(camera, my_sprite2->id);

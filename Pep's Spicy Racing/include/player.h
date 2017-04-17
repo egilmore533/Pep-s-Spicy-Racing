@@ -9,7 +9,7 @@ class Player
 {
 public:
 
-	Player(glm::vec3 position);
+	Player(std::string racer_def_file, glm::vec3 position);
 
 	void update_player_cam();
 
