@@ -1,0 +1,9 @@
+{
+"Racer": {
+  "name": "Pep",
+  "icon": "json/sprites/racer_icons/pep.json",
+  "acceleration_rate": 20.0,
+  "deacceleration_rate": 20.0,
+  "top_speed": 1000
+}
+}

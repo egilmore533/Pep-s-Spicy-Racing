@@ -15,6 +15,7 @@ Player::Player(std::string racer_def_file, glm::vec3 position)
 	entity_component->think = &think;
 
 	entity_component->movement_velocity = glm::vec3(0.0f);
+	entity_component->current_speed = 0;
 
 	json def = load_from_def(racer_def_file);
 	json racer_def = get_element_data(def, "Racer");
@@ -70,10 +71,12 @@ void update(Entity *ent)
 	{
 		ent->current_speed = ent->top_speed;
 	}
-	else
+	if (ent->current_speed < -ent->top_speed / 2.0f)
 	{
-		ent->current_speed--; //drop speed by one every frame just to slow without gas
+		ent->current_speed = -ent->top_speed / 2.0f;
 	}
+
+	printf("current_speed: %f\n", ent->current_speed);
 
 
 
@@ -81,24 +84,7 @@ void update(Entity *ent)
 	//change velocity based on that combined with the acceleration and deacceleration rates from the entity
 	//update position based on the new velocity
 
-	
-	if(forward == 1)
-	{
-		//handle turning and forward acceleration
-		ent->movement_velocity = (ent->movement_velocity / 2.0f) + ((ent->current_speed / 100.0f) * glm::vec3(forward * cos(glm::radians(ent->current_rotation)), 0, -forward * sin(glm::radians(ent->current_rotation))) * delta_time);
-	}
-	
-	else if (forward == 0)
-	{
-		ent->movement_velocity = (ent->movement_velocity / 2.0f) + ((ent->current_speed / 100.0f) * glm::vec3(forward * cos(glm::radians(ent->current_rotation)), 0, -forward * sin(glm::radians(ent->current_rotation))) * delta_time);
-	}
-	/*
-	else 
-	{
-		//handle acceleration backwards and turning, turning should be the most effective
-		ent->movement_velocity -= ent->movement_velocity / (ent->deacceleration_rate / 200.0f) ;
-	}
-	*/
+	ent->movement_velocity = ent->current_speed / 10.0f * glm::vec3(cos(glm::radians(ent->current_rotation)), 0,  sin(glm::radians(ent->current_rotation))) * delta_time;
 
 	ent->world_position = ent->world_position + ent->movement_velocity;
 
