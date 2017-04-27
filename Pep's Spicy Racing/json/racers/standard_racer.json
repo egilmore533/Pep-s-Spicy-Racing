@@ -2,8 +2,10 @@
 "Racer": {
   "name": "Pep",
   "icon": "json/sprites/racer_icons/pep.json",
-  "acceleration_rate": 20.0,
-  "deacceleration_rate": 20.0,
-  "top_speed": 1000
+  "acceleration_rate": 3.0,
+  "deacceleration_rate": 1.0,
+  "top_speed": 4.0,
+  "handling": 3.0,
+  "mass": 3.0
 }
 }

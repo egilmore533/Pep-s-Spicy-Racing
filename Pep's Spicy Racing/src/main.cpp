@@ -18,6 +18,12 @@
 
 #include "button.h"
 
+#include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
+
+#include "text.h"
+
+
 void singleplayer_mode();
 
 void level_editor();
@@ -65,6 +71,25 @@ int main()
 {
 	int game_running = 1;
 
+	int i;
+	///-----initialization_start-----
+
+	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
+	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+
+	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
+	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+
+	///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
+	btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+
+	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
+	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+
+	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+
+	dynamicsWorld->setGravity(btVector3(0, -10, 0));
+
 	init_logger("game_log.log");
 	Graphics *graphics = new Graphics();
 
@@ -90,6 +115,23 @@ int main()
 
 	reload_buttons();
 
+	/*
+	Text *my_text = new Text();
+
+	json def = load_from_def("json/sprites/text_sprites/alphabet.json");
+	json text_sprite_def = get_element_data(def, "Text_Sprite");
+	json text_data = get_element_data(text_sprite_def, "text_data");
+	my_text->Text::set_sprite_texture(text_data);
+	my_text->Text::set_shader(text_sprite_def["shader_def_filepath"]);
+	my_text->Text::set_data(glm::vec2(10.0f, 10.0f), glm::vec2(1000.0f, 1000.0f));
+
+	Text *my_text2 = new Text();
+
+	my_text2->Text::set_sprite_texture(text_data);
+	my_text2->Text::set_shader(text_sprite_def["shader_def_filepath"]);
+	my_text2->Text::set_data(glm::vec2(10.0f, 10.0f), glm::vec2(1000.0f, 1000.0f));
+	*/
+
 	while (game_running)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -110,6 +152,10 @@ int main()
 
 		singleplayer_button->draw(cam);
 		level_editor_button->draw(cam);
+
+		/*
+		my_text2->draw(cam);
+		*/
 
 		Graphics::next_frame();
 	}

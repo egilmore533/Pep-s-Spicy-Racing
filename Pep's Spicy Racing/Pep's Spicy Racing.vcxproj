@@ -36,8 +36,10 @@
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\sprite.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\sprite_manager.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\stage.cpp" />
+    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\text.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\texture.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\texture_manager.cpp" />
+    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\text_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\button.h" />
@@ -57,8 +59,10 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\sprite.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\sprite_manager.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\stage.h" />
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\text.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\texture.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\texture_manager.h" />
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\text_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\fs1.glsl" />
@@ -68,6 +72,17 @@
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\toon_fs.glsl" />
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\toon_vs.glsl" />
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\vs1.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenGL Libraries\bullet build\src\BulletCollision\BulletCollision.vcxproj">
+      <Project>{2df32a70-0c08-33b4-974a-a437d2be5ab0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenGL Libraries\bullet build\src\BulletDynamics\BulletDynamics.vcxproj">
+      <Project>{6a83fad1-acba-306e-a7f0-c13c8d3887a6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenGL Libraries\bullet build\src\LinearMath\LinearMath.vcxproj">
+      <Project>{eb38807a-8fd3-3eed-8d16-89e4b14123fa}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{358E9F98-BF9F-4706-BA09-317A5FEF898F}</ProjectGuid>
@@ -124,7 +139,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)\$(ProjectName)</OutDir>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>D:\Projects\Games\3D\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Projects\Games\3D\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include;D:\Projects\Games\3D\OpenGL Libraries\bullet3\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -133,7 +148,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\$(ProjectName)</OutDir>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>D:\Projects\Games\3D\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Projects\Games\3D\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include;D:\Projects\Games\3D\OpenGL Libraries\bullet3\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

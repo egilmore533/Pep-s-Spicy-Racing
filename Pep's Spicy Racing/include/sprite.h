@@ -5,11 +5,10 @@
 
 #include <GL/glew.h>
 
-#include <SFML\Graphics.hpp>
-
-#include <glm\common.hpp>
+#include <glm/common.hpp>
 
 #include <glm/glm.hpp>
+
 #include "texture.h"
 #include "shader.h"
 #include "json_helper.h"
@@ -48,11 +47,6 @@ public:
 	* @param shader_def the definition file for the shader program
 	*/
 	void set_shader(std::string shader_def);
-
-	/**
-	* @brief draws the sprite to the screen with its current configuration
-	*/
-	void draw();
 
 	//Data
 	bool in_use;				/**< flag for manager to understand if sprite is in use */

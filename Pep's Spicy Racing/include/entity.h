@@ -59,6 +59,8 @@ public:
 	float top_speed;			/**< the fastest speed this entity can move */
 	float deacceleration_rate;	/**< the rate at which this entity will deaccelerate */
 	float rotation_rate;		/**< the speed at which the entity rotates */
+	float mass;					/**< currently unused but will effect how long the racer is stunned when he is hit by an item, and how far he will bounce back and bounce other racers away */
+	float handling;				/**< defines how well a racer turns */
 
 	glm::mat4 model;			/**< the model matrix of this entity, used to draw the entity in world position */
 	glm::vec4 color_data;		/**< the colors this entity will be drawn in, unique to entity's now not mesh's that way I can set up a mesh resource manager */

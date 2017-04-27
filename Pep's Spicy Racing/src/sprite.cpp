@@ -63,11 +63,3 @@ void Sprite::set_shader(std::string shader_def)
 	projection_location = glGetUniformLocation(shader->program, "projection");
 	sprite_color_location = glGetUniformLocation(shader->program, "sprite_color");
 }
-
-/**
-* @brief draws the sprite to the screen with its current configuration
-*/
-void Sprite::draw()
-{
-	
-}
