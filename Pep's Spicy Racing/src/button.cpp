@@ -30,23 +30,23 @@ Button::Button(std::string button_def_file)
 	background = Sprite_Manager::create_sprite(sprite_def_filepath);
 	clicked = false;
 
+	glm::vec2 pos = glm::vec2(button_def["position"][0], button_def["position"][1]);
+	glm::vec2 size = glm::vec2(button_def["size"][0], button_def["size"][1]);
+	float rot = button_def["rotation"];
+	background->set_data(pos, size, rot, background->color);
+
 	json text_def = get_element_data(button_def, "Text");
 	
 	if (text_def == NULL)
 		return;
 
-	std::string temp_string = text_def["text"];
-	glm::vec2 pos = glm::vec2(text_def["position"][0], text_def["position"][1]);
-	glm::vec2 size = glm::vec2(text_def["size"][0], text_def["size"][1]);
-	float rot = text_def["rotation"];
-	background->set_data(pos, size, rot, background->color);
-
-
-
 	load_my_font();
-
 	text.setFont(button_font1);
+
+	std::string temp_string = text_def["text"];
+	rot = text_def["rotation"];
 	text.setString(temp_string);
+	text.setRotation(rot);
 
 	int text_size = text_def["text_size"];
 	text.setCharacterSize(text_size);

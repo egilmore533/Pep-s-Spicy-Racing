@@ -2,6 +2,8 @@
 "Button": {
   "name": "Theme Left Arrow Button",
   "sprite_def_filepath": "json/sprites/theme_left_arrow_sprite.json",
-  "text": ""
+  "position": [550,770],
+  "size": [64, 64],
+  "rotation": 0
 }
 }

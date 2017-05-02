@@ -1,10 +1,40 @@
 {
     "Level": {
-        "number_tiles": 0,
+        "number_tiles": 7,
         "start_tile": [
-            0.0,
-            0.0
+            21.0,
+            22.0
         ],
-        "theme": "json/stage_themes/spicy.json"
+        "theme": "json/stage_themes/spicy.json",
+        "tiles": [
+            [
+                1.0,
+                2.0
+            ],
+            [
+                21.0,
+                2.0
+            ],
+            [
+                81.0,
+                2.0
+            ],
+            [
+                81.0,
+                22.0
+            ],
+            [
+                81.0,
+                42.0
+            ],
+            [
+                11.0,
+                42.0
+            ],
+            [
+                21.0,
+                22.0
+            ]
+        ]
     }
 }
