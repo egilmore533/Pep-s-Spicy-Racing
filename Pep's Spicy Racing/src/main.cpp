@@ -252,15 +252,6 @@ void singleplayer_mode()
 		printf("dun goofed\n");
 	}
 
-	sf::Text speed;
-
-	speed.setFont(hud_font);
-	speed.setCharacterSize(64);
-	speed.setFillColor(sf::Color::Red);
-	speed.setOutlineColor(sf::Color::Black);
-	speed.setOutlineThickness(4.0f);
-	speed.setPosition(WINDOW_WIDTH - 350, WINDOW_HEIGHT - 64);
-
 	sf::Text mph;
 
 	mph.setFont(hud_font);
@@ -269,7 +260,17 @@ void singleplayer_mode()
 	mph.setFillColor(sf::Color::Red);
 	mph.setOutlineColor(sf::Color::Black);
 	mph.setOutlineThickness(2.0f);
-	mph.setPosition(WINDOW_WIDTH - 150, WINDOW_HEIGHT - 32);
+	mph.setPosition(WINDOW_WIDTH - 150, WINDOW_HEIGHT - 42);
+
+
+	sf::Text speed;
+
+	speed.setFont(hud_font);
+	speed.setCharacterSize(64);
+	speed.setFillColor(sf::Color::Red);
+	speed.setOutlineColor(sf::Color::Black);
+	speed.setOutlineThickness(4.0f);
+	speed.setPosition(mph.getPosition().x + speed.getLocalBounds().width + 10.0f, WINDOW_HEIGHT - 74);
 
 	//end TODO
 
@@ -311,6 +312,7 @@ void singleplayer_mode()
 		Sprite_Manager::draw(camera, item_backdrop->id);
 
 		speed.setString(std::to_string((int)std::round(player->entity_component->current_speed / 10.0f)));
+		speed.setPosition(mph.getPosition().x - speed.getLocalBounds().width - 10.0f, WINDOW_HEIGHT - 74);
 		Graphics::begin_draw_text();
 		Graphics::draw_text(speed); 
 		Graphics::draw_text(mph);
