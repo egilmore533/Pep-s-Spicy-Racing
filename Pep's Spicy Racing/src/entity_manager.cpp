@@ -96,6 +96,7 @@ Entity *Entity_Manager::create_entity(std::string entity_json_filepath, glm::vec
 
 		new_entity->texture = Texture_Manager::create_texture(texture_filepath.c_str(), true, true);
 		new_entity->mesh = Mesh_Manager::create_mesh(model_filepath.c_str());
+
 		new_entity->current_speed = (float)entity_def["move-speed"];
 		new_entity->think_rate = (float)entity_def["think-rate"];
 		new_entity->rotation_rate = (float)entity_def["rotation-speed"];
@@ -176,9 +177,14 @@ void Entity_Manager::clear()
 			manager->num_entities--;
 
 			//any resources contained in the entity need to be dereferenced here
-			Shader_Manager::dereference_shader(manager->entity_list[i]->shader->shader_def_file);
-			Mesh_Manager::dereference_mesh(manager->entity_list[i]->mesh->filepath);
-			Texture_Manager::dereference_texture(manager->entity_list[i]->texture->filepath);
+			if(manager->entity_list[i]->shader != NULL)
+				Shader_Manager::dereference_shader(manager->entity_list[i]->shader->shader_def_file);
+
+			if(manager->entity_list[i]->mesh != NULL)
+				Mesh_Manager::dereference_mesh(manager->entity_list[i]->mesh->filepath);
+
+			if(manager->entity_list[i]->texture != NULL)
+				Texture_Manager::dereference_texture(manager->entity_list[i]->texture->filepath);
 
 			if (manager->num_entities == 0)
 			{

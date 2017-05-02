@@ -5,6 +5,7 @@
 
 #include <simple_logger.h>
 
+#include "graphics.h"
 #include "mesh.h"
 
 /**
@@ -189,8 +190,13 @@ void Mesh::setup_buffers()
 		// Normal attribute
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertex), (GLvoid*)offsetof(vertex, normal));
-	// 4. Unbind VAO (NOT the EBO)
+	// 4. Unbind VAO
 	glBindVertexArray(0);
+
+	//don't forget to unbind the array buffer and the element array buffer you silly goose
+	//oh well only wasted an eternity figuring that one out
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 /**

@@ -22,7 +22,6 @@
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 
-#include "text.h"
 
 
 void singleplayer_mode();
@@ -135,19 +134,20 @@ int main()
 
 	Graphics::set_clear_color(menu_clear_color);
 
+	sf::Font hud_font;
+	if (!hud_font.loadFromFile("fonts/Spicy.ttf"))
+	{
+		printf("dun goofed\n");
+	}
+
+	sf::Text text;
+	text.setFont(hud_font);
+	text.setString("100mph");
+	text.setCharacterSize(50);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition(10, 50);
+
 	reload_buttons();
-
-	//sf::Font the_font;
-
-	//the_font.loadFromFile("fonts/Spicy.ttf");
-
-	//sf::Text text;
-	//text.setFont(the_font);
-	//text.setString("hello0o0o0o0oo0");
-	//text.setCharacterSize(24);
-	//text.setFillColor(sf::Color::Red);
-	//text.setOutlineColor(sf::Color::Black);
-	//text.setPosition(450, 200);
 
 	while (game_running)
 	{
@@ -170,9 +170,15 @@ int main()
 		singleplayer_button->draw_background(cam);
 		level_editor_button->draw_background(cam);
 
-		//singleplayer_button->draw_text();
-		//level_editor_button->draw_text();
+		Graphics::begin_draw_text();
 
+		singleplayer_button->draw_text();
+		level_editor_button->draw_text();
+
+
+		Graphics::draw_text(text);
+
+		Graphics::end_draw_text();
 
 		Graphics::next_frame();
 	}
@@ -202,7 +208,8 @@ void level_editor()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	Sprite *my_text_test = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
+	//this will be our light
+	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(0, 0, 0));
 
 
 	while (editor_running)
@@ -269,9 +276,29 @@ void singleplayer_mode()
 	Sprite *my_sprite2 = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
 
 	
+	sf::Font hud_font;
+	if (!hud_font.loadFromFile("fonts/Spicy.ttf"))
+	{
+		printf("dun goofed\n");
+	}
+
+	sf::Text text;
+	text.setFont(hud_font);
+	text.setString("100mph");
+	text.setCharacterSize(50);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition(10, 50);
 
 
+	sf::Text speed;
 
+	speed.setFont(hud_font);
+	speed.setString((int)std::round(player->entity_component->current_speed / 10.0f) + "mph");
+	speed.setCharacterSize(24);
+	speed.setFillColor(sf::Color::Red);
+	speed.setOutlineColor(sf::Color::Black);
+	speed.setOutlineThickness(1.0f);
+	speed.setPosition(450, 450);
 
 	while (singleplayer_running)
 	{
@@ -310,7 +337,12 @@ void singleplayer_mode()
 		Sprite_Manager::draw(camera, my_sprite->id);
 		Sprite_Manager::draw(camera, my_sprite2->id);
 
-		//mph->draw(camera);
+
+		//speed.setString((int)std::round(player->entity_component->current_speed / 10.0f) + "mph");
+		Graphics::begin_draw_text();
+		Graphics::draw_text(speed);
+		Graphics::end_draw_text();
+
 
 		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
 		//opengl is hard :(

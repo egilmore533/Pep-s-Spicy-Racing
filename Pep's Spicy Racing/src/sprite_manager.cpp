@@ -82,8 +82,11 @@ void Sprite_Manager::clear()
 			manager->num_sprites--;
 
 			//any resources contained in the entity need to be dereferenced here
-			Shader_Manager::dereference_shader(manager->sprite_list[i]->shader->shader_def_file);
-			Texture_Manager::dereference_texture(manager->sprite_list[i]->texture->filepath);
+			if(manager->sprite_list[i]->shader != NULL)
+				Shader_Manager::dereference_shader(manager->sprite_list[i]->shader->shader_def_file);
+
+			if(manager->sprite_list[i]->texture != NULL)
+				Texture_Manager::dereference_texture(manager->sprite_list[i]->texture->filepath);
 
 			if (manager->num_sprites == 0)
 			{
@@ -164,12 +167,6 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 			continue;
 		}
 
-		printf("Sprite: %d\n", i);
-
-		Sprite *new_sprite = manager->sprite_list[i];
-		new_sprite->id = i;
-		new_sprite->in_use = true;
-
 		//load json objects
 		json def = load_from_def(sprite_json_filepath);
 		json sprite_def = get_element_data(def, "Sprite");
@@ -178,10 +175,13 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 		//need to write it as == NULL because just using ! crashes the json object
 		if (sprite_def == NULL)
 		{
-			manager->num_sprites++;
-			manager->sprite_list[i] = new_sprite;
-			return manager->sprite_list[i];
+			slog("filepath given not a sprite defintion file");
+			return NULL;
 		}
+
+		Sprite *new_sprite = manager->sprite_list[i];
+		new_sprite->id = i;
+		new_sprite->in_use = true;
 
 		std::string texture_filepath = sprite_def["texture_filepath"];
 		new_sprite->set_sprite_texture(texture_filepath);
@@ -198,7 +198,6 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 		new_sprite->set_data(position, size, rotation, color_data);
 
 		manager->num_sprites++;
-		manager->sprite_list[i] = new_sprite;
 		return manager->sprite_list[i];
 	}
 	return NULL;
