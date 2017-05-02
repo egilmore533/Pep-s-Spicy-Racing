@@ -102,11 +102,6 @@ void update(Entity *ent)
 		}
 	}
 
-	printf("current_speed: %f\n", (ent->current_speed));
-
-	
-
-
 	//get gas/brake/reverse
 	//change velocity based on that combined with the acceleration and deacceleration rates from the entity
 	//update position based on the new velocity

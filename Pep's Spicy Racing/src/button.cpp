@@ -58,7 +58,7 @@ Button::Button(std::string button_def_file)
 
 	text.setFillColor(fill_color);
 	text.setOutlineColor(out_color);
-	text.setPosition(pos.x, pos.y);
+	text.setPosition((pos.x + background->size.x / 2.0f) - text.getLocalBounds().width / 2.0f, (pos.y + background->size.y / 2.0f) - text.getLocalBounds().height);
 }
 
 void Button::draw_background(Camera *camera)

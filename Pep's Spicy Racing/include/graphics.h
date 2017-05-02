@@ -6,7 +6,7 @@
 #include <SFML\OpenGL.hpp>
 #include <SFML\Graphics.hpp>
 
-#define WINDOW_WIDTH	1024
+#define WINDOW_WIDTH	1600
 #define WINDOW_HEIGHT	900
 
 #define FRAME_DELAY		33

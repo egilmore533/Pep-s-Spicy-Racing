@@ -54,39 +54,6 @@ void clean_up_scene()
 	Graphics::set_clear_color(menu_clear_color);
 }
 
-int test_text()
-{
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Trying to make a game");
-	sf::Font font;
-	if (!font.loadFromFile("fonts/Spicy.ttf"))
-	{
-		//error
-	}
-
-	sf::Text text;
-	text.setFont(font);
-	text.setString("100mph");
-	text.setCharacterSize(50);
-	text.setFillColor(sf::Color::Red);
-	text.setPosition(10, 50);
-
-	while (window.isOpen())
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-
-		window.clear();
-		window.draw(text);
-		window.display();
-	}
-
-	return 0;
-}
-
 int main()
 {
 	int game_running = 1;
@@ -140,12 +107,14 @@ int main()
 		printf("dun goofed\n");
 	}
 
-	sf::Text text;
-	text.setFont(hud_font);
-	text.setString("100mph");
-	text.setCharacterSize(50);
-	text.setFillColor(sf::Color::Red);
-	text.setPosition(10, 50);
+	sf::Text menu_text;
+	menu_text.setFont(hud_font);
+	menu_text.setString("Pep's Spicy Racing");
+	menu_text.setFillColor(sf::Color::Red);
+	menu_text.setOutlineColor(sf::Color::Black);
+	menu_text.setOutlineThickness(4.0f);
+	menu_text.setCharacterSize(128);
+	menu_text.setPosition((WINDOW_WIDTH / 2.0f) - (menu_text.getLocalBounds().width / 2.0f), 100);
 
 	reload_buttons();
 
@@ -176,7 +145,7 @@ int main()
 		level_editor_button->draw_text();
 
 
-		Graphics::draw_text(text);
+		Graphics::draw_text(menu_text);
 
 		Graphics::end_draw_text();
 
@@ -272,33 +241,37 @@ void singleplayer_mode()
 	//this should be disabled for UI and HUD stuffs, but enabled for 3D
 	glDisable(GL_DEPTH_TEST);
 
-	Sprite *my_sprite = Sprite_Manager::create_sprite("json/sprites/joe_sprite.json");
-	Sprite *my_sprite2 = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
+	//TODO add to GUI all this junk
+	Sprite *leader_1 = Sprite_Manager::create_sprite("json/sprites/joe_sprite.json");
+	Sprite *item_backdrop = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
+	Sprite *current_item = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
 
-	
 	sf::Font hud_font;
 	if (!hud_font.loadFromFile("fonts/Spicy.ttf"))
 	{
 		printf("dun goofed\n");
 	}
 
-	sf::Text text;
-	text.setFont(hud_font);
-	text.setString("100mph");
-	text.setCharacterSize(50);
-	text.setFillColor(sf::Color::Red);
-	text.setPosition(10, 50);
-
-
 	sf::Text speed;
 
 	speed.setFont(hud_font);
-	speed.setString((int)std::round(player->entity_component->current_speed / 10.0f) + "mph");
-	speed.setCharacterSize(24);
+	speed.setCharacterSize(64);
 	speed.setFillColor(sf::Color::Red);
 	speed.setOutlineColor(sf::Color::Black);
-	speed.setOutlineThickness(1.0f);
-	speed.setPosition(450, 450);
+	speed.setOutlineThickness(4.0f);
+	speed.setPosition(WINDOW_WIDTH - 350, WINDOW_HEIGHT - 64);
+
+	sf::Text mph;
+
+	mph.setFont(hud_font);
+	mph.setString("MPH");
+	mph.setCharacterSize(32);
+	mph.setFillColor(sf::Color::Red);
+	mph.setOutlineColor(sf::Color::Black);
+	mph.setOutlineThickness(2.0f);
+	mph.setPosition(WINDOW_WIDTH - 150, WINDOW_HEIGHT - 32);
+
+	//end TODO
 
 	while (singleplayer_running)
 	{
@@ -334,13 +307,13 @@ void singleplayer_mode()
 		//this should be disabled for UI and HUD stuffs, but enabled for 3D
 		glDisable(GL_DEPTH_TEST);
 
-		Sprite_Manager::draw(camera, my_sprite->id);
-		Sprite_Manager::draw(camera, my_sprite2->id);
+		Sprite_Manager::draw(camera, leader_1->id);
+		Sprite_Manager::draw(camera, item_backdrop->id);
 
-
-		//speed.setString((int)std::round(player->entity_component->current_speed / 10.0f) + "mph");
+		speed.setString(std::to_string((int)std::round(player->entity_component->current_speed / 10.0f)));
 		Graphics::begin_draw_text();
-		Graphics::draw_text(speed);
+		Graphics::draw_text(speed); 
+		Graphics::draw_text(mph);
 		Graphics::end_draw_text();
 
 
