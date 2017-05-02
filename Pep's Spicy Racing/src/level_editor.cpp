@@ -49,6 +49,20 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 
 	theme_right_arrow_button = new Button("json/GUI/buttons/level_editor/theme_right_arrow.json");
 	theme_right_arrow_button->callback = &theme_right_cycle;
+
+	
+	if (!editor_font.loadFromFile("fonts/Spicy.ttf"))
+	{
+		printf("dun goofed\n");
+	}
+
+	theme_text.setFont(editor_font);
+	theme_text.setString("Theme");
+	theme_text.setFillColor(sf::Color::Red);
+	theme_text.setOutlineColor(sf::Color::Black);
+	theme_text.setOutlineThickness(4.0f);
+	theme_text.setCharacterSize(64);
+	theme_text.setPosition((WINDOW_WIDTH - theme_text.getLocalBounds().width - 75.0f) - (theme_text.getLocalBounds().width / 2.0f), 20);
 }
 
 void Level_Editor::add_theme_to_list(std::string theme_filepath, std::string theme_sprite_filepath)
@@ -177,6 +191,10 @@ void Level_Editor::draw_editor(Camera *camera)
 	Sprite_Manager::draw(camera, theme_sprite_map[theme_key_list[current_theme_index]]->id);
 	theme_left_arrow_button->draw_background(camera);
 	theme_right_arrow_button->draw_background(camera);
+
+	Graphics::begin_draw_text();
+	Graphics::draw_text(theme_text);
+	Graphics::end_draw_text();
 }
 
 /**

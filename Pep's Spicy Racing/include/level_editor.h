@@ -63,6 +63,10 @@ private:
 
 	//Button *special_item_left_arrow;
 	//Button *special_item_right_arrow;
+
+	sf::Font editor_font;
+
+	sf::Text theme_text;
 };
 
 void theme_left_cycle();

@@ -3,7 +3,7 @@
   "name": "Spicy Theme",
   "shader_def_filepath": "json/shaders/basic_sprite_shader.json",
   "texture_filepath": "images/sprites/buttons/red_button_template.png",
-  "screen_position": [625,738],
+  "screen_position": [1180,100],
   "color": [1,1,1,1],
   "size": [256, 128],
   "rotation": 0

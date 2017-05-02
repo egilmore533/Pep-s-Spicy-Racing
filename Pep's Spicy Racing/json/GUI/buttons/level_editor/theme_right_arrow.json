@@ -2,7 +2,7 @@
 "Button": {
   "name": "Theme Right Arrow Button",
   "sprite_def_filepath": "json/GUI/sprites/theme_right_arrow_sprite.json",
-  "position": [892,770],
+  "position": [1450,128],
   "size": [64, 64],
   "rotation": 0
 }
