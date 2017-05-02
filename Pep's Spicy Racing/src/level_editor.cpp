@@ -21,10 +21,10 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 	max_grid_rows = rows;
 	tile_offset = offsets;
 
-	grid_tile_sprite = Sprite_Manager::create_sprite("json/sprites/grid_sprite.json");						//empty tile sprite
-	activated_tile_sprite = Sprite_Manager::create_sprite("json/sprites/activated_grid_sprite.json");		//tile that has been clicked on and added to the list of activated tiles (added to the stage)
-	highlighted_tile_sprite = Sprite_Manager::create_sprite("json/sprites/highlighted_grid_sprite.json");	//the tile that has the cursor over it
-	start_tile = Sprite_Manager::create_sprite("json/sprites/start_sprite.json");							//the sprite for the start position in the race
+	grid_tile_sprite = Sprite_Manager::create_sprite("json/GUI/sprites/grid_sprite.json");						//empty tile sprite
+	activated_tile_sprite = Sprite_Manager::create_sprite("json/GUI/sprites/activated_grid_sprite.json");		//tile that has been clicked on and added to the list of activated tiles (added to the stage)
+	highlighted_tile_sprite = Sprite_Manager::create_sprite("json/GUI/sprites/highlighted_grid_sprite.json");	//the tile that has the cursor over it
+	start_tile = Sprite_Manager::create_sprite("json/GUI/sprites/start_sprite.json");							//the sprite for the start position in the race
 	start_tile_set = false;
 	
 	//lets fill the grid positions with the configuration we have
@@ -39,15 +39,15 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 
 	theme_list_size = 0;
 
-	this->add_theme_to_list("json/stage_themes/spicy.json", "json/sprites/spicy_theme_sprite.json");
-	this->add_theme_to_list("json/stage_themes/water.json", "json/sprites/water_theme_sprite.json");
+	this->add_theme_to_list("json/stage_themes/spicy.json", "json/GUI/sprites/spicy_theme_sprite.json");
+	this->add_theme_to_list("json/stage_themes/water.json", "json/GUI/sprites/water_theme_sprite.json");
 
 	current_theme_index = 0;
 
-	theme_left_arrow_button = new Button("json/buttons/theme_left_arrow.json");
+	theme_left_arrow_button = new Button("json/GUI/buttons/level_editor/theme_left_arrow.json");
 	theme_left_arrow_button->callback = &theme_left_cycle;
 
-	theme_right_arrow_button = new Button("json/buttons/theme_right_arrow.json");
+	theme_right_arrow_button = new Button("json/GUI/buttons/level_editor/theme_right_arrow.json");
 	theme_right_arrow_button->callback = &theme_right_cycle;
 }
 

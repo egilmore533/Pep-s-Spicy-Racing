@@ -39,10 +39,10 @@ static bool pressed = false;
 
 void reload_buttons()
 {
-	singleplayer_button = new Button("json/buttons/singleplayer.json");
+	singleplayer_button = new Button("json/GUI/buttons/main_menu/singleplayer.json");
 	singleplayer_button->callback = &singleplayer_mode;
 
-	level_editor_button = new Button("json/buttons/level_editor.json");
+	level_editor_button = new Button("json/GUI/buttons/main_menu/level_editor.json");
 	level_editor_button->callback = &level_editor;
 }
 
@@ -242,9 +242,8 @@ void singleplayer_mode()
 	glDisable(GL_DEPTH_TEST);
 
 	//TODO add to GUI all this junk
-	Sprite *leader_1 = Sprite_Manager::create_sprite("json/sprites/joe_sprite.json");
-	Sprite *item_backdrop = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
-	Sprite *current_item = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
+	Sprite *leader_1 = Sprite_Manager::create_sprite("json/GUI/sprites/joe_sprite.json");
+	Sprite *item_backdrop = Sprite_Manager::create_sprite("json/GUI/sprites/wood_sprite.json");
 
 	sf::Font hud_font;
 	if (!hud_font.loadFromFile("fonts/Spicy.ttf"))

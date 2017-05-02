@@ -1,16 +1,16 @@
 {
 "Button": {
-  "name": "Singleplayer",
-  "sprite_def_filepath": "json/sprites/single_player_button.json",
-  "position": [650,400],
+  "name": "Level Editor",
+  "sprite_def_filepath": "json/GUI/sprites/level_editor_button.json",
+  "position": [650,600],
   "size": [256, 128],
   "rotation": 0,
   "Text": {
-	  "text": "Singleplayer",
+	  "text": "Level Editor",
 	  "text_size": 24,
 	  "text_outline_color": [0,0,0,1],
 	  "text_fill_color": [0,0,0,1],
 	  "rotation": 0
-  }
+  } 
 }
 }
