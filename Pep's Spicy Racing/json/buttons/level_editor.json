@@ -2,6 +2,15 @@
 "Button": {
   "name": "Level Editor",
   "sprite_def_filepath": "json/sprites/level_editor_button.json",
-  "text": "Level Editor"
+  "Text": {
+	  "text": "Level Editor",
+	  "text_size": 24,
+	  "text_outline_color": [1,1,1,1],
+	  "text_fill_color": [1,0,0,1],
+	  "position": [450,400],
+	  "size": [256, 128],
+	  "color": [1, 1, 1, 1],
+	  "rotation": 0
+  } 
 }
 }

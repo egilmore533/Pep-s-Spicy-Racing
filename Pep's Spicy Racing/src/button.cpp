@@ -1,5 +1,20 @@
 #include "button.h"
 
+sf::Font button_font1;
+bool font_loaded = false;
+
+void load_my_font()
+{
+	if (!font_loaded)
+	{
+		if (!button_font1.loadFromFile("fonts/Spicy.ttf"))
+		{
+
+		}
+		font_loaded = true;
+	}
+}
+
 Button::Button(std::string button_def_file)
 {
 	json def = load_from_def(button_def_file);
@@ -13,14 +28,47 @@ Button::Button(std::string button_def_file)
 
 	std::string sprite_def_filepath = button_def["sprite_def_filepath"];
 	background = Sprite_Manager::create_sprite(sprite_def_filepath);
-	std::string temp_string = button_def["text"];
-
 	clicked = false;
+
+	json text_def = get_element_data(button_def, "Text");
+	
+	if (text_def == NULL)
+		return;
+
+	std::string temp_string = text_def["text"];
+	glm::vec2 pos = glm::vec2(text_def["position"][0], text_def["position"][1]);
+	glm::vec2 size = glm::vec2(text_def["size"][0], text_def["size"][1]);
+	float rot = text_def["rotation"];
+	background->set_data(pos, size, rot, background->color);
+
+
+
+	load_my_font();
+
+	text.setFont(button_font1);
+	text.setString(temp_string);
+
+	int text_size = text_def["text_size"];
+	text.setCharacterSize(text_size);
+
+	glm::vec4 out_col = glm::vec4(text_def["text_outline_color"][0], text_def["text_outline_color"][1], text_def["text_outline_color"][2], text_def["text_outline_color"][3]);
+	sf::Color out_color = sf::Color(out_col.r * 255.0f, out_col.g * 255.0f, out_col.b * 255.0f, out_col.a * 255.0f);
+	glm::vec4 fill_col = glm::vec4(text_def["text_fill_color"][0], text_def["text_fill_color"][1], text_def["text_fill_color"][2], text_def["text_fill_color"][3]);
+	sf::Color fill_color = sf::Color(fill_col.r * 255.0f, fill_col.g * 255.0f, fill_col.b * 255.0f, fill_col.a * 255.0f);
+
+	text.setFillColor(fill_color);
+	text.setOutlineColor(out_color);
+	text.setPosition(pos.x, pos.y);
 }
 
-void Button::draw(Camera *camera)
+void Button::draw_background(Camera *camera)
 {
 	Sprite_Manager::draw(camera, background->id);
+}
+
+void Button::draw_text()
+{
+	Graphics::draw_text(text);
 }
 
 void Button::update()

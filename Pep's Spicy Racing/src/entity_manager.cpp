@@ -269,7 +269,9 @@ void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 			glUniform3f(manager->entity_list[i]->view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 		}
 
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, manager->entity_list[i]->texture->get_texture());
+		glActiveTexture(GL_TEXTURE0);
 
 		manager->entity_list[i]->draw(manager->entity_list[i]);
 	}

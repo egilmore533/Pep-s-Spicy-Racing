@@ -6,8 +6,9 @@
 #include "shader.h"
 
 sf::Clock Graphics::game_delta_time;
-sf::RenderWindow *Graphics::game_window;
+sf::RenderWindow Graphics::game_window;
 glm::vec4 Graphics::clear_color;
+
 
 Graphics::Graphics()
 {
@@ -20,26 +21,27 @@ Graphics::Graphics()
 	settings.majorVersion = 3;
 	settings.minorVersion = 0;
 
-	game_window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pep's Spicy Adventure", sf::Style::Default, settings);
+	game_window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pep's Spicy Adventure", sf::Style::Default, settings);
 	if ((error = glewInit()) != GLEW_OK)
 	{
 		slog("Error: %s\n", glewGetErrorString(error));
 		exit(1);
 	}
 
-	game_window->setMouseCursorGrabbed(true);
-	game_window->setVerticalSyncEnabled(true);
+	game_window.setMouseCursorGrabbed(true);
+	game_window.setVerticalSyncEnabled(true);
 	clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+
 
 	game_delta_time.restart();
 }
 
 sf::RenderWindow *Graphics::get_game_window()
 {
-	return game_window;
+	return &game_window;
 
 }
 
@@ -49,9 +51,32 @@ void Graphics::frame_begin()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+/**
+* @brief pushes opengl states, used when you want to start drawing text, should only be used once per loop or will become too slow to be used efficiently
+*/
+void Graphics::begin_draw_text()
+{
+	game_window.pushGLStates();
+}
+
+/**
+* @brief pops the opengl states, used once all text has been rendered
+*/
+void Graphics::end_draw_text()
+{
+	game_window.popGLStates();
+}
+
+void Graphics::draw_text(sf::Text text)
+{
+	
+	game_window.draw(text);
+	
+}
+
 void Graphics::next_frame()
 {
-	game_window->display();
+	game_window.display();
 	game_delta_time.restart();
 }
 
@@ -64,3 +89,8 @@ sf::Time Graphics::get_delta_time()
 {
 	return game_delta_time.getElapsedTime();
 }
+
+
+
+
+

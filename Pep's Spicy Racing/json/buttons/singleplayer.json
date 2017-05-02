@@ -2,6 +2,14 @@
 "Button": {
   "name": "Singleplayer",
   "sprite_def_filepath": "json/sprites/single_player_button.json",
-  "text": "Singleplayer"
+  "Text": {
+	  "text": "Singleplayer",
+	  "text_size": 24,
+	  "text_outline_color": [1,1,1,1],
+	  "text_fill_color": [1,0,0,1],
+	  "position": [450,200],
+	  "size": [256, 128],
+	  "rotation": 0
+  }
 }
 }

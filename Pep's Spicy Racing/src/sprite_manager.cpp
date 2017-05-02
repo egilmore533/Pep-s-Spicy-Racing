@@ -130,10 +130,12 @@ void Sprite_Manager::draw(Camera *cam, int sprite_id)
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, manager->sprite_list[sprite_id]->texture->get_texture());
+	glActiveTexture(GL_TEXTURE0);
 
 	glBindVertexArray(manager->quad_vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
+
 }
 
 /**
@@ -149,7 +151,7 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 		return NULL;
 	}
 
-	//makesure we have the room for a new entity
+	//makesure we have the room for a new sprite
 	if (manager->num_sprites + 1 > MAX_SPRITES)
 	{
 		slog("Maximum Sprites Reached.");
@@ -171,34 +173,18 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 		//load json objects
 		json def = load_from_def(sprite_json_filepath);
 		json sprite_def = get_element_data(def, "Sprite");
-		json text_sprite_def = get_element_data(def, "Text_Sprite");
 
 		//we cannot count on this def file to contain the proper data
 		//need to write it as == NULL because just using ! crashes the json object
-		if (sprite_def == NULL && text_sprite_def == NULL)
+		if (sprite_def == NULL)
 		{
 			manager->num_sprites++;
 			manager->sprite_list[i] = new_sprite;
 			return manager->sprite_list[i];
 		}
 
-		//this isn't a text sprite so it must be a normal image sprite
-		if (text_sprite_def == NULL)
-		{
-			std::string texture_filepath = sprite_def["texture_filepath"];
-			new_sprite->set_sprite_texture(texture_filepath);
-		}
-
-		//this isn't a normal image sprite so it must be a text sprite
-		else if (sprite_def == NULL)
-		{
-			json text_data = text_sprite_def["text_data"];
-			new_sprite->set_sprite_texture(text_data);
-
-			//the only difference bewtween the two has been dealt with so we can just move on using 
-			//the same json object as sprite, but we need to copy it over first to do that
-			sprite_def = text_sprite_def;
-		}
+		std::string texture_filepath = sprite_def["texture_filepath"];
+		new_sprite->set_sprite_texture(texture_filepath);
 		
 
 		std::string shader_filepath = sprite_def["shader_def_filepath"];

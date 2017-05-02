@@ -36,10 +36,8 @@
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\sprite.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\sprite_manager.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\stage.cpp" />
-    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\text.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\texture.cpp" />
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\texture_manager.cpp" />
-    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\text_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\button.h" />
@@ -47,6 +45,7 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\entity.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\entity_manager.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\graphics.h" />
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\gui.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\json_helper.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\level_editor.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\mesh.h" />
@@ -59,10 +58,8 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\sprite.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\sprite_manager.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\stage.h" />
-    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\text.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\texture.h" />
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\texture_manager.h" />
-    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\text_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\shader\fs1.glsl" />

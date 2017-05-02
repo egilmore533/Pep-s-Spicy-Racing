@@ -4,8 +4,6 @@
 #include "json_helper.h"
 #include "player.h"
 
-
-
 Player::Player(std::string racer_def_file, glm::vec3 position)
 {
 	glm::vec3 cameraPosition = glm::vec3(position.x, position.y, position.z - 1.0f);

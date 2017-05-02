@@ -172,9 +172,11 @@ void Level_Editor::draw_editor(Camera *camera)
 		Sprite_Manager::draw(camera, highlighted_tile_sprite->id);
 	}
 
+
+
 	Sprite_Manager::draw(camera, theme_sprite_map[theme_key_list[current_theme_index]]->id);
-	theme_left_arrow_button->draw(camera);
-	theme_right_arrow_button->draw(camera);
+	theme_left_arrow_button->draw_background(camera);
+	theme_right_arrow_button->draw_background(camera);
 }
 
 /**

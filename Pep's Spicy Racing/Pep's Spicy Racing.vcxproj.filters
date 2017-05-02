@@ -75,12 +75,6 @@
     <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\text_manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\src\text.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\graphics.h">
@@ -140,10 +134,7 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\text_manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\text.h">
+    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

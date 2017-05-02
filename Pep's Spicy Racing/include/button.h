@@ -11,10 +11,11 @@ public:
 	~Button();
 
 	void update();
-	void draw(Camera *camera);
+	void draw_background(Camera *camera);
+	void draw_text();
 
 	Sprite *background;
-	Sprite *text;
+	sf::Text text;
 	int state;
 	bool clicked;
 

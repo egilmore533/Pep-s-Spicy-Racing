@@ -117,7 +117,9 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glUniform3f(light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
 		glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tile_texture->get_texture());
+		glActiveTexture(GL_TEXTURE0);
 
 		tile_mesh->Mesh::draw(shader->program);
 	}
@@ -139,7 +141,9 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glUniform3f(light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
 		glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tile_texture->get_texture());
+		glActiveTexture(GL_TEXTURE0);
 
 		wall_mesh->Mesh::draw(shader->program);
 	}

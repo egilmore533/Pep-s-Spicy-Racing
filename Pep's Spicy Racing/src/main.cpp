@@ -1,3 +1,4 @@
+#include <string>
 #include <GL/glew.h>
 
 #include <glm\glm.hpp>
@@ -28,20 +29,7 @@ void singleplayer_mode();
 
 void level_editor();
 
-
-/*
-?s
-
-Why doesn't my entity system allow me to load entities after loading my sprites
-
-Why does the set shader not work for the text in the single player loop on the first try, but on the second try it works
-
-Is this level editor a bad idea?
-How else could I implement the stage itself?
-How should I set up my level data for later use in the game, should i use the vertices 
-of the track itself to determine where the ai and the  player are and keep track of the race?
-
-*/
+int test_text();
 
 Button *singleplayer_button;
 Button *level_editor_button;
@@ -67,11 +55,45 @@ void clean_up_scene()
 	Graphics::set_clear_color(menu_clear_color);
 }
 
+int test_text()
+{
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Trying to make a game");
+	sf::Font font;
+	if (!font.loadFromFile("fonts/Spicy.ttf"))
+	{
+		//error
+	}
+
+	sf::Text text;
+	text.setFont(font);
+	text.setString("100mph");
+	text.setCharacterSize(50);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition(10, 50);
+
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+		window.clear();
+		window.draw(text);
+		window.display();
+	}
+
+	return 0;
+}
+
 int main()
 {
 	int game_running = 1;
 
 	int i;
+	
 	///-----initialization_start-----
 
 	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
@@ -115,22 +137,17 @@ int main()
 
 	reload_buttons();
 
-	/*
-	Text *my_text = new Text();
+	//sf::Font the_font;
 
-	json def = load_from_def("json/sprites/text_sprites/alphabet.json");
-	json text_sprite_def = get_element_data(def, "Text_Sprite");
-	json text_data = get_element_data(text_sprite_def, "text_data");
-	my_text->Text::set_sprite_texture(text_data);
-	my_text->Text::set_shader(text_sprite_def["shader_def_filepath"]);
-	my_text->Text::set_data(glm::vec2(10.0f, 10.0f), glm::vec2(1000.0f, 1000.0f));
+	//the_font.loadFromFile("fonts/Spicy.ttf");
 
-	Text *my_text2 = new Text();
-
-	my_text2->Text::set_sprite_texture(text_data);
-	my_text2->Text::set_shader(text_sprite_def["shader_def_filepath"]);
-	my_text2->Text::set_data(glm::vec2(10.0f, 10.0f), glm::vec2(1000.0f, 1000.0f));
-	*/
+	//sf::Text text;
+	//text.setFont(the_font);
+	//text.setString("hello0o0o0o0oo0");
+	//text.setCharacterSize(24);
+	//text.setFillColor(sf::Color::Red);
+	//text.setOutlineColor(sf::Color::Black);
+	//text.setPosition(450, 200);
 
 	while (game_running)
 	{
@@ -150,12 +167,12 @@ int main()
 
 		Graphics::frame_begin();
 
-		singleplayer_button->draw(cam);
-		level_editor_button->draw(cam);
+		singleplayer_button->draw_background(cam);
+		level_editor_button->draw_background(cam);
 
-		/*
-		my_text2->draw(cam);
-		*/
+		//singleplayer_button->draw_text();
+		//level_editor_button->draw_text();
+
 
 		Graphics::next_frame();
 	}
@@ -184,6 +201,9 @@ void level_editor()
 	//this should all be 2d so we dont need to switch in the loop
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	Sprite *my_text_test = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
+
 
 	while (editor_running)
 	{
@@ -248,7 +268,10 @@ void singleplayer_mode()
 	Sprite *my_sprite = Sprite_Manager::create_sprite("json/sprites/joe_sprite.json");
 	Sprite *my_sprite2 = Sprite_Manager::create_sprite("json/sprites/wood_sprite.json");
 
-	Sprite *my_text = Sprite_Manager::create_sprite("json/sprites/text_sprites/alphabet.json");
+	
+
+
+
 
 	while (singleplayer_running)
 	{
@@ -286,13 +309,8 @@ void singleplayer_mode()
 
 		Sprite_Manager::draw(camera, my_sprite->id);
 		Sprite_Manager::draw(camera, my_sprite2->id);
-		Sprite_Manager::draw(camera, my_text->id);
 
-		/*
-		Sprite_Manager::draw(player->player_cam, my_sprite->id);
-		Sprite_Manager::draw(player->player_cam, my_sprite2->id);
-		Sprite_Manager::draw(player->player_cam, my_text->id);
-		*/
+		//mph->draw(camera);
 
 		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
 		//opengl is hard :(

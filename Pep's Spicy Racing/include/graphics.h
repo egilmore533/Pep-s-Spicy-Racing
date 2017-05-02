@@ -49,10 +49,31 @@ public:
 	*/
 	static void set_clear_color(glm::vec4 new_clear_color);
 
+	/**
+	* @brief pushes opengl states, used when you want to start drawing text, should only be used once per loop or will become too slow to be used efficiently
+	*/
+	static void begin_draw_text();
+
+	/**
+	* @brief pops the opengl states, used once all text has been rendered
+	*/
+	static void end_draw_text();
+
+	/**
+	* @brief the only way i discovered to use sfml's text interface is to push and pop the glStates inbetween text draw calls. This may turn out to be slow or not.
+	* @param text	an sfml text object that will be draw to the screen according to its own settings
+	*/
+	static void draw_text(sf::Text text);
+
 private:
-		static sf::RenderWindow *game_window;	/**< a static pointer to our game's window */
+		static sf::RenderWindow game_window;	/**< our game's window */
 		static sf::Clock game_delta_time;		/**< the clock that tracks time passed since last frame*/
 		static glm::vec4 clear_color;			/**< the color of the blank screen */
+
+		//testes
+		static sf::Font font;
+		static sf::Text text;
+
 };
 
 #endif 

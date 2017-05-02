@@ -1,0 +1,15 @@
+{
+"Text_Sprite": {
+  "name": "speed",
+  "shader_def_filepath": "json/shaders/basic_sprite_shader.json",
+  "text_data": {
+	"font_filepath": "fonts/Spicy.ttf",
+	"font_size": 24,
+	"text": "mph"
+  },
+  "screen_position": [450,450],
+  "color": [1,1,1,1],
+  "size": [100, 100],
+  "rotation": 0
+}
+}

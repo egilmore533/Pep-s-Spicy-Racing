@@ -1,7 +1,7 @@
 #ifndef __TEXTURE_MANAGER_H__
 #define __TEXTURE_MANAGER_H__
 
-#define MAX_TEXTURES	15
+#define MAX_TEXTURES	1500
 
 #include <array>
 #include "texture.h"
@@ -37,6 +37,8 @@ public:
 	* @param texture_filepath the file of the texture to be dereferenced
 	*/
 	static void dereference_texture(std::string texture_filepath);
+
+	static void dereference_texture(Texture *text_image);
 
 	/**
 	* @brief allocates and sets default data for the textures in the texture_manager's list
