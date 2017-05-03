@@ -32,8 +32,6 @@ Player::Player(std::string racer_def_file, glm::vec3 position)
 	entity_component->top_speed = 500.0f + (50.0f * racer_def["top_speed"]);
 	entity_component->mass = racer_def["mass"];
 	entity_component->handling = racer_def["handling"] * 50.0f;
-
-	printf("top turning speed: %f\n", entity_component->top_speed - (entity_component->top_speed * 1.0f / (1.0f + (entity_component->handling / 50.0f))));
 }
 
 void Player::update_player_cam()
@@ -109,6 +107,8 @@ void update(Entity *ent)
 	ent->movement_velocity = glm::vec3((ent->current_speed) * cos(glm::radians(ent->current_rotation)), 0, -(ent->current_speed) * sin(glm::radians(ent->current_rotation))) * delta_time;
 
 	ent->world_position = ent->world_position + ent->movement_velocity;
+
+	printf("car's position: %f, %f\n", ent->world_position.x, ent->world_position.z);
 
 	ent->model = glm::mat4(1.0f);
 	ent->model = glm::translate(ent->model, ent->world_position);
