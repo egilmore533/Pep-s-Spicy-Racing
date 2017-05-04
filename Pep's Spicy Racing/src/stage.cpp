@@ -11,8 +11,6 @@ Stage::Stage(std::string stage_def_filepath)
 	node_id_num = 0;
 	tile_dimensions = glm::vec3(10.0f, 10.0f, 10.0f);
 
-	path_type = CenterAndNeighbor;
-
 	//start by loading up the level data
 	json level_def = load_from_def(stage_def_filepath);
 	json level = get_element_data(level_def, "Level");
@@ -34,12 +32,9 @@ Stage::Stage(std::string stage_def_filepath)
 	get_track_in_order();
 
 	//now we will find the racing line through the track for keeping track of position and moving the AI
-	switch (path_type)
-	{
-	case CenterAndNeighbor:
-		get_center_and_neighbor_path();
-		break;
-	}
+	current_path_type = NoPath;			//we have no path yet
+	path_type = CutCorners;			//we want this path type now
+	update_path();						//update the path
 }
 
 Stage::~Stage()
@@ -266,7 +261,7 @@ void Stage::get_track_in_order()
 	}
 }
 
-void Stage::get_center_and_neighbor_nodes(glm::vec3 current_tile, glm::vec3 next_tile, bool finish_tile)
+void Stage::get_center_oriented_nodes(glm::vec3 current_tile, glm::vec3 next_tile, bool finish_tile)
 {
 	Node center_point;
 	center_point.position = current_tile;
@@ -296,9 +291,53 @@ void Stage::get_center_and_neighbor_nodes(glm::vec3 current_tile, glm::vec3 next
 	node_list.push_back(neighbor_point);
 }
 
-void Stage::get_center_and_neighbor_path()
+Node Stage::get_cut_corner_nodes(glm::vec3 current_tile, glm::vec3 next_tile, Node previous_node, bool finish_tile)
 {
-	get_center_and_neighbor_nodes(tile_positions_in_order[0], tile_positions_in_order[1], true);
+	Node next_node;
+	CardinalDirection direction = direction_to_next_tile(current_tile, next_tile, tile_dimensions);
+
+	if (direction == North)
+		next_node.position = glm::vec3(current_tile.x + tile_dimensions.x / 2.0f, current_tile.y, current_tile.z);
+
+	else if (direction == South)
+		next_node.position = glm::vec3(current_tile.x - tile_dimensions.x / 2.0f, current_tile.y, current_tile.z);
+
+	else if (direction == East)
+		next_node.position = glm::vec3(current_tile.x, current_tile.y, current_tile.z + tile_dimensions.z / 2.0f);
+
+	else if (direction == West)
+		next_node.position = glm::vec3(current_tile.x, current_tile.y, current_tile.z - tile_dimensions.z / 2.0f);
+
+	glm::vec3 centroid;
+	if (finish_tile)
+	{
+		centroid = current_tile;
+	}
+	else
+	{
+		glm::vec3 temp_sum = previous_node.position + next_node.position;
+		centroid = temp_sum / 2.0f;
+	}
+	
+
+	Node center_node;
+	center_node.finish_line_node = finish_tile;
+	center_node.node_num = node_id_num++;
+	center_node.position = centroid;
+	node_list.push_back(center_node);
+
+	next_node.node_num = node_id_num++;
+	next_node.finish_line_node = false;
+	node_list.push_back(next_node);
+
+	return next_node;
+}
+
+void Stage::get_center_oriented_path()
+{
+	node_list.clear();
+	node_id_num = 0;
+	get_center_oriented_nodes(tile_positions_in_order[0], tile_positions_in_order[1], true);
 
 	for (int i = 1; i < tile_positions_in_order.size(); i++)
 	{
@@ -314,7 +353,55 @@ void Stage::get_center_and_neighbor_path()
 			next_tile = tile_positions_in_order[0];
 
 
-		get_center_and_neighbor_nodes(current_tile, next_tile, false);
+		get_center_oriented_nodes(current_tile, next_tile, false);
+	}
+	current_path_type = CenterOriented;
+}
+
+void Stage::get_cut_corner_path()
+{
+	node_list.clear();
+	node_id_num = 0;
+
+	Node prev_node;
+
+	prev_node = get_cut_corner_nodes(tile_positions_in_order[0], tile_positions_in_order[1], prev_node, true);
+
+	for (int i = 1; i < tile_positions_in_order.size(); i++)
+	{
+		//first get the current and next tiles for use
+		glm::vec3 current_tile, next_tile;
+
+		current_tile = tile_positions_in_order[i];
+
+		//if the next tile doesn't exist in the list its the finish line and we need the first tile again
+		if (i + 1< tile_positions_in_order.size())
+			next_tile = tile_positions_in_order[i + 1];
+		else
+			next_tile = tile_positions_in_order[0];
+
+
+		prev_node = get_cut_corner_nodes(current_tile, next_tile, prev_node, false);
+	}
+	current_path_type = CutCorners;
+}
+
+void Stage::update_path() 
+{
+	if (path_type == current_path_type)
+		return;
+
+	switch (path_type)
+	{
+	case CenterOriented:
+		get_center_oriented_path();
+		break;
+	case CutCorners:
+		get_cut_corner_path();
+		break;
+	case SmartTurns:
+		current_path_type = SmartTurns;
+		break;
 	}
 }
 

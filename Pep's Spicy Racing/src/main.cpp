@@ -283,7 +283,26 @@ void singleplayer_mode()
 				singleplayer_running = 0;
 				pressed = true;
 			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+			{
+				//set path type to CenterOriented
+				stage.path_type = CenterOriented;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+			{
+				//set path type to CutCorners
+				stage.path_type = CutCorners;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+			{
+				//set path tpe to SmartTurns
+			}
 		}
+
+		stage.update_path();
 
 		Entity_Manager::update_all();
 

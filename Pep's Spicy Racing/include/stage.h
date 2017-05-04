@@ -23,15 +23,17 @@ typedef struct
 enum CardinalDirection
 {
 	North = 1,
-	South = 2,
-	East = 3,
-	West = 4
+	South,
+	East,
+	West,
 };
 
 enum PathType
 {
-	CenterAndNeighbor = 1,
-	NeigborAndCenter = 2,
+	CenterOriented = 1,
+	CutCorners,
+	SmartTurns,
+	NoPath
 };
 
 class Stage {
@@ -69,19 +71,29 @@ public:
 	*/
 	void draw_stage(Camera *camera, Entity *single_light);
 
-	/**
-	* @brief used to store a simple path through the stage in node_list, rigid and predictable, also not very optimized for speed
-	*			does this by taking the current and next node and finding the center point and the center point of the two tiles
-	* @param current_tile		the current tile we are working with
-	* @param next_tile			the next_tile in the path
-	* @param finish_line		is this current tile the finish line
-	*/
-	void get_center_and_neighbor_nodes(glm::vec3 current_tile, glm::vec3 next_tile, bool finish_tile);
+	void update_path();
 
 	/**
-	* @brief populates node_list using get_center_and_neighbor_nodes
+	* @brief gets the next nodes in the path
+	*			rigid and predictable, also not very optimized for speed
+	*			does this by taking the current and next node to find the center point and the  point of the two tiles
+	* @param current_tile		the current tile int the path we are working with
+	* @param next_tile			the next_tile in the path
+	* @param finish_line		is this current tile the finish line?
 	*/
-	void get_center_and_neighbor_path();
+	void get_center_oriented_nodes(glm::vec3 current_tile, glm::vec3 next_tile, bool finish_tile);
+
+	Node get_cut_corner_nodes(glm::vec3 current_tile, glm::vec3 next_tile, Node previous_node, bool finish_tile);
+
+	/**
+	* @brief uses get_center_oriented_nodes to populate node_list
+	*/
+	void get_center_oriented_path();
+
+	/**
+	* @brief populates 
+	*/
+	void get_cut_corner_path();
 
 	//std::string  name;
 	//MusicPak *stage_music;
@@ -103,8 +115,6 @@ public:
 	std::vector<glm::vec4> wall_position_data;	/**< locations of all the walls the stage will build, fourth value is the rotation of the wall */
 	glm::vec3 start_position;					/**< the position of the starting tile */
 
-	std::vector<Node> node_list;				/**< list of all the nodes in the stage, in order, determines race position and will be used by the AI to determine how to move */
-
 	//shader uniform data 
 	Shader *shader;
 	GLuint model_location;		/**< the location of the uniform model */
@@ -117,9 +127,14 @@ public:
 	GLuint light_position_location;		/**< location of the light position uniform */
 	GLuint view_position_location;		/**< location of the camera position uniform */
 
+	//PATHING DATA
 	std::vector<glm::vec3> tile_positions_in_order;		/**< position data for the actual race track, these are the tiles in order that the players need to go through */
-	int node_id_num;									/**< current node id number, used to id the nodes, in order as they appear on the stage */
 	PathType path_type;									/**< enumeration that determines what type of node list we have loaded here */
+	std::vector<Node> node_list;						/**< list of all the nodes in the stage, in order, determines race position and will be used by the AI to determine how to move */
+
+private:
+	int node_id_num;				/**< current node id number, used to id the nodes, in order as they appear on the stage */
+	PathType current_path_type;		/**< used to determine if the node list needs to be reloaded */
 };
 
 /**

@@ -50,12 +50,6 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 	theme_right_arrow_button = new Button("json/GUI/buttons/level_editor/theme_right_arrow.json");
 	theme_right_arrow_button->callback = &theme_right_cycle;
 
-	
-	if (!editor_font.loadFromFile("fonts/Spicy.ttf"))
-	{
-		printf("dun goofed\n");
-	}
-
 	theme_text.setFont(editor_font);
 	theme_text.setString("Theme");
 	theme_text.setFillColor(sf::Color::Red);
