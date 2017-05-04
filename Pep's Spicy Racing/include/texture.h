@@ -13,11 +13,6 @@ public:
 	Texture();
 
 	/**
-	* @brief creates the texture from a given filepath, sets the smoothing and repeating flags, uses the whole image given
-	*/
-	Texture(std::string filepath, bool repeated, bool smoothed);
-
-	/**
 	* @brief loads texture from given file path, sets smoothing and repeating accordingly, uses the whole image given so it can be reused multiple times 
 	*			for instance one sprite might only want the texture's blue values to be drawn while another wants all the colors, this should all be 
 	*			done on the sprite end, not the texture
@@ -32,12 +27,9 @@ public:
 	 * @return GLuint texture
 	 */
 	GLuint get_texture() { return texture; }
-	
-public:
+
 	std::string filepath;		/**< the filepath to this texture, used to identify different textures */
-
 	int reference_count;		/**< the number of times this texture is being referenced */
-
 	bool in_use;
 
 private:

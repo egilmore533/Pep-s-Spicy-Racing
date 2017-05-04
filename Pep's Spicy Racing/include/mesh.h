@@ -98,7 +98,6 @@ private:
 
 	Texture *myTexture;				/**< Mesh's texture(s) */
 
-
 	//vertex buffer objects
 	GLuint vao;		/**< vertex array object, stores the configurations of the buffer objects to allow rebinding of the same object without having to rebind and reconfigure the buffer */
 	GLuint vbo;		/**< vertex buffer obejct, used to contain our vertices array in a buffer for OpenGL to use*/

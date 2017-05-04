@@ -34,6 +34,9 @@ public:
 	*/
 	void save_and_exit(std::string filename);
 
+	/**
+	* @brief adds a theme defintion file and sprite to the theme maps
+	*/
 	void add_theme_to_list(std::string theme_filepath, std::string theme_sprite_filepath);
 
 private:
@@ -64,13 +67,18 @@ private:
 	//Button *special_item_left_arrow;
 	//Button *special_item_right_arrow;
 
-	sf::Font editor_font;
-
-	sf::Text theme_text;
+	sf::Font editor_font;		/**< the font all the GUI elements will use */
+	sf::Text theme_text;		/**< the text above the theme settings */
 };
 
+/**
+* @brief cycles backwards through the themes in the cpp file
+*/
 void theme_left_cycle();
 
+/**
+* @brief cycles forward through the themes in the cpp file
+*/
 void theme_right_cycle();
 
 

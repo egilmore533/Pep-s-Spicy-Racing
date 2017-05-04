@@ -45,6 +45,7 @@ class Stage {
 public:
 	/**
 	* @brief loads a stage from the given defintion file
+	* @param stage_def_filepath		filepath to a stage defintion file
 	*/
 	Stage(std::string stage_def_filepath);
 
@@ -139,7 +140,7 @@ public:
 	glm::vec3 start_position;					/**< the position of the starting tile */
 
 	//shader uniform data 
-	Shader *shader;
+	Shader *shader;				/**< the shader used to draw the stage */
 	GLuint model_location;		/**< the location of the uniform model */
 	GLuint color_location;		/**< location of the uniform color data */
 

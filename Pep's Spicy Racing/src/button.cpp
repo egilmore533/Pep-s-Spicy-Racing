@@ -91,6 +91,4 @@ void Button::update()
 		background->color = glm::vec4(1);
 		clicked = false;
 	}
-
-	
 }

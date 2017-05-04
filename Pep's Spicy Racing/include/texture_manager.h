@@ -22,23 +22,12 @@ public:
 	static Texture *create_texture(std::string texture_filepath, bool repeated, bool smoothed);
 
 	/**
-	* @brief loads a text sprite using sf::Text from the given font with the given font size, checks if the text already exists and uses it instead if available and increases the reference_count
-	* @param text_string the text to create a texture for
-	* @param font_size the size of the font to use for the text
-	* @param font_filepath the path to the font to use
-	* @return a pointer to the loaded texture
-	*/
-	static Texture *create_text_texture(std::string text_string, unsigned int font_size, std::string font_filepath);
-
-	/**
 	* @brief decrement the reference count of the given texture, enabling the manager
 	*		(if the reference count has reached 0) to replace the texture by loading
 	*		another texture
 	* @param texture_filepath the file of the texture to be dereferenced
 	*/
 	static void dereference_texture(std::string texture_filepath);
-
-	static void dereference_texture(Texture *text_image);
 
 	/**
 	* @brief allocates and sets default data for the textures in the texture_manager's list

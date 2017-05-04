@@ -23,12 +23,12 @@ public:
 	~Entity();
 
 	/**
-	 * @brief the entity's update function
+	 * @brief the entity's update function, should handle all the model matrix updates as well
 	 */
 	void (*update)(Entity *ent);
 
 	/**
-	 * @brief the think function for entities, used to process information regarding the entity
+	 * @brief the think function for entities, used to process information regarding the entity periodically
 	 */
 	void (*think)(Entity *ent);
 

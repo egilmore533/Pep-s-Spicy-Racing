@@ -100,7 +100,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		model = glm::translate(model, glm::vec3(node_list[i].position.x, node_list[i].position.y, node_list[i].position.z));
 		
 		//no rotate or scale
-		model = glm::rotate(model, node_list[i].rotation, glm::vec3(0, 1, 0));
+		model = glm::rotate(model, glm::radians(node_list[i].rotation), glm::vec3(0, 1, 0));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 11.0f));
 
 		glUniform4fv(color_location, 1, &color[0]);
@@ -406,11 +406,12 @@ void Stage::set_node_rotations()
 		else
 			next_node = node_list[0];
 
-		float z_diff = current_node.position.z - next_node.position.z;
-		float x_diff = current_node.position.x - next_node.position.x;
+		float z_diff = next_node.position.z - current_node.position.z;
+		float x_diff = next_node.position.x - current_node.position.x;
 
-		float rotation = -glm::atan(z_diff, x_diff);
-		node_list[i].rotation = rotation;
+		float rotation = glm::atan(z_diff, x_diff);
+		float deg = -glm::degrees(rotation);
+		node_list[i].rotation = deg;
 	}
 }
 

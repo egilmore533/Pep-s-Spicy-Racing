@@ -4,11 +4,12 @@
 #include "json_helper.h"
 #include "player.h"
 
-Player::Player(std::string racer_def_file, glm::vec3 position)
+Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 {
 	glm::vec3 cameraPosition = glm::vec3(position.x, position.y, position.z - 1.0f);
 	player_cam = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 	entity_component = Entity_Manager::create_entity("json/entities/racer.json", position);
+	entity_component->current_rotation = rotation;
 	entity_component->scale = 0.5f;
 	entity_component->update = &update;
 	entity_component->draw = &draw;
@@ -104,8 +105,6 @@ void update(Entity *ent)
 	ent->movement_velocity = glm::vec3((ent->current_speed) * cos(glm::radians(ent->current_rotation)), 0, -(ent->current_speed) * sin(glm::radians(ent->current_rotation))) * delta_time;
 
 	ent->world_position = ent->world_position + ent->movement_velocity;
-
-	printf("car's position: %f, %f\n", ent->world_position.x, ent->world_position.z);
 
 	ent->model = glm::mat4(1.0f);
 	ent->model = glm::translate(ent->model, ent->world_position);

@@ -69,11 +69,6 @@ private:
 		static sf::RenderWindow game_window;	/**< our game's window */
 		static sf::Clock game_delta_time;		/**< the clock that tracks time passed since last frame*/
 		static glm::vec4 clear_color;			/**< the color of the blank screen */
-
-		//testes
-		static sf::Font font;
-		static sf::Text text;
-
 };
 
 #endif 

@@ -204,7 +204,7 @@ void singleplayer_mode()
 	glm::vec3 cameraPosition = glm::vec3(-3, 20, 28);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
-	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.start_position.x, stage.start_position.y, stage.start_position.z));
+	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.node_list[0].position.x, stage.node_list[0].position.y, stage.node_list[0].position.z), stage.node_list[0].rotation);
 
 	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
