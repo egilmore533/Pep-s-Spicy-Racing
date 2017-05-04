@@ -3,9 +3,6 @@
 #include "json_helper.h"
 #include "stage.h"
 
-/**
-* @brief loads a stage from the given defintion file
-*/
 Stage::Stage(std::string stage_def_filepath)
 {
 	node_id_num = 0;
@@ -33,7 +30,7 @@ Stage::Stage(std::string stage_def_filepath)
 
 	//now we will find the racing line through the track for keeping track of position and moving the AI
 	current_path_type = NoPath;			//we have no path yet
-	path_type = CutCorners;			//we want this path type now
+	path_type = CutCorners;				//we want this path type now
 	update_path();						//update the path
 }
 
@@ -44,13 +41,6 @@ Stage::~Stage()
 	Shader_Manager::dereference_shader(shader->shader_def_file);
 }
 
-
-/**
-* @brief draws the stage (should be one of if not the first thing drawn in the game loop)
-*			draws all the tiles first, then the walls, then any extra stage bits we add
-* @param *camera		the camera to determine how to draw the stage
-* @param *single_light	the only scene light (TODO MAKE THE LIGHT MANAGER AND ADD IT TO THE ENTITY DRAW ALL AND HERE)
-*/
 void Stage::draw_stage(Camera *camera, Entity *single_light)
 {
 	glUseProgram(shader->program);
@@ -110,8 +100,8 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		model = glm::translate(model, glm::vec3(node_list[i].position.x, node_list[i].position.y, node_list[i].position.z));
 		
 		//no rotate or scale
-		//model = glm::rotate(model, glm::radians(wall_position_data[i].w), glm::vec3(0, 1, 0));
-		model = glm::scale(model, glm::vec3(1.0f));
+		model = glm::rotate(model, node_list[i].rotation, glm::vec3(0, 1, 0));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 11.0f));
 
 		glUniform4fv(color_location, 1, &color[0]);
 		glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
@@ -131,10 +121,6 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 	}
 }
 
-/**
-* @brief loads the stage's theme into the stage's data
-* @param theme_filepath		filepath to the theme definition file
-*/
 void Stage::load_theme_data(std::string theme_filepath)
 {
 	json theme_def = load_from_def(theme_filepath);
@@ -163,7 +149,7 @@ void Stage::load_theme_data(std::string theme_filepath)
 	wall_texture = Texture_Manager::create_texture(wall["texture-filepath"], true, true);
 
 	//hard coded debug sphere
-	node_mesh = Mesh_Manager::create_mesh("models/sphere.obj");
+	node_mesh = Mesh_Manager::create_mesh("models/test_plane.obj");
 
 	//now lets set up the shader program
 	shader = Shader_Manager::create_shader(theme["shader-program"]);
@@ -187,17 +173,18 @@ void Stage::load_walls()
 		bool north, south, east, west; //bools to know if we need corresponding walls
 		north = south = east = west = true; //assume we need a wall, unless we have a reason to not put a wall
 
-											//for each tile, look through each other tile determining whether or not to keep them
+		//for each tile, look through each other tile determining whether or not to keep them
 		for (int j = 0; j < tile_positions.size(); j++)
 		{
 			if (i == j) continue; //don't compare the same tiles
 
-								  //get the x and z differences to determine if we need some walls
+			//get the x and z differences to determine if we need some walls
 			float z_diff = tile_positions[i].z - tile_positions[j].z;
 			float x_diff = tile_positions[i].x - tile_positions[j].x;
 
 			bool z_aligned = z_diff == 0.0f;
 			bool x_aligned = x_diff == 0.0f;
+
 			//if we are on the same x or z axis we might have a connecting tile
 			if (z_aligned || x_aligned)
 			{
@@ -255,7 +242,6 @@ void Stage::get_track_in_order()
 
 		if (current_position == glm::vec3(-1, -1, -1))
 		{
-			printf("dun goofed\n");
 			break;
 		}
 	}
@@ -403,6 +389,29 @@ void Stage::update_path()
 		current_path_type = SmartTurns;
 		break;
 	}
+
+	set_node_rotations();
+}
+
+void Stage::set_node_rotations()
+{
+	for (int i = 0; i < node_list.size(); i++)
+	{
+		Node current_node = node_list[i];
+		Node next_node;
+
+		//if the next node doesn't exist in the list its the finish line and we need the first tile again
+		if (i + 1 < node_list.size())
+			next_node = node_list[i + 1];
+		else
+			next_node = node_list[0];
+
+		float z_diff = current_node.position.z - next_node.position.z;
+		float x_diff = current_node.position.x - next_node.position.x;
+
+		float rotation = -glm::atan(z_diff, x_diff);
+		node_list[i].rotation = rotation;
+	}
 }
 
 glm::vec3 find_next_neighbor_tile(std::vector<glm::vec3> tile_positions, std::vector<glm::vec3> already_added_positions, glm::vec3 position, glm::vec3 tile_dimensions)
@@ -449,12 +458,6 @@ glm::vec3 find_next_neighbor_tile(std::vector<glm::vec3> tile_positions, std::ve
 	return glm::vec3(-1, -1, -1);
 }
 
-/**
-* @brief test to determine the direction of the next tile (cardinal directions only)
-* @param current_tile	the position of the current tile in world space
-* @param next_tile		the position of the next tile in world space
-* @param dimensions		dimensions of the tile
-*/
 CardinalDirection direction_to_next_tile(glm::vec3 current_tile, glm::vec3 next_tile, glm::vec3 dimensions)
 {
 	float x_diff = current_tile.x - next_tile.x;
@@ -478,5 +481,3 @@ CardinalDirection direction_to_next_tile(glm::vec3 current_tile, glm::vec3 next_
 
 	slog("error finding cardinal direction");
 }
-
-

@@ -4,9 +4,6 @@
 
 static Shader_Manager *manager = NULL;
 
-/**
-* @brief initialize the shader manager by filling the shader_list with new shaders and setting the shader_count
-*/
 void Shader_Manager::initialize()
 {
 	if (manager)
@@ -24,14 +21,6 @@ void Shader_Manager::initialize()
 	manager = this;
 }
 
-/**
-* @brief check shader_list to see if the shader has already been loaded if so
-*		increment the reference count and return that shader else build the new
-*		shader in the first available shader position, also check if room
-*		available in the shader_list, if not exit program
-* @param shader_def_file path to the shader definition file
-* @return a pointer to the shader program that is defined by the given def file
-*/
 Shader *Shader_Manager::create_shader(std::string shader_def_file)
 {
 	if (!manager)
@@ -78,12 +67,6 @@ Shader *Shader_Manager::create_shader(std::string shader_def_file)
 	return manager->shader_list[first_empty];
 }
 
-/**
-* @brief decrement the reference count of the given shader, enabling it
-*		(if the reference count has reached 0) to be replaced by the creation
-*		of another shader
-* @param *shader_def_file the name of the shader to be dereferenced
-*/
 void Shader_Manager::dereference_shader(std::string shader_def_file)
 {
 	if (!manager)
@@ -105,9 +88,6 @@ void Shader_Manager::dereference_shader(std::string shader_def_file)
 	}
 }
 
-/**
-* @brief clears the shader list by setting all reference counts equal to zero
-*/
 void Shader_Manager::clear()
 {
 	if (!manager)

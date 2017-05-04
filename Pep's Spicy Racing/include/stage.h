@@ -15,6 +15,7 @@ typedef struct
 	glm::vec3 position;			/**< position of this node in world space */
 	int node_num;				/**< this node's number in the node list, since I only load this once we don't have to worry about the number changing */
 	bool finish_line_node;		/**< flag to know if this node is the finish line */
+	float rotation;				/**< rotation of the node's plane to test position */
 }Node;
 
 /**
@@ -28,6 +29,9 @@ enum CardinalDirection
 	West,
 };
 
+/**
+* @enum	Type's of paths generated, used to know what type of path is in node_list already
+*/
 enum PathType
 {
 	CenterOriented = 1,
@@ -68,21 +72,40 @@ public:
 
 	/**
 	* @brief draws the stage (should be one of if not the first thing drawn in the game loop)
+	* @param camera the game camera
+	* @param single_light	the single light in the game
 	*/
 	void draw_stage(Camera *camera, Entity *single_light);
 
+	/**
+	* @brief updates the stage's path, used to switch between the types of paths
+	*/
 	void update_path();
+
+	/**
+	* @brief sets the rotations of each node to face the next node in the list, in the case of the last node it faces the starting (finish) node
+	*/
+	void set_node_rotations();
 
 	/**
 	* @brief gets the next nodes in the path
 	*			rigid and predictable, also not very optimized for speed
 	*			does this by taking the current and next node to find the center point and the  point of the two tiles
-	* @param current_tile		the current tile int the path we are working with
+	* @param current_tile		the current tile in the path we are working with
 	* @param next_tile			the next_tile in the path
 	* @param finish_line		is this current tile the finish line?
 	*/
 	void get_center_oriented_nodes(glm::vec3 current_tile, glm::vec3 next_tile, bool finish_tile);
 
+	/**
+	* @brief gets the next nodes in the path
+	*			predictable, but rounded, not incredibly optimized or smooth but better
+	*			does this by taking the current, and next tiles as well as the previous Node and finds the centroid of the next and previous node
+	* @param current_tile		the current tile in the path we are working with
+	* @param next_tile			the next tile in the path
+	* @param previous_node		the previos node in the node list, used to find the centroid of it and the next Node
+	* @param finish_tile		is this tile the finish tile?
+	*/
 	Node get_cut_corner_nodes(glm::vec3 current_tile, glm::vec3 next_tile, Node previous_node, bool finish_tile);
 
 	/**
@@ -91,7 +114,7 @@ public:
 	void get_center_oriented_path();
 
 	/**
-	* @brief populates 
+	* @brief populates the node_list using get_cut_corner_nodes
 	*/
 	void get_cut_corner_path();
 

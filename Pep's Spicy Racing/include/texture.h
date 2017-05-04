@@ -31,7 +31,7 @@ public:
 	 * @brief gets the unique texture ID for use
 	 * @return GLuint texture
 	 */
-	GLuint get_texture();
+	GLuint get_texture() { return texture; }
 	
 public:
 	std::string filepath;		/**< the filepath to this texture, used to identify different textures */

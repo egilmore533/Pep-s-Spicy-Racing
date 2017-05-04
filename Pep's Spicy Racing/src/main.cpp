@@ -19,11 +19,6 @@
 
 #include "button.h"
 
-#include <btBulletDynamicsCommon.h>
-#include <btBulletCollisionCommon.h>
-
-
-
 void singleplayer_mode();
 
 void level_editor();
@@ -59,24 +54,6 @@ int main()
 	int game_running = 1;
 
 	int i;
-	
-	///-----initialization_start-----
-
-	///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
-	btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
-
-	///use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
-	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
-
-	///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
-	btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
-
-	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
-	btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
-
-	btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-
-	dynamicsWorld->setGravity(btVector3(0, -10, 0));
 
 	init_logger("game_log.log");
 	Graphics *graphics = new Graphics();
@@ -227,7 +204,7 @@ void singleplayer_mode()
 	glm::vec3 cameraPosition = glm::vec3(-3, 20, 28);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
-	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.start_position.x, stage.start_position.y + 0.5f, stage.start_position.z));
+	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.start_position.x, stage.start_position.y, stage.start_position.z));
 
 	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));

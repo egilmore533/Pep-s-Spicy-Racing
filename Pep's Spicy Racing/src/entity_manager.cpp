@@ -14,9 +14,6 @@
 
 static Entity_Manager *manager = NULL;
 
-/**
-* @brief initializes the entity manager by filling the entity_list with empty entities and setting the number of current entities to none
-*/
 void Entity_Manager::initialize()
 {
 	if (manager)
@@ -35,12 +32,6 @@ void Entity_Manager::initialize()
 	manager = this;
 }
 
-/**
-* @brief gets a pointer to the next free entity that we can use in the entity_list, and defines an entity using the given json file
-* @param *entity_json_filepath definition file for this entity to be created from
-* @param position  the position the entity is in the world space (model matrix)
-* @return a pointer to the next entity to be used
-*/
 Entity *Entity_Manager::create_entity(std::string entity_json_filepath, glm::vec3 position)
 {
 	int i;
@@ -123,10 +114,6 @@ Entity *Entity_Manager::create_entity(std::string entity_json_filepath, glm::vec
 	return NULL;
 }
 
-/**
-* @brief deletes the given entity from the entity_list
-* @param entity_id the id of the entity to delete
-*/
 void Entity_Manager::delete_entity(int entity_id)
 {
 	if (!manager)
@@ -153,9 +140,6 @@ void Entity_Manager::delete_entity(int entity_id)
 	}
 }
 
-/**
-* @brief empties the entity_list useful to load a new level
-*/
 void Entity_Manager::clear()
 {
 	if (!manager)
@@ -194,9 +178,6 @@ void Entity_Manager::clear()
 	}
 }
 
-/**
-* @brief perform the think function of all the entities that are currently in use
-*/
 void Entity_Manager::think_all()
 {
 	if (!manager)
@@ -220,9 +201,6 @@ void Entity_Manager::think_all()
 	}
 }
 
-/**
-* @brief perform the updates of all entities that are currently in use
-*/
 void Entity_Manager::update_all()
 {
 	if (!manager)
@@ -241,11 +219,6 @@ void Entity_Manager::update_all()
 	}
 }
 
-/**
-* @brief draws all entities that are in use from the perspective of the given camera
-* @param *camera the camera that will determine the perspective these entities will be drawn from
-* @param *single_light (TODO make a light resource manager) temporary light in the world, there can only be one right now
-*/
 void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 {
 	if (!manager)

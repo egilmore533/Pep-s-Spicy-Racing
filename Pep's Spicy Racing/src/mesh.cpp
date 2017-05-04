@@ -8,10 +8,6 @@
 #include "graphics.h"
 #include "mesh.h"
 
-/**
-* @brief creates a mesh from a given .obj file, scans the file prelimnarily to allocate the correct storage for the mesh, then stores data
-* @param filepath	the path to the .obj file from the working directory
-*/
 Mesh::Mesh(std::string filename)
 {
 	vertices.reserve(1000);
@@ -26,9 +22,6 @@ Mesh::Mesh(std::string filename)
 	setup_buffers();
 }
 
-/**
-* @brief creates a mesh to be used with all data set to default values
-*/
 Mesh::Mesh()
 {
 	filepath = "";
@@ -48,10 +41,6 @@ Mesh::Mesh()
 	ebo = 0;
 }
 
-/**
- * @brief loads data from an obj file into this mesh, looking for vertices, uvs, normals, and faces
- * @param filename		the filepath to the obj file to load from
- */
 void Mesh::load_obj(std::string filename)
 {
 	FILE *file;
@@ -162,9 +151,6 @@ void Mesh::load_obj(std::string filename)
 	}
 }
 
-/**
-* @brief sets up the appropriate vertex array object and buffers for the mesh
-*/
 void Mesh::setup_buffers()
 {
 	glGenVertexArrays(1, &vao);
@@ -199,10 +185,6 @@ void Mesh::setup_buffers()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-/**
-* @brief draws the mesh
-* @param shader_program	id of the shader program to use in drawing
-*/
 void Mesh::draw(GLuint shader_program)
 {
 	glUseProgram(shader_program);
@@ -212,9 +194,6 @@ void Mesh::draw(GLuint shader_program)
 	glBindVertexArray(0);
 }
 
-/**
-* @brief deconstructor for the mesh, destroys the data from the vertices, texels, normals, and triangles
-*/
 Mesh::~Mesh()
 {
 	

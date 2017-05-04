@@ -4,9 +4,6 @@
 
 #include "texture.h"
 
-/**
-* @brief default texture constructor setting all data to default values
-*/
 Texture::Texture()
 {
 	texture = 0;
@@ -15,14 +12,6 @@ Texture::Texture()
 	in_use = false;
 }
 
-/**
-* @brief loads texture from given file path, sets smoothing and repeating accordingly, uses the whole image given so it can be reused multiple times
-*			for instance one sprite might only want the texture's blue values to be drawn while another wants all the colors, this should all be
-*			done on the sprite end, not the texture
-* @param filepath	path to the image in from our working directory
-* @param repeated	boolean flag to set whether or not to repeat the texture when mapping to our model
-* @param smoothed	boolean flag to set how we handle the drawing of the texture
-*/
 void Texture::load_texture(std::string filepath, bool repeated, bool smoothed)
 {
 	sf::Image image;
@@ -61,13 +50,4 @@ void Texture::load_texture(std::string filepath, bool repeated, bool smoothed)
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glActiveTexture(GL_TEXTURE0);
-}
-
-/**
-* @brief gets the unique texture ID for use
-* @return GLuint texture
-*/
-GLuint Texture::get_texture()
-{
-	return texture;
 }

@@ -4,14 +4,6 @@
 
 static Mesh_Manager *manager = NULL;
 
-/**
-* @brief check mesh_list to see if the mesh has already been loaded if so
-*		increment the reference count and return that mesh else build the new
-*		mesh in the first available mesh position, also check if room
-*		available in the mesh_list, if not exit program
-* @param mesh_filepath path to the mesh obj file
-* @return a pointer to the mesh that is defined by the given files
-*/
 Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath)
 {
 	if (!manager)
@@ -67,12 +59,6 @@ Mesh *Mesh_Manager::create_mesh(std::string mesh_filepath)
 	return manager->mesh_list[first_empty];			//return the mesh at this position in the mesh_list
 }
 
-/**
-* @brief decrement the reference count of the given mesh, enabling it
-*		(if the reference count has reached 0) to be replaced by the creation
-*		of another mesh
-* @param mesh_filepath the file of the mesh to be dereferenced
-*/
 void Mesh_Manager::dereference_mesh(std::string mesh_filepath)
 {
 	if (!manager)
@@ -94,10 +80,6 @@ void Mesh_Manager::dereference_mesh(std::string mesh_filepath)
 	}
 }
 
-/**
-* @brief allocates and sets default data for the meshes in the mesh_manager's list
-*			then sets the mesh manager to be the global mesh manager
-*/
 void Mesh_Manager::initialize()
 {
 	if (manager)
@@ -122,9 +104,6 @@ void Mesh_Manager::initialize()
 	manager = this;
 }
 
-/**
-* @brief clears the mesh_list by setting the reference_count to 0 on each mesh
-*/
 void Mesh_Manager::clear()
 {
 	if (!manager)

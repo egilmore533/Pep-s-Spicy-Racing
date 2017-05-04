@@ -97,11 +97,6 @@ void Camera::get_mouse_input()
 	up = glm::cross(right, forward);
 }
 
-/**
-* @brief update the camera's target, position, and up veector based on the given entity
-*		follows the entity from a certain away
-* @param *entity the entity to follow
-*/
 void Camera::follow_entity(Entity *entity)
 {
 	position = entity->world_position + glm::vec3(-5 * cos(glm::radians(entity->current_rotation)), 1.5f, 5 * sin(glm::radians(entity->current_rotation)));
@@ -109,45 +104,26 @@ void Camera::follow_entity(Entity *entity)
 	up = glm::vec3(0,1,0);
 }
 
-/**
-* @brief updates the model matrix using the camera's target as the center
-*/
 void Camera::view_matrix_look_at_target()
 {
 	view_matrix = glm::lookAt(position, target, up);
 }
 
-/**
-* @brief update's the camera's view matrix using position + forward as the center
-*/
 void Camera::view_matrix_look_forward()
 {
 	view_matrix = glm::lookAt(position, position + forward, up);
 }
 
-/**
-* @brief sets the view matrix based on the given data, needs to give the calculated forward vector
-* @param target_position	the position to look at (calculate the forward vector and give it to this)
-* @param up					the direction that is being used as the upward vector
-*/
 void Camera::set_view_matrix(glm::vec3 target_position, glm::vec3 up)
 {
 	view_matrix = glm::lookAt(position, target_position, up);
 }
 
-/**
-* @brief sets the camera's position
-* @param cam_position the new camera position
-*/
 void Camera::set_camera_position(glm::vec3 cam_position)
 {
 	position = cam_position;
 }
 
-/**
-* @brief returns the camera's position in world space
-* @return the camera's position
-*/
 glm::vec3 Camera::get_position()
 {
 	return position;

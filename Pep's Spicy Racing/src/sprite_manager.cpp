@@ -11,9 +11,6 @@
 
 static Sprite_Manager *manager = NULL;
 
-/**
-* @brief
-*/
 void Sprite_Manager::initialize()
 {
 
@@ -58,9 +55,6 @@ void Sprite_Manager::initialize()
 	manager = this;
 }
 
-/**
-* @brief empties the sprite_list useful to load a new game mode, not static because this shouldn't be done in any file beside one that has access to the actual sprite_manager object
-*/
 void Sprite_Manager::clear()
 {
 	if (!manager)
@@ -96,12 +90,6 @@ void Sprite_Manager::clear()
 	}
 }
 
-
-/**
-* @brief performs the rendering of the given sprite
-* @param *cam	pointer to the camera for using the projection
-* @param the id of the sprite to draw
-*/
 void Sprite_Manager::draw(Camera *cam, int sprite_id)
 {
 	if (!manager)
@@ -141,11 +129,6 @@ void Sprite_Manager::draw(Camera *cam, int sprite_id)
 
 }
 
-/**
-* @brief gets a pointer to the next free sprite that we can use in the sprite_list, and defines an sprite using the given json file
-* @param *sprite_json_filepath definition file for this entity to be created from
-* @return a pointer to the next entity to be used
-*/
 Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 {
 	if (!manager)
@@ -203,10 +186,6 @@ Sprite *Sprite_Manager::create_sprite(std::string sprite_json_filepath)
 	return NULL;
 }
 
-/**
-* @brief deletes the given sprite from the sprite_list
-* @param sprite_id the id of the sprite to delete
-*/
 void Sprite_Manager::delete_sprite(int sprite_id)
 {
 	if (!manager)

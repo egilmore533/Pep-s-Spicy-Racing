@@ -9,12 +9,6 @@
 int current_theme_index;
 int theme_list_size;
 
-/**
-* @brief configures the code for the editor, positioning the grid, and loading the sprites
-* @param rows		the number of rows the grid will have
-* @param columns	the number of columns in the grid
-* @param offsets	the offset of the tiles in the grid
-*/
 void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm::vec2 offsets)
 {
 	max_grid_columns = columns;
@@ -57,6 +51,7 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 	theme_text.setOutlineThickness(4.0f);
 	theme_text.setCharacterSize(64);
 	theme_text.setPosition((WINDOW_WIDTH - theme_text.getLocalBounds().width - 75.0f) - (theme_text.getLocalBounds().width / 2.0f), 20);
+	
 }
 
 void Level_Editor::add_theme_to_list(std::string theme_filepath, std::string theme_sprite_filepath)
@@ -66,9 +61,6 @@ void Level_Editor::add_theme_to_list(std::string theme_filepath, std::string the
 	theme_key_list.push_back(theme_filepath);
 }
 
-/**
-* @brief updates the data in the editor's activated positions and also determines whether to draw the highlighted tile or not (should only draw the highlighted sprite if the cursor is on the grid)
-*/
 void Level_Editor::update_editor()
 {
 	mouse_position = sf::Mouse::getPosition(*Graphics::get_game_window());
@@ -149,10 +141,6 @@ void Level_Editor::update_editor()
 	}
 }
 
-/**
-* @brief draw the tile's onto the screen, then any other UI elements
-* @param *camera		the camera used by the sprite manager to draw the sprite
-*/
 void Level_Editor::draw_editor(Camera *camera)
 {
 	//draw all grid tiles
@@ -191,10 +179,6 @@ void Level_Editor::draw_editor(Camera *camera)
 	Graphics::end_draw_text();
 }
 
-/**
-* @param exit the editor and write a level definition file to the given filename
-* @param filename		the name of the file to be saved
-*/
 void Level_Editor::save_and_exit(std::string filename)
 {
 	json def = {

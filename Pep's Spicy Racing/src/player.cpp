@@ -40,9 +40,6 @@ void Player::update_player_cam()
 	player_cam->view_matrix_look_at_target();
 }
 
-/**
-* @brief the update function for the player
-*/
 void update(Entity *ent)
 {
 	int forward;
@@ -116,17 +113,11 @@ void update(Entity *ent)
 	ent->model = glm::scale(ent->model, glm::vec3(ent->scale));
 }
 
-/**
-* @brief the think function for the player
-*/
 void think(Entity *ent)
 {
 
 }
 
-/**
-* @brief draws the player
-*/
 void draw(Entity *ent)
 {
 	ent->mesh->Mesh::draw(ent->shader->program);

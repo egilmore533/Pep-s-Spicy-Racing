@@ -5,9 +5,6 @@
 #include "json_helper.h"
 #include "shader.h"
 
-/**
-* @brief default constructor for Shader
-*/
 Shader::Shader()
 {
 	program = 0;
@@ -15,9 +12,6 @@ Shader::Shader()
 	reference_count = 0;
 }
 
-/**
-* @brief load a shader program from a def file
-*/
 void Shader::build_shader(std::string def_file)
 {
 	json def = load_from_def(def_file);
