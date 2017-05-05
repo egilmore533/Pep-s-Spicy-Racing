@@ -10,7 +10,7 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 	player_cam = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 	entity_component = Entity_Manager::create_entity("json/entities/racer.json", position);
 	entity_component->current_rotation = rotation;
-	entity_component->scale = 0.5f;
+	entity_component->scale = 0.3f;
 	entity_component->update = &update;
 	entity_component->draw = &draw;
 	entity_component->think = &think;
@@ -34,7 +34,7 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 	entity_component->mass = racer_def["mass"];
 	entity_component->handling = (float)racer_def["handling"] * 50.0f;
 
-	entity_component->add_rigid_body(glm::vec3(1.0f));
+	entity_component->add_rigid_body(glm::vec3(0.6f));
 }
 
 void Player::update_player_cam()
@@ -107,6 +107,10 @@ void update(Entity *ent)
 	ent->movement_velocity = glm::vec3((ent->current_speed) * cos(glm::radians(ent->current_rotation)), 0, -(ent->current_speed) * sin(glm::radians(ent->current_rotation))) * delta_time;
 
 	ent->world_position = ent->world_position + ent->movement_velocity;
+
+	ent->body.rb->getWorldTransform().setOrigin(btVector3(ent->world_position.x, ent->world_position.y, ent->world_position.z));
+
+	node_collision collision_call(this);
 
 	ent->model = glm::mat4(1.0f);
 	ent->model = glm::translate(ent->model, ent->world_position);

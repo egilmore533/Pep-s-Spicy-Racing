@@ -93,7 +93,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		wall_mesh->Mesh::draw(shader->program);
 	}
 
-	/*
+	
 	for (int i = 0; i < node_list.size(); i++)
 	{
 		glm::vec4 color = glm::vec4(1.0f);
@@ -120,7 +120,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 
 		node_mesh->Mesh::draw(shader->program);
 	}
-	*/
+	
 }
 
 void Stage::load_theme_data(std::string theme_filepath)
@@ -393,6 +393,11 @@ void Stage::update_path()
 	}
 
 	set_node_rotations();
+
+	for (int i = 0; i < node_list.size(); i++)
+	{
+		path_plane_bodies.push_back(Physics::create_plane_body_trigger(node_list[i].position, glm::vec3(1.0f, 1.0f, 0.5f), node_list[i].rotation));
+	}
 }
 
 void Stage::set_node_rotations()

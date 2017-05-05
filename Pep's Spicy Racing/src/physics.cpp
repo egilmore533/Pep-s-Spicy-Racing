@@ -62,7 +62,7 @@ Physics::~Physics()
 	delete collision_configuration;
 }
 
-rigid_body Physics::create_plane_body()
+rigid_body Physics::create_plane_body_trigger(glm::vec3 position, glm::vec3 dimensions, float rotation)
 {
 	if (num_rigid_bodies + 1 >= MAX_RIGID_BODIES)
 	{
@@ -77,11 +77,19 @@ rigid_body Physics::create_plane_body()
 
 			btTransform t;
 			t.setIdentity();
-			t.setOrigin(btVector3(0, -8, 0));
+			
+			t.setOrigin(btVector3(position.x, position.y, position.z));
+			
+			btQuaternion q;
+			q.setEuler(glm::radians(90.0f + rotation), glm::radians(90.0f), 0);
+
+			t.setRotation(q);
+
 			btStaticPlaneShape* plane = new btStaticPlaneShape(btVector3(0, 1, 0), 0);
 			btMotionState* motion = new btDefaultMotionState(t);
 			btRigidBody::btRigidBodyConstructionInfo info(0.0, motion, plane);
 			btRigidBody* body = new btRigidBody(info);
+			body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
 			new_rigid_body.rb = body;
 			new_rigid_body.id_num = i;
@@ -139,6 +147,10 @@ void Physics::delete_all_rigid_body()
 {
 	for (int i = 0; i < MAX_RIGID_BODIES; i++)
 	{
+		if (!rigid_body_list[i].rb)
+		{
+			continue;
+		}
 		btMotionState* motionState = rigid_body_list[i].rb->getMotionState();
 		btCollisionShape* shape = rigid_body_list[i].rb->getCollisionShape();
 		world->removeCollisionObject(rigid_body_list[i].rb);

@@ -16,14 +16,13 @@ typedef struct
 }rigid_body;
 
 
-
 class Physics {
 
 public:
 	Physics();
 	~Physics();
 
-	static rigid_body create_plane_body();
+	static rigid_body create_plane_body_trigger(glm::vec3 position, glm::vec3 dimensions, float rotation);
 
 	static rigid_body create_cube_body(glm::vec3 dimensions, glm::vec3 position, float mass);
 

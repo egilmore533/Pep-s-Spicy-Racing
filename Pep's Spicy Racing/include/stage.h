@@ -130,7 +130,7 @@ public:
 	glm::vec4 wall_color_data;
 	Texture *wall_texture;					/**< texture for the walls */
 
-	Mesh *node_mesh;						/**< debug sphere to be drawn to see nodes in relation to the stage */
+	Mesh *node_mesh;						/**< debug plane to be drawn to see nodes in relation to the stage */
 
 	glm::vec3 background_color;
 
@@ -155,6 +155,7 @@ public:
 	std::vector<glm::vec3> tile_positions_in_order;		/**< position data for the actual race track, these are the tiles in order that the players need to go through */
 	PathType path_type;									/**< enumeration that determines what type of node list we have loaded here */
 	std::vector<Node> node_list;						/**< list of all the nodes in the stage, in order, determines race position and will be used by the AI to determine how to move */
+	std::vector<rigid_body> path_plane_bodies;			/**< list of the rigid body (triggers) that are associated with each node */
 
 private:
 	int node_id_num;				/**< current node id number, used to id the nodes, in order as they appear on the stage */

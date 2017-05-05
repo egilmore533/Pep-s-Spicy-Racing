@@ -29,7 +29,8 @@ Graphics::Graphics()
 		exit(1);
 	}
 
-	game_window.setMouseCursorGrabbed(true);
+	//game_window.setFramerateLimit(15);
+	//game_window.setMouseCursorGrabbed(true);
 	game_window.setVerticalSyncEnabled(true);
 	clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
 
@@ -49,7 +50,7 @@ sf::RenderWindow *Graphics::get_game_window()
 
 void Graphics::frame_begin()
 {
-	glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+	glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

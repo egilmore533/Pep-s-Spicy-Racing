@@ -1,7 +1,7 @@
 {
 "Entity": {
   "name": "Racer",
-  "model-filepath": "models/new_lowpolycar.obj",
+  "model-filepath": "models/lowest_poly_car.obj",
   "color": [0.0, 1.0, 0.0, 1.0],
   "think-rate": 100,
   "move-speed": 512.0,

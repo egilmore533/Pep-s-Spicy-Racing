@@ -125,6 +125,12 @@ int main()
 	menu_text.setCharacterSize(128);
 	menu_text.setPosition((WINDOW_WIDTH / 2.0f) - (menu_text.getLocalBounds().width / 2.0f), 100);
 
+	sf::Text fps;
+	fps.setFont(hud_font);
+	fps.setFillColor(sf::Color::Red);
+	fps.setCharacterSize(24);
+	fps.setPosition(10, 10);
+
 	reload_buttons();
 
 	while (game_running)
@@ -138,7 +144,8 @@ int main()
 		{
 			pressed = false;
 		}
-		
+
+		//fps.setString(std::to_string((int)1.0f / Graphics::get_delta_time().asSeconds()));
 
 		singleplayer_button->update();
 		level_editor_button->update();
@@ -155,6 +162,7 @@ int main()
 
 
 		Graphics::draw_text(menu_text);
+		//Graphics::draw_text(fps);
 
 		Graphics::end_draw_text();
 
@@ -236,13 +244,10 @@ void singleplayer_mode()
 	glm::vec3 cameraPosition = glm::vec3(-3, 20, 28);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
-	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.node_list[0].position.x, stage.node_list[0].position.y, stage.node_list[0].position.z), stage.node_list[0].rotation);
+	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.node_list[0].position.x, stage.node_list[0].position.y + 0.5, stage.node_list[0].position.z), stage.node_list[0].rotation);
 
 	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
-
-	Mesh *test_mesh = Mesh_Manager::create_mesh("models/cube.obj");
-	rigid_body rg_test = Physics::create_cube_body(glm::vec3(1), glm::vec3(0), 1);
 
 	//test UI elements
 
@@ -321,6 +326,8 @@ void singleplayer_mode()
 		camera->Camera::follow_entity(player->entity_component);
 		camera->Camera::view_matrix_look_at_target();
 
+		Physics::physics_step(Graphics::get_time().asMilliseconds());
+
 		Graphics::frame_begin();
 
 		/*Drawing Code Start*/
@@ -328,19 +335,6 @@ void singleplayer_mode()
 		stage.draw_stage(camera, test_cube);
 
 		Entity_Manager::draw_all(camera, test_cube);
-
-		///////////test rigid body draw
-		glUseProgram(test_cube->shader->program);
-		glUniform4fv(test_cube->color_location, 1, &test_cube->color_data[0]);
-		glUniformMatrix4fv(test_cube->model_location, 1, GL_FALSE, &test_cube->model[0][0]);
-
-		glUniformMatrix4fv(test_cube->view_location, 1, GL_FALSE, &camera->Camera::get_view_matrix()[0][0]);
-		glUniformMatrix4fv(test_cube->projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
-		test_mesh->draw(test_cube->shader->program);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, test_cube->texture->get_texture());
-		glActiveTexture(GL_TEXTURE0);
-		///////////end test draw
 
 		mydebugdrawer.SetMatrices(camera->get_view_matrix(), camera->get_projection_matrix());
 		Physics::world->debugDrawWorld();

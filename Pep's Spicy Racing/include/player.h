@@ -5,6 +5,21 @@
 #include "entity_manager.h"
 #include "camera.h"
 
+struct node_collision : public btCollisionWorld::ContactResultCallback
+{
+	node_collision(Player* player) : p(player) {}
+
+
+	virtual	btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
+	{
+		printf("hit node\n");
+		return 0;
+	}
+
+	Player* p;
+
+};
+
 class Player
 {
 public:
