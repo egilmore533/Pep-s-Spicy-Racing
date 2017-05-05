@@ -43,6 +43,8 @@ public:
 	*/
 	static sf::Time get_delta_time();
 
+	static sf::Time get_time();
+
 	/**
 	* @brief sets the clear color for the window to be the given values
 	* @param new_clear_color	the new color the window will clear to be
@@ -67,6 +69,7 @@ public:
 
 private:
 		static sf::RenderWindow game_window;	/**< our game's window */
+		static sf::Clock total_game_time;
 		static sf::Clock game_delta_time;		/**< the clock that tracks time passed since last frame*/
 		static glm::vec4 clear_color;			/**< the color of the blank screen */
 };

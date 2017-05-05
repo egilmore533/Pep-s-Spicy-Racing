@@ -50,7 +50,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, tile_positions[i]);
 		
-		model = glm::scale(model, glm::vec3(5.0f));
+		model = glm::scale(model, tile_dimensions / 2.0f);
 
 		glUniform4fv(color_location, 1, &tile_color_data[0]);
 		glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
@@ -93,6 +93,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		wall_mesh->Mesh::draw(shader->program);
 	}
 
+	/*
 	for (int i = 0; i < node_list.size(); i++)
 	{
 		glm::vec4 color = glm::vec4(1.0f);
@@ -119,6 +120,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 
 		node_mesh->Mesh::draw(shader->program);
 	}
+	*/
 }
 
 void Stage::load_theme_data(std::string theme_filepath)

@@ -5,6 +5,7 @@
 
 #include <array>
 
+#include "physics.h"
 #include "shader.h"
 #include "texture.h"
 #include "mesh.h"
@@ -37,6 +38,8 @@ public:
 	*/
 	void (*draw)(Entity *ent);
 
+	void add_rigid_body(glm::vec3 dimensions);
+
 	bool in_use;				/**< in use flag to determine if this entity is in use */
 	int id;						/**< the id of the entity */
 
@@ -61,6 +64,8 @@ public:
 	float rotation_rate;		/**< the speed at which the entity rotates */
 	float mass;					/**< currently unused but will effect how long the racer is stunned when he is hit by an item, and how far he will bounce back and bounce other racers away */
 	float handling;				/**< defines how well a racer turns */
+
+	rigid_body body;
 
 	glm::mat4 model;			/**< the model matrix of this entity, used to draw the entity in world position */
 	glm::vec4 color_data;		/**< the colors this entity will be drawn in, unique to entity's now not mesh's that way I can set up a mesh resource manager */

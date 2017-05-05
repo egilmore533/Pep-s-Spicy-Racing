@@ -42,6 +42,10 @@ Entity::~Entity()
 	//decrement the mesh/model, shader, etc. here
 }
 
+void Entity::add_rigid_body(glm::vec3 dimensions)
+{
+	body = Physics::create_cube_body(dimensions, world_position, mass);
+}
 
 /*
 void update()

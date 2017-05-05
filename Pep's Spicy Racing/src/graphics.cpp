@@ -6,6 +6,7 @@
 #include "shader.h"
 
 sf::Clock Graphics::game_delta_time;
+sf::Clock Graphics::total_game_time;
 sf::RenderWindow Graphics::game_window;
 glm::vec4 Graphics::clear_color;
 
@@ -37,6 +38,7 @@ Graphics::Graphics()
 
 
 	game_delta_time.restart();
+	total_game_time.restart();
 }
 
 sf::RenderWindow *Graphics::get_game_window()
@@ -88,6 +90,11 @@ void Graphics::set_clear_color(glm::vec4 new_clear_color)
 sf::Time Graphics::get_delta_time()
 {
 	return game_delta_time.getElapsedTime();
+}
+
+sf::Time Graphics::get_time()
+{
+	return total_game_time.getElapsedTime();
 }
 
 

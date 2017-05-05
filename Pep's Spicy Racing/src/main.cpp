@@ -13,20 +13,48 @@
 #include "texture_manager.h"
 #include "sprite_manager.h"
 
+#include "physics.h"
+
 #include "player.h"
 #include "level_editor.h"
 #include "stage.h"
 
 #include "button.h"
 
+class BulletDebugDrawer_DeprecatedOpenGL : public btIDebugDraw {
+public:
+	void SetMatrices(glm::mat4 pViewMatrix, glm::mat4 pProjectionMatrix) {
+		glUseProgram(0); // Use Fixed-function pipeline (no shaders)
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(&pViewMatrix[0][0]);
+		glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(&pProjectionMatrix[0][0]);
+	}
+	virtual void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) {
+		glColor3f(color.x(), color.y(), color.z());
+		glBegin(GL_LINES);
+		glVertex3f(from.x(), from.y(), from.z());
+		glVertex3f(to.x(), to.y(), to.z());
+		glEnd();
+	}
+	virtual void drawContactPoint(const btVector3 &, const btVector3 &, btScalar, int, const btVector3 &) {}
+	virtual void reportErrorWarning(const char *) {}
+	virtual void draw3dText(const btVector3 &, const char *) {}
+	virtual void setDebugMode(int p) {
+		m = p;
+	}
+	int getDebugMode(void) const { return 3; }
+	int m;
+};
+
 void singleplayer_mode();
 
 void level_editor();
 
-int test_text();
-
 Button *singleplayer_button;
 Button *level_editor_button;
+
+BulletDebugDrawer_DeprecatedOpenGL mydebugdrawer;
 
 glm::vec4 menu_clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
 
@@ -72,6 +100,10 @@ int main()
 
 	Sprite_Manager sprite_manager;
 	sprite_manager.initialize();
+
+	Physics physics;
+
+	physics.world->setDebugDrawer(&mydebugdrawer);
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	Camera *cam = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
@@ -209,6 +241,9 @@ void singleplayer_mode()
 	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
 
+	Mesh *test_mesh = Mesh_Manager::create_mesh("models/cube.obj");
+	rigid_body rg_test = Physics::create_cube_body(glm::vec3(1), glm::vec3(0), 1);
+
 	//test UI elements
 
 	//this should be enabled for 2d sprites to have their transparency
@@ -291,10 +326,24 @@ void singleplayer_mode()
 		/*Drawing Code Start*/
 		
 		stage.draw_stage(camera, test_cube);
-		//stage.draw_stage(player->player_cam, test_cube);
 
 		Entity_Manager::draw_all(camera, test_cube);
-		//Entity_Manager::draw_all(player->player_cam, test_cube);
+
+		///////////test rigid body draw
+		glUseProgram(test_cube->shader->program);
+		glUniform4fv(test_cube->color_location, 1, &test_cube->color_data[0]);
+		glUniformMatrix4fv(test_cube->model_location, 1, GL_FALSE, &test_cube->model[0][0]);
+
+		glUniformMatrix4fv(test_cube->view_location, 1, GL_FALSE, &camera->Camera::get_view_matrix()[0][0]);
+		glUniformMatrix4fv(test_cube->projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
+		test_mesh->draw(test_cube->shader->program);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, test_cube->texture->get_texture());
+		glActiveTexture(GL_TEXTURE0);
+		///////////end test draw
+
+		mydebugdrawer.SetMatrices(camera->get_view_matrix(), camera->get_projection_matrix());
+		Physics::world->debugDrawWorld();
 
 		//this should be enabled for 2d sprites to have their transparency
 		glEnable(GL_BLEND);

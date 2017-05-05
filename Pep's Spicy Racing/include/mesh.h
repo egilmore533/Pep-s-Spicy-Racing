@@ -2,13 +2,12 @@
 #define __MESH_H__
 
 #include <vector>
-
 #include <GL/glew.h>
-
 #include <glm/glm.hpp>
 
-
 #include "texture.h"
+
+#define MAX_VECTOR_SIZE			4000
 
 /**
  * @struct triangle_corner (vertex/point/corner), used to store the indexes for a vertex from an .obj file (one part of three for the face)

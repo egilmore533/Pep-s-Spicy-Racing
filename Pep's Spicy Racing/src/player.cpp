@@ -28,11 +28,13 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 	}
 
 	//since this json object we can count on being formated properly for an entity assume the data is there
-	entity_component->acceleration_rate = 60.0f + (10.0f * racer_def["acceleration_rate"]);
-	entity_component->deacceleration_rate = 60.0f + (10.0f * racer_def["deacceleration_rate"]);
-	entity_component->top_speed = 500.0f + (50.0f * racer_def["top_speed"]);
+	entity_component->acceleration_rate = 60.0f + (10.0f * (float)racer_def["acceleration_rate"]);
+	entity_component->deacceleration_rate = 60.0f + (10.0f * (float)racer_def["deacceleration_rate"]);
+	entity_component->top_speed = 500.0f + (50.0f * (float)racer_def["top_speed"]);
 	entity_component->mass = racer_def["mass"];
-	entity_component->handling = racer_def["handling"] * 50.0f;
+	entity_component->handling = (float)racer_def["handling"] * 50.0f;
+
+	entity_component->add_rigid_body(glm::vec3(1.0f));
 }
 
 void Player::update_player_cam()
