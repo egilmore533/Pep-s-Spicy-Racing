@@ -3,6 +3,9 @@
 #include "json_helper.h"
 #include "stage.h"
 
+std::vector<Node> Stage::node_list;
+bool Stage::collided;
+
 Stage::Stage(std::string stage_def_filepath)
 {
 	node_id_num = 0;
@@ -31,7 +34,7 @@ Stage::Stage(std::string stage_def_filepath)
 	//now we will find the racing line through the track for keeping track of position and moving the AI
 	current_path_type = NoPath;			//we have no path yet
 	path_type = CutCorners;				//we want this path type now
-	update_path();						//update the path
+	update_stage();						//update the path
 }
 
 Stage::~Stage()
@@ -93,7 +96,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		wall_mesh->Mesh::draw(shader->program);
 	}
 
-	
+	/*
 	for (int i = 0; i < node_list.size(); i++)
 	{
 		glm::vec4 color = glm::vec4(1.0f);
@@ -120,7 +123,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 
 		node_mesh->Mesh::draw(shader->program);
 	}
-	
+	*/
 }
 
 void Stage::load_theme_data(std::string theme_filepath)
@@ -257,7 +260,6 @@ void Stage::get_center_oriented_nodes(glm::vec3 current_tile, glm::vec3 next_til
 	center_point.finish_line_node = finish_tile;
 	node_list.push_back(center_point);
 
-
 	Node neighbor_point;
 	neighbor_point.node_num = node_id_num++;
 	neighbor_point.finish_line_node = false;
@@ -374,29 +376,41 @@ void Stage::get_cut_corner_path()
 	current_path_type = CutCorners;
 }
 
-void Stage::update_path() 
+void Stage::update_stage() 
 {
-	if (path_type == current_path_type)
-		return;
-
-	switch (path_type)
+	//update path 
+	if (path_type != current_path_type)
 	{
-	case CenterOriented:
-		get_center_oriented_path();
-		break;
-	case CutCorners:
-		get_cut_corner_path();
-		break;
-	case SmartTurns:
-		current_path_type = SmartTurns;
-		break;
+		switch (path_type)
+		{
+		case CenterOriented:
+			get_center_oriented_path();
+			break;
+		case CutCorners:
+			get_cut_corner_path();
+			break;
+		case SmartTurns:
+			current_path_type = SmartTurns;
+			break;
+		}
+
+		set_node_rotations();
+
+		//path_rigid_bodies.push_back(Physics::create_cube_body_trigger(node_list[1].position, glm::vec3(1.0f, 1.0f, 11.0f), node_list[1].rotation, 1000.0f));
+
+		
+		for (int i = 0; i < node_list.size(); i++)
+		{
+			path_rigid_bodies.push_back(Physics::create_cube_body_trigger(node_list[i].position, glm::vec3(1.0f, 1.0f, 20.0f), node_list[i].rotation, 1000.0f));
+		}
+		
 	}
 
-	set_node_rotations();
-
-	for (int i = 0; i < node_list.size(); i++)
+	for (int i = 0; i < racer_list.size(); i++)
 	{
-		path_plane_bodies.push_back(Physics::create_plane_body_trigger(node_list[i].position, glm::vec3(1.0f, 1.0f, 0.5f), node_list[i].rotation));
+		node_collision hit_trigger(racer_list[i]->check_this_node, racer_list[i]);
+
+		Physics::world->contactPairTest(racer_list[i]->entity_component->body.rb, path_rigid_bodies[racer_list[i]->check_this_node.node_num].rb, hit_trigger);
 	}
 }
 
@@ -489,3 +503,30 @@ CardinalDirection direction_to_next_tile(glm::vec3 current_tile, glm::vec3 next_
 
 	slog("error finding cardinal direction");
 }
+
+Node Stage::get_next_node_in_path(Node current_node)
+{
+	for (int i = 0; i < node_list.size(); i++)
+	{
+		if (current_node.node_num == node_list[i].node_num)
+		{
+			Node next_node;
+
+			//if the next node doesn't exist in the list its the finish line and we need the first node again
+			if (i + 1 < node_list.size())
+				next_node = node_list[i + 1];
+			else
+				next_node = node_list[0];
+
+			return next_node;
+		}
+	}
+}
+
+void Stage::add_player(Player *p)
+{
+	racer_list.push_back(p);
+	
+	p->check_this_node = node_list[0];
+}
+

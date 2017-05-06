@@ -2,6 +2,7 @@
 
 #include "graphics.h"
 #include "json_helper.h"
+#include "sprite_manager.h"
 #include "player.h"
 
 Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
@@ -35,6 +36,51 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 	entity_component->handling = (float)racer_def["handling"] * 50.0f;
 
 	entity_component->add_rigid_body(glm::vec3(0.6f));
+
+	lap_number = 0;
+
+
+
+	//HUD components load
+
+	leader_1 = Sprite_Manager::create_sprite("json/GUI/sprites/joe_sprite.json");
+	item_backdrop = Sprite_Manager::create_sprite("json/GUI/sprites/wood_sprite.json");
+
+	if (!hud_font.loadFromFile("fonts/Spicy.ttf"))
+	{
+		printf("dun goofed\n");
+	}
+
+	mph.setFont(hud_font);
+	mph.setString("MPH");
+	mph.setCharacterSize(32);
+	mph.setFillColor(sf::Color::Red);
+	mph.setOutlineColor(sf::Color::Black);
+	mph.setOutlineThickness(2.0f);
+	mph.setPosition(WINDOW_WIDTH - 500, WINDOW_HEIGHT - 42);
+
+	speed.setFont(hud_font);
+	speed.setCharacterSize(64);
+	speed.setFillColor(sf::Color::Red);
+	speed.setOutlineColor(sf::Color::Black);
+	speed.setOutlineThickness(4.0f);
+	speed.setPosition(mph.getPosition().x + speed.getLocalBounds().width + 10.0f, WINDOW_HEIGHT - 74);
+
+
+
+}
+
+void Player::draw_player_hud()
+{
+	Sprite_Manager::draw(player_cam, leader_1->id);
+	Sprite_Manager::draw(player_cam, item_backdrop->id);
+
+	speed.setString(std::to_string((int)std::round(entity_component->current_speed / 10.0f)));
+	speed.setPosition(mph.getPosition().x - speed.getLocalBounds().width - 10.0f, WINDOW_HEIGHT - 74);
+	Graphics::begin_draw_text();
+	Graphics::draw_text(speed);
+	Graphics::draw_text(mph);
+	Graphics::end_draw_text();
 }
 
 void Player::update_player_cam()
@@ -109,8 +155,10 @@ void update(Entity *ent)
 	ent->world_position = ent->world_position + ent->movement_velocity;
 
 	ent->body.rb->getWorldTransform().setOrigin(btVector3(ent->world_position.x, ent->world_position.y, ent->world_position.z));
-
-	node_collision collision_call(this);
+	
+	btQuaternion q;
+	q.setRotation(btVector3(0, 1, 0), glm::radians(ent->current_rotation));
+	ent->body.rb->getWorldTransform().setRotation(q);
 
 	ent->model = glm::mat4(1.0f);
 	ent->model = glm::translate(ent->model, ent->world_position);

@@ -62,6 +62,55 @@ Physics::~Physics()
 	delete collision_configuration;
 }
 
+rigid_body Physics::create_cube_body_trigger(glm::vec3 position, glm::vec3 dimensions, float rotation, float mass)
+{
+	if (num_rigid_bodies + 1 >= MAX_RIGID_BODIES)
+	{
+		slog("too many rigid bodies");
+		exit(0);
+	}
+	for (int i = 0; i < MAX_RIGID_BODIES; i++)
+	{
+		if (!rigid_body_list[i].in_use)
+		{
+			rigid_body new_rigid_body = rigid_body_list[i];
+
+			btTransform t;
+			t.setIdentity();
+
+			t.setOrigin(btVector3(position.x, position.y, position.z));
+
+			btQuaternion q;
+			q.setEuler(glm::radians(rotation), 0, 0);
+
+			t.setRotation(q);
+
+			btBoxShape* cube = new btBoxShape(btVector3(dimensions.x / 2.0, dimensions.y / 2.0, dimensions.z / 2.0));
+			btVector3 inertia(0, 0, 0);
+
+			if (mass != 0.0)
+			{
+				cube->calculateLocalInertia(mass, inertia);
+			}
+
+			btMotionState* motion = new btDefaultMotionState(t);
+			btRigidBody::btRigidBodyConstructionInfo info(mass, motion, cube, inertia);
+			btRigidBody* body = new btRigidBody(info);
+
+			body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
+			new_rigid_body.rb = body;
+			new_rigid_body.id_num = i;
+			new_rigid_body.in_use = true;
+
+			world->addRigidBody(body);
+			num_rigid_bodies++;
+
+			return new_rigid_body;
+		}
+	}
+}
+
 rigid_body Physics::create_plane_body_trigger(glm::vec3 position, glm::vec3 dimensions, float rotation)
 {
 	if (num_rigid_bodies + 1 >= MAX_RIGID_BODIES)
@@ -81,7 +130,7 @@ rigid_body Physics::create_plane_body_trigger(glm::vec3 position, glm::vec3 dime
 			t.setOrigin(btVector3(position.x, position.y, position.z));
 			
 			btQuaternion q;
-			q.setEuler(glm::radians(90.0f + rotation), glm::radians(90.0f), 0);
+			q.setEuler(glm::radians(270.0f + rotation), glm::radians(90.0f), 0);
 
 			t.setRotation(q);
 

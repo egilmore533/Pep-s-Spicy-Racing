@@ -258,35 +258,7 @@ void singleplayer_mode()
 	//this should be disabled for UI and HUD stuffs, but enabled for 3D
 	glDisable(GL_DEPTH_TEST);
 
-	//TODO add to GUI all this junk
-	Sprite *leader_1 = Sprite_Manager::create_sprite("json/GUI/sprites/joe_sprite.json");
-	Sprite *item_backdrop = Sprite_Manager::create_sprite("json/GUI/sprites/wood_sprite.json");
-
-	sf::Font hud_font;
-	if (!hud_font.loadFromFile("fonts/Spicy.ttf"))
-	{
-		printf("dun goofed\n");
-	}
-
-	sf::Text mph;
-
-	mph.setFont(hud_font);
-	mph.setString("MPH");
-	mph.setCharacterSize(32);
-	mph.setFillColor(sf::Color::Red);
-	mph.setOutlineColor(sf::Color::Black);
-	mph.setOutlineThickness(2.0f);
-	mph.setPosition(WINDOW_WIDTH - 150, WINDOW_HEIGHT - 42);
-
-
-	sf::Text speed;
-
-	speed.setFont(hud_font);
-	speed.setCharacterSize(64);
-	speed.setFillColor(sf::Color::Red);
-	speed.setOutlineColor(sf::Color::Black);
-	speed.setOutlineThickness(4.0f);
-	speed.setPosition(mph.getPosition().x + speed.getLocalBounds().width + 10.0f, WINDOW_HEIGHT - 74);
+	stage.add_player(player);
 
 	//end TODO
 
@@ -315,11 +287,13 @@ void singleplayer_mode()
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 			{
-				//set path tpe to SmartTurns
+				//set path type to SmartTurns
 			}
 		}
 
-		stage.update_path();
+		stage.update_stage();
+
+		printf("lap number: %d\n", player->lap_number);
 
 		Entity_Manager::update_all();
 
@@ -336,8 +310,11 @@ void singleplayer_mode()
 
 		Entity_Manager::draw_all(camera, test_cube);
 
-		mydebugdrawer.SetMatrices(camera->get_view_matrix(), camera->get_projection_matrix());
-		Physics::world->debugDrawWorld();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		{
+			mydebugdrawer.SetMatrices(camera->get_view_matrix(), camera->get_projection_matrix());
+			Physics::world->debugDrawWorld();
+		}
 
 		//this should be enabled for 2d sprites to have their transparency
 		glEnable(GL_BLEND);
@@ -346,16 +323,7 @@ void singleplayer_mode()
 		//this should be disabled for UI and HUD stuffs, but enabled for 3D
 		glDisable(GL_DEPTH_TEST);
 
-		Sprite_Manager::draw(camera, leader_1->id);
-		Sprite_Manager::draw(camera, item_backdrop->id);
-
-		speed.setString(std::to_string((int)std::round(player->entity_component->current_speed / 10.0f)));
-		speed.setPosition(mph.getPosition().x - speed.getLocalBounds().width - 10.0f, WINDOW_HEIGHT - 74);
-		Graphics::begin_draw_text();
-		Graphics::draw_text(speed); 
-		Graphics::draw_text(mph);
-		Graphics::end_draw_text();
-
+		player->draw_player_hud();
 
 		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
 		//opengl is hard :(

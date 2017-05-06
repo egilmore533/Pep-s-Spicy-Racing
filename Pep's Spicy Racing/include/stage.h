@@ -5,18 +5,7 @@
 #include "shader_manager.h"
 #include "texture_manager.h"
 #include "camera.h"
-#include "entity.h"
-
-/**
-* @struct defines a point on the track that will be used to determine a racer's progress through the map
-*/
-typedef struct
-{
-	glm::vec3 position;			/**< position of this node in world space */
-	int node_num;				/**< this node's number in the node list, since I only load this once we don't have to worry about the number changing */
-	bool finish_line_node;		/**< flag to know if this node is the finish line */
-	float rotation;				/**< rotation of the node's plane to test position */
-}Node;
+#include "player.h"
 
 /**
 * @enum Cardinal Directions of the tiles, used to quickly and readibly determine which direction a tile is in
@@ -81,7 +70,7 @@ public:
 	/**
 	* @brief updates the stage's path, used to switch between the types of paths
 	*/
-	void update_path();
+	void update_stage();
 
 	/**
 	* @brief sets the rotations of each node to face the next node in the list, in the case of the last node it faces the starting (finish) node
@@ -119,6 +108,10 @@ public:
 	*/
 	void get_cut_corner_path();
 
+	static Node get_next_node_in_path(Node current_node);
+
+	void add_player(Player *p);
+
 	//std::string  name;
 	//MusicPak *stage_music;
 
@@ -154,12 +147,36 @@ public:
 	//PATHING DATA
 	std::vector<glm::vec3> tile_positions_in_order;		/**< position data for the actual race track, these are the tiles in order that the players need to go through */
 	PathType path_type;									/**< enumeration that determines what type of node list we have loaded here */
-	std::vector<Node> node_list;						/**< list of all the nodes in the stage, in order, determines race position and will be used by the AI to determine how to move */
-	std::vector<rigid_body> path_plane_bodies;			/**< list of the rigid body (triggers) that are associated with each node */
+	static std::vector<Node> node_list;					/**< list of all the nodes in the stage, in order, determines race position and will be used by the AI to determine how to move */
+	std::vector<rigid_body> path_rigid_bodies;	/**< list of the rigid body (triggers) that are associated with each node */
+
+	struct node_collision : public btCollisionWorld::ContactResultCallback
+	{
+		node_collision(Node node, Player *player) : n(node), p(player) {}
+
+		Node n;
+		Player *p;
+
+		virtual	btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
+		{
+			Node touched_node = p->check_this_node;
+			p->check_this_node = get_next_node_in_path(p->check_this_node);
+
+			if (touched_node.finish_line_node)
+			{
+				p->lap_number++;
+			}
+
+			return 0;
+		}
+	};
 
 private:
 	int node_id_num;				/**< current node id number, used to id the nodes, in order as they appear on the stage */
 	PathType current_path_type;		/**< used to determine if the node list needs to be reloaded */
+
+	std::vector<Player *> racer_list;
+	static bool collided;
 };
 
 /**
@@ -178,6 +195,8 @@ glm::vec3 find_next_neighbor_tile(std::vector<glm::vec3> tile_positions, std::ve
 * @param dimensions			dimensions of the tiles
 */
 CardinalDirection direction_to_next_tile(glm::vec3 current_tile, glm::vec3 next_tile, glm::vec3 dimensions);
+
+
 
 
 #endif
