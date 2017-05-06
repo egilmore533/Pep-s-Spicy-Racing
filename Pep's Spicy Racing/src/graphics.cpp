@@ -29,7 +29,7 @@ Graphics::Graphics()
 		exit(1);
 	}
 
-	//game_window.setFramerateLimit(15);
+	//game_window.setFramerateLimit(30);
 	//game_window.setMouseCursorGrabbed(true);
 	game_window.setVerticalSyncEnabled(true);
 	clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);

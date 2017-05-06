@@ -260,9 +260,12 @@ void singleplayer_mode()
 
 	stage.add_player(player);
 
+	Player *winner = NULL;
+	sf::Text winner_text;
+
 	//end TODO
 
-	while (singleplayer_running)
+	while (singleplayer_running && !winner)
 	{
 		sf::Event event;
 		while (Graphics::get_game_window()->pollEvent(event))
@@ -293,14 +296,14 @@ void singleplayer_mode()
 
 		stage.update_stage();
 
-		printf("lap number: %d\n", player->lap_number);
-
 		Entity_Manager::update_all();
 
 		camera->Camera::follow_entity(player->entity_component);
 		camera->Camera::view_matrix_look_at_target();
 
 		Physics::physics_step(Graphics::get_time().asMilliseconds());
+
+		winner = stage.get_winner();
 
 		Graphics::frame_begin();
 
@@ -336,6 +339,59 @@ void singleplayer_mode()
 		/*Drawing Code End*/
 
 		Graphics::next_frame();
+	}
+
+	if (winner)
+	{
+		sf::Font hud_font;
+		if (!hud_font.loadFromFile("fonts/Spicy.ttf"))
+		{
+			printf("dun goofed\n");
+		}
+
+		winner_text.setFont(hud_font);
+		winner_text.setCharacterSize(128);
+		winner_text.setFillColor(sf::Color::Red);
+		winner_text.setOutlineColor(sf::Color::Black);
+		winner_text.setOutlineThickness(6.0f);
+		winner_text.setPosition(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
+
+		if (player == winner)
+		{
+			winner_text.setString("You Win!");
+		}
+
+		singleplayer_running = 1;
+		while (singleplayer_running)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			{
+				singleplayer_running = 0;
+				pressed = true;
+			}
+
+			Graphics::frame_begin();
+
+			//this should be enabled for 2d sprites to have their transparency
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+			//this should be disabled for UI and HUD stuffs, but enabled for 3D
+			glDisable(GL_DEPTH_TEST);
+
+			Graphics::begin_draw_text();
+			Graphics::draw_text(winner_text);
+			Graphics::end_draw_text();
+
+			//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
+			//opengl is hard :(
+			glDisable(GL_BLEND);
+
+			glEnable(GL_DEPTH_TEST);
+			glDepthFunc(GL_LESS);
+
+			Graphics::next_frame();
+		}
 	}
 
 	clean_up_scene();

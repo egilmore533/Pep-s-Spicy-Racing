@@ -112,6 +112,8 @@ public:
 
 	void add_player(Player *p);
 
+	Player *get_winner();
+
 	//std::string  name;
 	//MusicPak *stage_music;
 

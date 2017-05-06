@@ -39,10 +39,7 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 
 	lap_number = 0;
 
-
-
 	//HUD components load
-
 	leader_1 = Sprite_Manager::create_sprite("json/GUI/sprites/joe_sprite.json");
 	item_backdrop = Sprite_Manager::create_sprite("json/GUI/sprites/wood_sprite.json");
 
@@ -66,7 +63,21 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 	speed.setOutlineThickness(4.0f);
 	speed.setPosition(mph.getPosition().x + speed.getLocalBounds().width + 10.0f, WINDOW_HEIGHT - 74);
 
+	lap_num_text.setFont(hud_font);
+	lap_num_text.setString(std::to_string(lap_number) + "/3");
+	lap_num_text.setCharacterSize(64);
+	lap_num_text.setFillColor(sf::Color::Red);
+	lap_num_text.setOutlineColor(sf::Color::Black);
+	lap_num_text.setOutlineThickness(4.0f);
+	lap_num_text.setPosition(WINDOW_WIDTH - (lap_num_text.getLocalBounds().width + 10.0f), WINDOW_HEIGHT - (lap_num_text.getLocalBounds().height + 10.0f));
 
+	lap_text.setFont(hud_font);
+	lap_text.setString("LAP");
+	lap_text.setCharacterSize(32);
+	lap_text.setFillColor(sf::Color::Red);
+	lap_text.setOutlineColor(sf::Color::Black);
+	lap_text.setOutlineThickness(2.0f);
+	lap_text.setPosition(WINDOW_WIDTH - (lap_text.getLocalBounds().width + 50.0f), WINDOW_HEIGHT - (lap_num_text.getLocalBounds().height + 42));
 
 }
 
@@ -80,6 +91,9 @@ void Player::draw_player_hud()
 	Graphics::begin_draw_text();
 	Graphics::draw_text(speed);
 	Graphics::draw_text(mph);
+	Graphics::draw_text(lap_text);
+	lap_num_text.setString(std::to_string(lap_number) + "/3");
+	Graphics::draw_text(lap_num_text);
 	Graphics::end_draw_text();
 }
 

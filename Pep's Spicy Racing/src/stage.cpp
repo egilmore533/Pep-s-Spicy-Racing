@@ -530,3 +530,15 @@ void Stage::add_player(Player *p)
 	p->check_this_node = node_list[0];
 }
 
+Player *Stage::get_winner()
+{
+	for (int i = 0; i < racer_list.size(); i++)
+	{
+		if (racer_list[i]->lap_number > 3)
+		{
+			return racer_list[i];
+		}
+	}
+	return NULL;
+}
+
