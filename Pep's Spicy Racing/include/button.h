@@ -14,6 +14,8 @@ public:
 	*/
 	Button(std::string button_def_file);
 
+	~Button();
+
 	/**
 	* @brief updates the button's state and runs the callback on click
 	*/

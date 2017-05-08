@@ -40,8 +40,16 @@ Stage::Stage(std::string stage_def_filepath)
 Stage::~Stage()
 {
 	Mesh_Manager::dereference_mesh(tile_mesh->filepath);
+	Mesh_Manager::dereference_mesh(wall_mesh->filepath);
+	Mesh_Manager::dereference_mesh(node_mesh->filepath);
 	Texture_Manager::dereference_texture(tile_texture->filepath);
 	Shader_Manager::dereference_shader(shader->shader_def_file);
+	clear_nodes();
+
+	for (int i = 0; i < racer_list.size(); i++)
+	{
+		delete racer_list[i];
+	}
 }
 
 void Stage::draw_stage(Camera *camera, Entity *single_light)
@@ -70,6 +78,8 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glActiveTexture(GL_TEXTURE0);
 
 		tile_mesh->Mesh::draw(shader->program);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	for (int i = 0; i < wall_position_data.size(); i++)
@@ -94,36 +104,40 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glActiveTexture(GL_TEXTURE0);
 
 		wall_mesh->Mesh::draw(shader->program);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	/*
-	for (int i = 0; i < node_list.size(); i++)
-	{
-		glm::vec4 color = glm::vec4(1.0f);
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(node_list[i].position.x, node_list[i].position.y, node_list[i].position.z));
-		
-		//no rotate or scale
-		model = glm::rotate(model, glm::radians(node_list[i].rotation), glm::vec3(0, 1, 0));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 11.0f));
+	//
+	//for (int i = 0; i < node_list.size(); i++)
+	//{
+	//	glm::vec4 color = glm::vec4(1.0f);
+	//	glm::mat4 model = glm::mat4(1.0f);
+	//	model = glm::translate(model, glm::vec3(node_list[i].position.x, node_list[i].position.y, node_list[i].position.z));
+	//	
+	//	//no rotate or scale
+	//	model = glm::rotate(model, glm::radians(node_list[i].rotation), glm::vec3(0, 1, 0));
+	//	model = glm::scale(model, glm::vec3(2.0f, 1.0f,1.0f));
 
-		glUniform4fv(color_location, 1, &color[0]);
-		glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
+	//	glUniform4fv(color_location, 1, &color[0]);
+	//	glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
 
-		glUniformMatrix4fv(view_location, 1, GL_FALSE, &camera->Camera::get_view_matrix()[0][0]);
-		glUniformMatrix4fv(projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
+	//	glUniformMatrix4fv(view_location, 1, GL_FALSE, &camera->Camera::get_view_matrix()[0][0]);
+	//	glUniformMatrix4fv(projection_location, 1, GL_FALSE, &camera->Camera::get_projection_matrix()[0][0]);
 
-		glUniform4f(light_color_location, single_light->color_data.x, single_light->color_data.y, single_light->color_data.z, single_light->color_data.w);
-		glUniform3f(light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
-		glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
+	//	glUniform4f(light_color_location, single_light->color_data.x, single_light->color_data.y, single_light->color_data.z, single_light->color_data.w);
+	//	glUniform3f(light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
+	//	glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tile_texture->get_texture());
-		glActiveTexture(GL_TEXTURE0);
+	//	glActiveTexture(GL_TEXTURE0);
+	//	glBindTexture(GL_TEXTURE_2D, tile_texture->get_texture());
+	//	glActiveTexture(GL_TEXTURE0);
 
-		node_mesh->Mesh::draw(shader->program);
-	}
-	*/
+	//	node_mesh->Mesh::draw(shader->program);
+
+	//	glBindTexture(GL_TEXTURE_2D, 0);
+	//}
+	//
 }
 
 void Stage::load_theme_data(std::string theme_filepath)
@@ -154,7 +168,7 @@ void Stage::load_theme_data(std::string theme_filepath)
 	wall_texture = Texture_Manager::create_texture(wall["texture-filepath"], true, true);
 
 	//hard coded debug sphere
-	node_mesh = Mesh_Manager::create_mesh("models/test_plane.obj");
+	node_mesh = Mesh_Manager::create_mesh("models/sphere.obj");
 
 	//now lets set up the shader program
 	shader = Shader_Manager::create_shader(theme["shader-program"]);
@@ -325,8 +339,8 @@ Node Stage::get_cut_corner_nodes(glm::vec3 current_tile, glm::vec3 next_tile, No
 
 void Stage::get_center_oriented_path()
 {
-	node_list.clear();
-	node_id_num = 0;
+	clear_nodes();
+
 	get_center_oriented_nodes(tile_positions_in_order[0], tile_positions_in_order[1], true);
 
 	for (int i = 1; i < tile_positions_in_order.size(); i++)
@@ -350,8 +364,7 @@ void Stage::get_center_oriented_path()
 
 void Stage::get_cut_corner_path()
 {
-	node_list.clear();
-	node_id_num = 0;
+	clear_nodes();
 
 	Node prev_node;
 
@@ -374,6 +387,18 @@ void Stage::get_cut_corner_path()
 		prev_node = get_cut_corner_nodes(current_tile, next_tile, prev_node, false);
 	}
 	current_path_type = CutCorners;
+}
+
+
+void Stage::clear_nodes()
+{
+	node_list.clear();
+	node_id_num = 0;
+
+	for (int i = 0; i < path_rigid_bodies.size(); i++)
+	{
+		Physics::delete_rigid_body(path_rigid_bodies[i].id_num);
+	}
 }
 
 void Stage::update_stage() 
@@ -401,7 +426,7 @@ void Stage::update_stage()
 		
 		for (int i = 0; i < node_list.size(); i++)
 		{
-			path_rigid_bodies.push_back(Physics::create_cube_body_trigger(node_list[i].position, glm::vec3(1.0f, 1.0f, 20.0f), node_list[i].rotation, 1000.0f));
+			path_rigid_bodies.push_back(Physics::create_cube_body_trigger(node_list[i].position, glm::vec3(2.0f, 2.0f, 30.0f), node_list[i].rotation, 1000.0f));
 		}
 		
 	}
@@ -461,7 +486,6 @@ glm::vec3 find_next_neighbor_tile(std::vector<glm::vec3> tile_positions, std::ve
 		bool z_aligned = z_diff == 0.0f;
 		bool x_aligned = x_diff == 0.0f;
 
-		bool north, south, east, west;
 		//if we are on the same x or z axis we might have a connecting tile
 		if (z_aligned || x_aligned)
 		{

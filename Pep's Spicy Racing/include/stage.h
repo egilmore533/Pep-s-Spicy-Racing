@@ -98,6 +98,8 @@ public:
 	*/
 	Node get_cut_corner_nodes(glm::vec3 current_tile, glm::vec3 next_tile, Node previous_node, bool finish_tile);
 
+	void clear_nodes();
+
 	/**
 	* @brief uses get_center_oriented_nodes to populate node_list
 	*/

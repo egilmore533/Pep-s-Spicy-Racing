@@ -9,7 +9,10 @@
 int current_theme_index;
 int theme_list_size;
 
-void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm::vec2 offsets)
+int current_special_index;
+int special_list_size;
+
+Level_Editor::Level_Editor(unsigned int rows, unsigned int columns, glm::vec2 offsets)
 {
 	max_grid_columns = columns;
 	max_grid_rows = rows;
@@ -19,6 +22,10 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 	activated_tile_sprite = Sprite_Manager::create_sprite("json/GUI/sprites/activated_grid_sprite.json");		//tile that has been clicked on and added to the list of activated tiles (added to the stage)
 	highlighted_tile_sprite = Sprite_Manager::create_sprite("json/GUI/sprites/highlighted_grid_sprite.json");	//the tile that has the cursor over it
 	start_tile = Sprite_Manager::create_sprite("json/GUI/sprites/start_sprite.json");							//the sprite for the start position in the race
+	
+	speed_pad = Sprite_Manager::create_sprite("json/GUI/sprites/speed_pad_sprite.json");
+	item_box = Sprite_Manager::create_sprite("json/GUI/sprites/item_box_sprite.json");
+
 	start_tile_set = false;
 	
 	//lets fill the grid positions with the configuration we have
@@ -31,6 +38,12 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 
 	}
 
+	if (!editor_font.loadFromFile("fonts/Spicy.ttf"))
+	{
+		printf("dun goofed\n");
+	}
+
+	//theme settings stuff
 	theme_list_size = 0;
 
 	this->add_theme_to_list("json/stage_themes/spicy.json", "json/GUI/sprites/spicy_theme_sprite.json");
@@ -52,6 +65,72 @@ void Level_Editor::configure_editor(unsigned int rows, unsigned int columns, glm
 	theme_text.setCharacterSize(64);
 	theme_text.setPosition((WINDOW_WIDTH - theme_text.getLocalBounds().width - 75.0f) - (theme_text.getLocalBounds().width / 2.0f), 20);
 	
+
+
+	special_text.setFont(editor_font);
+	special_text.setString("Right Click Placement");
+	special_text.setFillColor(sf::Color::Red);
+	special_text.setOutlineColor(sf::Color::Black);
+	special_text.setOutlineThickness(2.0f);
+	special_text.setCharacterSize(24);
+	special_text.setPosition((WINDOW_WIDTH - special_text.getLocalBounds().width - 75.0f) - (special_text.getLocalBounds().width / 2.0f), 320);
+
+	special_item_left_arrow = new Button("json/GUI/buttons/level_editor/special_left_arrow.json");
+	special_item_left_arrow->callback = &special_left_cycle;
+
+	special_item_right_arrow = new Button("json/GUI/buttons/level_editor/special_right_arrow.json");
+	special_item_right_arrow->callback = &special_right_cycle;
+
+	finish_line_text.setFont(editor_font);
+	finish_line_text.setString("Finish Line");
+	finish_line_text.setFillColor(sf::Color::Red);
+	finish_line_text.setOutlineColor(sf::Color::Black);
+	finish_line_text.setOutlineThickness(2.0f);
+	finish_line_text.setCharacterSize(32);
+	finish_line_text.setPosition(special_item_left_arrow->background->screen_position.x + special_item_left_arrow->background->size.x + 40.0f, 440);
+
+	speed_pad_text.setFont(editor_font);
+	speed_pad_text.setString("Speed Pad");
+	speed_pad_text.setFillColor(sf::Color::Red);
+	speed_pad_text.setOutlineColor(sf::Color::Black);
+	speed_pad_text.setOutlineThickness(2.0f);
+	speed_pad_text.setCharacterSize(32);
+	speed_pad_text.setPosition(special_item_left_arrow->background->screen_position.x + special_item_left_arrow->background->size.x + 40.0f, 440);
+
+	
+	item_box_text.setFont(editor_font);
+	item_box_text.setString("Item Box");
+	item_box_text.setFillColor(sf::Color::Red);
+	item_box_text.setOutlineColor(sf::Color::Black);
+	item_box_text.setOutlineThickness(2.0f);
+	item_box_text.setCharacterSize(32);
+	item_box_text.setPosition(special_item_left_arrow->background->screen_position.x + special_item_left_arrow->background->size.x + 40.0f, 440);
+
+
+	//special settings stuff
+	special_list_size = 0;
+
+	this->add_special_to_list("json/entities/finish_line.json", finish_line_text);
+	this->add_special_to_list("json/entities/speed_pad.json", speed_pad_text);
+	this->add_special_to_list("json/entities/item_box.json", item_box_text);
+
+	current_special_index = 0;
+}
+
+Level_Editor::~Level_Editor()
+{
+	Sprite_Manager::delete_sprite(grid_tile_sprite->id);
+	Sprite_Manager::delete_sprite(activated_tile_sprite->id);
+	Sprite_Manager::delete_sprite(highlighted_tile_sprite->id);
+	Sprite_Manager::delete_sprite(start_tile->id);
+	Sprite_Manager::delete_sprite(speed_pad->id);
+	Sprite_Manager::delete_sprite(item_box->id);
+
+	delete theme_left_arrow_button;
+	delete theme_right_arrow_button;
+
+	delete special_item_left_arrow;
+	delete special_item_right_arrow;
 }
 
 void Level_Editor::add_theme_to_list(std::string theme_filepath, std::string theme_sprite_filepath)
@@ -61,12 +140,22 @@ void Level_Editor::add_theme_to_list(std::string theme_filepath, std::string the
 	theme_key_list.push_back(theme_filepath);
 }
 
+void Level_Editor::add_special_to_list(std::string special_def, sf::Text special_text)
+{
+	special_text_map.insert(std::pair<std::string, sf::Text>(special_def, special_text));
+	special_list_size++;
+	special_list.push_back(special_def);
+}
+
 void Level_Editor::update_editor()
 {
 	mouse_position = sf::Mouse::getPosition(*Graphics::get_game_window());
 
 	theme_left_arrow_button->update();
 	theme_right_arrow_button->update();
+
+	special_item_left_arrow->update();
+	special_item_right_arrow->update();
 
 	bool cursor_on_grid = false;
 	for (int i = 0; i < max_grid_columns * max_grid_rows; i++)
@@ -174,8 +263,16 @@ void Level_Editor::draw_editor(Camera *camera)
 	theme_left_arrow_button->draw_background(camera);
 	theme_right_arrow_button->draw_background(camera);
 
+	special_item_left_arrow->draw_background(camera);
+	special_item_right_arrow->draw_background(camera);
+
 	Graphics::begin_draw_text();
 	Graphics::draw_text(theme_text);
+	for (int i = 0; i < special_text_map.size(); i++)
+	{
+		Graphics::draw_text(special_text_map[special_list[current_special_index]]);
+	}
+	Graphics::draw_text(special_text);
 	Graphics::end_draw_text();
 }
 
@@ -207,7 +304,6 @@ void theme_left_cycle()
 	{
 		current_theme_index = theme_list_size - 1;
 	}
-	printf("%d\n", current_theme_index);
 }
 
 void theme_right_cycle()
@@ -217,5 +313,22 @@ void theme_right_cycle()
 	{
 		current_theme_index = 0;
 	}
-	printf("%d\n", current_theme_index);
+}
+
+void special_left_cycle()
+{
+	current_special_index--;
+	if (current_special_index < 0)
+	{
+		current_special_index = special_list_size - 1;
+	}
+}
+
+void special_right_cycle()
+{
+	current_special_index++;
+	if (current_special_index >= special_list_size)
+	{
+		current_special_index = 0;
+	}
 }

@@ -40,6 +40,7 @@ Entity::Entity()
 Entity::~Entity()
 {
 	//decrement the mesh/model, shader, etc. here
+	slog("delete");
 }
 
 void Entity::add_rigid_body(glm::vec3 dimensions)

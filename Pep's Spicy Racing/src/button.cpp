@@ -15,6 +15,11 @@ void load_my_font()
 	}
 }
 
+Button::~Button()
+{
+	Sprite_Manager::delete_sprite(background->id);
+}
+
 Button::Button(std::string button_def_file)
 {
 	json def = load_from_def(button_def_file);

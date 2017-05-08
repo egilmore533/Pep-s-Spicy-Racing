@@ -126,6 +126,7 @@ void Sprite_Manager::draw(Camera *cam, int sprite_id)
 	glBindVertexArray(manager->quad_vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 }
 

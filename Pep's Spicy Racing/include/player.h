@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 
 #include "entity_manager.h"
+#include "sprite_manager.h"
 #include "camera.h"
 
 /**
@@ -27,6 +28,8 @@ public:
 	*/
 	Player(std::string racer_def_file, glm::vec3 position, float rotation);
 
+	~Player();
+
 	void draw_player_hud();
 
 	/**
@@ -48,7 +51,6 @@ public:
 	sf::Text speed;
 
 	sf::Text lap_text;
-	sf::Text lap_max;
 	sf::Text lap_num_text;
 };
 

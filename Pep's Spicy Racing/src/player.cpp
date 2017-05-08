@@ -2,7 +2,6 @@
 
 #include "graphics.h"
 #include "json_helper.h"
-#include "sprite_manager.h"
 #include "player.h"
 
 Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
@@ -78,6 +77,14 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation)
 	lap_text.setOutlineColor(sf::Color::Black);
 	lap_text.setOutlineThickness(2.0f);
 	lap_text.setPosition(WINDOW_WIDTH - (lap_text.getLocalBounds().width + 50.0f), WINDOW_HEIGHT - (lap_num_text.getLocalBounds().height + 42));
+
+}
+
+Player::~Player()
+{
+	Entity_Manager::delete_entity(entity_component->id);
+	Sprite_Manager::delete_sprite(leader_1->id);
+	Sprite_Manager::delete_sprite(item_backdrop->id);
 
 }
 

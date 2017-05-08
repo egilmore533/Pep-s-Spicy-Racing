@@ -136,6 +136,9 @@ void Entity_Manager::delete_entity(int entity_id)
 		Shader_Manager::dereference_shader(manager->entity_list[i]->shader->shader_def_file);
 		Mesh_Manager::dereference_mesh(manager->entity_list[i]->mesh->filepath);
 		Texture_Manager::dereference_texture(manager->entity_list[i]->texture->filepath);
+		
+		Physics::delete_rigid_body(manager->entity_list[i]->body.id_num);
+		
 		return;
 	}
 }
@@ -253,5 +256,7 @@ void Entity_Manager::draw_all(Camera *camera, Entity *single_light)
 		glActiveTexture(GL_TEXTURE0);
 
 		manager->entity_list[i]->draw(manager->entity_list[i]);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

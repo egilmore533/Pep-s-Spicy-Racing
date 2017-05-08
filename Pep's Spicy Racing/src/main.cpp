@@ -21,31 +21,31 @@
 
 #include "button.h"
 
-class BulletDebugDrawer_DeprecatedOpenGL : public btIDebugDraw {
-public:
-	void SetMatrices(glm::mat4 pViewMatrix, glm::mat4 pProjectionMatrix) {
-		glUseProgram(0); // Use Fixed-function pipeline (no shaders)
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(&pViewMatrix[0][0]);
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(&pProjectionMatrix[0][0]);
-	}
-	virtual void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) {
-		glColor3f(color.x(), color.y(), color.z());
-		glBegin(GL_LINES);
-		glVertex3f(from.x(), from.y(), from.z());
-		glVertex3f(to.x(), to.y(), to.z());
-		glEnd();
-	}
-	virtual void drawContactPoint(const btVector3 &, const btVector3 &, btScalar, int, const btVector3 &) {}
-	virtual void reportErrorWarning(const char *) {}
-	virtual void draw3dText(const btVector3 &, const char *) {}
-	virtual void setDebugMode(int p) {
-		m = p;
-	}
-	int getDebugMode(void) const { return 3; }
-	int m;
-};
+//class BulletDebugDrawer_DeprecatedOpenGL : public btIDebugDraw {
+//public:
+//	void SetMatrices(glm::mat4 pViewMatrix, glm::mat4 pProjectionMatrix) {
+//		glUseProgram(0); // Use Fixed-function pipeline (no shaders)
+//		glMatrixMode(GL_MODELVIEW);
+//		glLoadMatrixf(&pViewMatrix[0][0]);
+//		glMatrixMode(GL_PROJECTION);
+//		glLoadMatrixf(&pProjectionMatrix[0][0]);
+//	}
+//	virtual void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) {
+//		glColor3f(color.x(), color.y(), color.z());
+//		glBegin(GL_LINES);
+//		glVertex3f(from.x(), from.y(), from.z());
+//		glVertex3f(to.x(), to.y(), to.z());
+//		glEnd();
+//	}
+//	virtual void drawContactPoint(const btVector3 &, const btVector3 &, btScalar, int, const btVector3 &) {}
+//	virtual void reportErrorWarning(const char *) {}
+//	virtual void draw3dText(const btVector3 &, const char *) {}
+//	virtual void setDebugMode(int p) {
+//		m = p;
+//	}
+//	int getDebugMode(void) const { return 3; }
+//	int m;
+//};
 
 void singleplayer_mode();
 
@@ -54,9 +54,11 @@ void level_editor();
 Button *singleplayer_button;
 Button *level_editor_button;
 
-BulletDebugDrawer_DeprecatedOpenGL mydebugdrawer;
+//BulletDebugDrawer_DeprecatedOpenGL mydebugdrawer;
 
 glm::vec4 menu_clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
+
+sf::Text fps;
 
 static bool pressed = false;
 
@@ -79,6 +81,7 @@ void clean_up_scene()
 
 int main()
 {
+	//opengl is hard :(
 	int game_running = 1;
 
 	int i;
@@ -103,7 +106,7 @@ int main()
 
 	Physics physics;
 
-	physics.world->setDebugDrawer(&mydebugdrawer);
+	//physics.world->setDebugDrawer(&mydebugdrawer);
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	Camera *cam = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
@@ -125,7 +128,6 @@ int main()
 	menu_text.setCharacterSize(128);
 	menu_text.setPosition((WINDOW_WIDTH / 2.0f) - (menu_text.getLocalBounds().width / 2.0f), 100);
 
-	sf::Text fps;
 	fps.setFont(hud_font);
 	fps.setFillColor(sf::Color::Red);
 	fps.setCharacterSize(24);
@@ -162,7 +164,7 @@ int main()
 
 
 		Graphics::draw_text(menu_text);
-		//Graphics::draw_text(fps);
+		Graphics::draw_text(fps);
 
 		Graphics::end_draw_text();
 
@@ -183,9 +185,7 @@ void level_editor()
 
 	Graphics::set_clear_color(glm::vec4(0.0f, 0.0f, 0.6f, 1.0f));
 
-	Level_Editor editor;
-
-	editor.configure_editor(7, 10, glm::vec2(10, 20));
+	Level_Editor editor(7, 10, glm::vec2(10, 20));
 
 	//turn off depth test for UI/HUD elements
 	glDisable(GL_DEPTH_TEST);
@@ -196,6 +196,7 @@ void level_editor()
 
 	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(0, 0, 0));
+
 
 
 	while (editor_running)
@@ -228,35 +229,26 @@ void level_editor()
 
 	editor.save_and_exit("json/levels/created_level.json");
 
-	clean_up_scene();
+	Entity_Manager::delete_entity(test_cube->id);
 
 	return;
 }
 
 void singleplayer_mode()
 {
+	bool debug_rigid_bodies = false;
 	int singleplayer_running = 1;
 
 	Stage stage = Stage("json/levels/created_level.json");
 
 	Graphics::set_clear_color(glm::vec4(stage.background_color.x, stage.background_color.y, stage.background_color.z, 1.0f));
 
-	glm::vec3 cameraPosition = glm::vec3(-3, 20, 28);
+	glm::vec3 cameraPosition = glm::vec3(0, 20,0);
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
 	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.node_list[0].position.x, stage.node_list[0].position.y + 0.5, stage.node_list[0].position.z), stage.node_list[0].rotation);
 
-	//this will be our light
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
-
-	//test UI elements
-
-	//this should be enabled for 2d sprites to have their transparency
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	//this should be disabled for UI and HUD stuffs, but enabled for 3D
-	glDisable(GL_DEPTH_TEST);
 
 	stage.add_player(player);
 
@@ -267,6 +259,7 @@ void singleplayer_mode()
 
 	while (singleplayer_running && !winner)
 	{
+		bool debug_pressed = false;
 		sf::Event event;
 		while (Graphics::get_game_window()->pollEvent(event))
 		{
@@ -291,19 +284,43 @@ void singleplayer_mode()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 			{
 				//set path type to SmartTurns
+				stage.path_type = SmartTurns;
 			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
+			{
+				if (!debug_pressed)
+				{
+					if (!debug_rigid_bodies)
+						debug_rigid_bodies = true;
+					else
+						debug_rigid_bodies = false;
+
+					debug_pressed = true;
+				}
+			}
+			else
+				debug_pressed = false;
 		}
+
+		/*camera->get_keyboard_input();
+		camera->get_mouse_input();
+		camera->view_matrix_look_forward();*/
+
+		Entity_Manager::update_all();
 
 		stage.update_stage();
 
-		Entity_Manager::update_all();
+		Physics::physics_step(Graphics::get_time().asMilliseconds());
 
 		camera->Camera::follow_entity(player->entity_component);
 		camera->Camera::view_matrix_look_at_target();
 
-		Physics::physics_step(Graphics::get_time().asMilliseconds());
+
 
 		winner = stage.get_winner();
+		if (winner)
+			break;
 
 		Graphics::frame_begin();
 
@@ -313,11 +330,11 @@ void singleplayer_mode()
 
 		Entity_Manager::draw_all(camera, test_cube);
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		/*if (debug_rigid_bodies || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
 			mydebugdrawer.SetMatrices(camera->get_view_matrix(), camera->get_projection_matrix());
 			Physics::world->debugDrawWorld();
-		}
+		}*/
 
 		//this should be enabled for 2d sprites to have their transparency
 		glEnable(GL_BLEND);
@@ -329,9 +346,14 @@ void singleplayer_mode()
 		player->draw_player_hud();
 
 		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
-		//opengl is hard :(
+		
 		glDisable(GL_BLEND);
 
+		Graphics::begin_draw_text();
+
+		fps.setString(std::to_string(Graphics::get_delta_time().asMilliseconds()));
+		Graphics::draw_text(fps);
+		Graphics::end_draw_text();
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
@@ -354,7 +376,7 @@ void singleplayer_mode()
 		winner_text.setFillColor(sf::Color::Red);
 		winner_text.setOutlineColor(sf::Color::Black);
 		winner_text.setOutlineThickness(6.0f);
-		winner_text.setPosition(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f);
+		winner_text.setPosition((WINDOW_WIDTH / 2.0f) - (winner_text.getLocalBounds().width / 2.0f), (WINDOW_HEIGHT / 2.0f) - (winner_text.getLocalBounds().height / 2.0f));
 
 		if (player == winner)
 		{
@@ -394,7 +416,7 @@ void singleplayer_mode()
 		}
 	}
 
-	clean_up_scene();
+	Entity_Manager::delete_entity(test_cube->id);
 
 	return;
 }

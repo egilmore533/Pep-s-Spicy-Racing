@@ -15,7 +15,9 @@ public:
 	* @param columns	the number of columns in the grid
 	* @param offsets	the offset of the tiles in the grid
 	*/
-	void configure_editor(unsigned int rows, unsigned int columns, glm::vec2 offsets);
+	Level_Editor(unsigned int rows, unsigned int columns, glm::vec2 offsets);
+
+	~Level_Editor();
 
 	/**
 	* @brief updates the data in the editor's activated positions and also determines whether to draw the highlighted tile or not (should only draw the highlighted sprite if the cursor is on the grid)
@@ -39,11 +41,15 @@ public:
 	*/
 	void add_theme_to_list(std::string theme_filepath, std::string theme_sprite_filepath);
 
+	void add_special_to_list(std::string special_def, sf::Text special_text);
+
 private:
 	Sprite *grid_tile_sprite;						/**< empty tile sprite */
 	Sprite *activated_tile_sprite;					/**< tile that has been clicked on and added to the list of activated tiles (added to the stage) */
 	Sprite *highlighted_tile_sprite;				/**< the tile that has the cursor over it */
 	Sprite *start_tile;								/**< the start tile for the race */
+	Sprite *speed_pad;
+	Sprite *item_box;
 
 	sf::Vector2i mouse_position;					/**< stores the player's cursor position to determine which tile is highlighted and add that to the activated positions*/
 	std::vector<glm::vec2> grid_positions;			/**< just standard grid used to determine where to place the tiles (highlighted, activated, empty) */
@@ -61,14 +67,22 @@ private:
 	std::map<std::string, Sprite *> theme_sprite_map;		/**< map of themes and their repsective sprites */
 	std::vector<std::string> theme_key_list;				/**< list of the theme keys, used to index the theme sprite map */
 
+	std::map<std::string, sf::Text> special_text_map;	/**< map of the special features and their respective text components */
+	std::vector<std::string> special_list;				/**< list of all the speical features that can be added to the stage that */
+
 	Button *theme_left_arrow_button;				/**< button that will cycle through to the previous theme */
 	Button *theme_right_arrow_button;				/**< button that will cycle through to the next theme */
 
-	//Button *special_item_left_arrow;
-	//Button *special_item_right_arrow;
+	Button *special_item_left_arrow;
+	Button *special_item_right_arrow;
 
 	sf::Font editor_font;		/**< the font all the GUI elements will use */
 	sf::Text theme_text;		/**< the text above the theme settings */
+	sf::Text special_text;		/**< the text above the special settings */
+
+	sf::Text finish_line_text;
+	sf::Text speed_pad_text;
+	sf::Text item_box_text;
 };
 
 /**
@@ -81,5 +95,8 @@ void theme_left_cycle();
 */
 void theme_right_cycle();
 
+void special_right_cycle();
+
+void special_left_cycle();
 
 #endif

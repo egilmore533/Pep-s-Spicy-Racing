@@ -26,7 +26,7 @@ Camera::Camera(glm::vec2 screen_size, glm::vec3 pos)
 	vertical_angle = 0.0f;
 
 	//set mouse to center at the start before taking input 
-	sf::Mouse::setPosition(sf::Vector2i(screen_dimensions.x / 2, screen_dimensions.y / 2), *Graphics::get_game_window());
+	//sf::Mouse::setPosition(sf::Vector2i(screen_dimensions.x / 2, screen_dimensions.y / 2), *Graphics::get_game_window());
 }
 
 glm::mat4 Camera::get_view_matrix()
