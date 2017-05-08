@@ -5,7 +5,7 @@
 #include "shader_manager.h"
 #include "texture_manager.h"
 #include "camera.h"
-#include "player.h"
+#include "racer.h"
 
 /**
 * @enum Cardinal Directions of the tiles, used to quickly and readibly determine which direction a tile is in
@@ -112,9 +112,9 @@ public:
 
 	static Node get_next_node_in_path(Node current_node);
 
-	void add_player(Player *p);
+	void add_racer(Racer *r);
 
-	Player *get_winner();
+	Racer *get_winner();
 
 	//std::string  name;
 	//MusicPak *stage_music;
@@ -156,19 +156,19 @@ public:
 
 	struct node_collision : public btCollisionWorld::ContactResultCallback
 	{
-		node_collision(Node node, Player *player) : n(node), p(player) {}
+		node_collision(Node node, Racer *racer) : n(node), r(racer) {}
 
 		Node n;
-		Player *p;
+		Racer *r;
 
 		virtual	btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
 		{
-			Node touched_node = p->check_this_node;
-			p->check_this_node = get_next_node_in_path(p->check_this_node);
+			Node touched_node = r->check_this_node;
+			r->check_this_node = get_next_node_in_path(r->check_this_node);
 
 			if (touched_node.finish_line_node)
 			{
-				p->lap_number++;
+				r->lap_number++;
 			}
 
 			return 0;
@@ -179,7 +179,7 @@ private:
 	int node_id_num;				/**< current node id number, used to id the nodes, in order as they appear on the stage */
 	PathType current_path_type;		/**< used to determine if the node list needs to be reloaded */
 
-	std::vector<Player *> racer_list;
+	std::vector<Racer *> racer_list;
 	static bool collided;
 };
 

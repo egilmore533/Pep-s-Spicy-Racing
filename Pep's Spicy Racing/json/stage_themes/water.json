@@ -6,8 +6,10 @@
   "tile-alt-color": [0.8, 0.77, 0.10, 1.0],
   "wall-def-file": "json/stage-walls/perfect-wall.json",
   "wall-color": [0.6, 0.45, 0.06, 1.0],
-  "shader-program": "json/shaders/toon_shader.json",
+  "shader-program": "json/shaders/toon_texture_shader.json",
   "background-color": [0.02, 0.56, 0.8, 1.0],
-  "background-alt-color": [0.18, 0.38, 0.65, 1.0]
+  "background-alt-color": [0.18, 0.38, 0.65, 1.0],
+  "wall_texture": "images/wood_planks.png",
+  "tile_texture": "images/sand.png"
 }
 }

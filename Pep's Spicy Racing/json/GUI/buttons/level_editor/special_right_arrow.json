@@ -1,0 +1,9 @@
+{
+"Button": {
+  "name": "Special Right Arrow Button",
+  "sprite_def_filepath": "json/GUI/sprites/special_right_arrow_sprite.json",
+  "position": [1450,428],
+  "size": [64, 64],
+  "rotation": 0
+}
+}

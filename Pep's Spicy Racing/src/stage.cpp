@@ -100,7 +100,7 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tile_texture->get_texture());
+		glBindTexture(GL_TEXTURE_2D, wall_texture->get_texture());
 		glActiveTexture(GL_TEXTURE0);
 
 		wall_mesh->Mesh::draw(shader->program);
@@ -157,7 +157,7 @@ void Stage::load_theme_data(std::string theme_filepath)
 
 	tile_mesh = Mesh_Manager::create_mesh(tile["model-filepath"]);
 	tile_color_data = glm::vec4(theme["tile-color"][0], theme["tile-color"][1], theme["tile-color"][2], theme["tile-color"][3]);
-	tile_texture = Texture_Manager::create_texture(tile["texture-filepath"], true, true);
+	tile_texture = Texture_Manager::create_texture(theme["tile_texture"], true, true);
 
 	//next lets handle the wall loading
 	json wall_def = load_from_def(wall_def_filepath);
@@ -165,7 +165,7 @@ void Stage::load_theme_data(std::string theme_filepath)
 
 	wall_mesh = Mesh_Manager::create_mesh(wall["model-filepath"]);
 	wall_color_data = glm::vec4(theme["wall-color"][0], theme["wall-color"][1], theme["wall-color"][2], theme["wall-color"][3]);
-	wall_texture = Texture_Manager::create_texture(wall["texture-filepath"], true, true);
+	wall_texture = Texture_Manager::create_texture(theme["wall_texture"], true, true);
 
 	//hard coded debug sphere
 	node_mesh = Mesh_Manager::create_mesh("models/sphere.obj");
@@ -433,9 +433,12 @@ void Stage::update_stage()
 
 	for (int i = 0; i < racer_list.size(); i++)
 	{
+		racer_list[i]->update();
+
 		node_collision hit_trigger(racer_list[i]->check_this_node, racer_list[i]);
 
 		Physics::world->contactPairTest(racer_list[i]->entity_component->body.rb, path_rigid_bodies[racer_list[i]->check_this_node.node_num].rb, hit_trigger);
+
 	}
 }
 
@@ -547,14 +550,14 @@ Node Stage::get_next_node_in_path(Node current_node)
 	}
 }
 
-void Stage::add_player(Player *p)
+void Stage::add_racer(Racer *r)
 {
-	racer_list.push_back(p);
+	racer_list.push_back(r);
 	
-	p->check_this_node = node_list[0];
+	r->check_this_node = node_list[0];
 }
 
-Player *Stage::get_winner()
+Racer *Stage::get_winner()
 {
 	for (int i = 0; i < racer_list.size(); i++)
 	{

@@ -4,9 +4,9 @@
   "icon": "json/sprites/racer_icons/pep.json",
   "acceleration_rate": 3.0,
   "deacceleration_rate": 1.0,
-  "top_speed": 6.0,
+  "top_speed": 1.0,
   "handling": 3.0,
   "mass": 3.0,
-  "color": [0.0, 1.0, 0.0, 1.0]
+  "color": [0.66, 0.0, 1.0, 1.0]
 }
 }

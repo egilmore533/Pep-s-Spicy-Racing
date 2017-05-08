@@ -15,37 +15,38 @@
 
 #include "physics.h"
 
+#include "ai_racer.h"
 #include "player.h"
 #include "level_editor.h"
 #include "stage.h"
 
 #include "button.h"
 
-//class BulletDebugDrawer_DeprecatedOpenGL : public btIDebugDraw {
-//public:
-//	void SetMatrices(glm::mat4 pViewMatrix, glm::mat4 pProjectionMatrix) {
-//		glUseProgram(0); // Use Fixed-function pipeline (no shaders)
-//		glMatrixMode(GL_MODELVIEW);
-//		glLoadMatrixf(&pViewMatrix[0][0]);
-//		glMatrixMode(GL_PROJECTION);
-//		glLoadMatrixf(&pProjectionMatrix[0][0]);
-//	}
-//	virtual void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) {
-//		glColor3f(color.x(), color.y(), color.z());
-//		glBegin(GL_LINES);
-//		glVertex3f(from.x(), from.y(), from.z());
-//		glVertex3f(to.x(), to.y(), to.z());
-//		glEnd();
-//	}
-//	virtual void drawContactPoint(const btVector3 &, const btVector3 &, btScalar, int, const btVector3 &) {}
-//	virtual void reportErrorWarning(const char *) {}
-//	virtual void draw3dText(const btVector3 &, const char *) {}
-//	virtual void setDebugMode(int p) {
-//		m = p;
-//	}
-//	int getDebugMode(void) const { return 3; }
-//	int m;
-//};
+class BulletDebugDrawer_DeprecatedOpenGL : public btIDebugDraw {
+public:
+	void SetMatrices(glm::mat4 pViewMatrix, glm::mat4 pProjectionMatrix) {
+		glUseProgram(0); // Use Fixed-function pipeline (no shaders)
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(&pViewMatrix[0][0]);
+		glMatrixMode(GL_PROJECTION);
+		glLoadMatrixf(&pProjectionMatrix[0][0]);
+	}
+	virtual void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) {
+		glColor3f(color.x(), color.y(), color.z());
+		glBegin(GL_LINES);
+		glVertex3f(from.x(), from.y(), from.z());
+		glVertex3f(to.x(), to.y(), to.z());
+		glEnd();
+	}
+	virtual void drawContactPoint(const btVector3 &, const btVector3 &, btScalar, int, const btVector3 &) {}
+	virtual void reportErrorWarning(const char *) {}
+	virtual void draw3dText(const btVector3 &, const char *) {}
+	virtual void setDebugMode(int p) {
+		m = p;
+	}
+	int getDebugMode(void) const { return 3; }
+	int m;
+};
 
 void singleplayer_mode();
 
@@ -54,7 +55,7 @@ void level_editor();
 Button *singleplayer_button;
 Button *level_editor_button;
 
-//BulletDebugDrawer_DeprecatedOpenGL mydebugdrawer;
+BulletDebugDrawer_DeprecatedOpenGL mydebugdrawer;
 
 glm::vec4 menu_clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
 
@@ -69,6 +70,8 @@ void reload_buttons()
 
 	level_editor_button = new Button("json/GUI/buttons/main_menu/level_editor.json");
 	level_editor_button->callback = &level_editor;
+
+	Graphics::set_clear_color(menu_clear_color);
 }
 
 void clean_up_scene()
@@ -106,7 +109,7 @@ int main()
 
 	Physics physics;
 
-	//physics.world->setDebugDrawer(&mydebugdrawer);
+	physics.world->setDebugDrawer(&mydebugdrawer);
 
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 6.0f);
 	Camera *cam = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
@@ -247,16 +250,21 @@ void singleplayer_mode()
 	Camera *camera = new Camera(glm::vec2(WINDOW_WIDTH, WINDOW_HEIGHT), cameraPosition);
 
 	Player *player = new Player("json/racers/standard_racer.json", glm::vec3(stage.node_list[0].position.x, stage.node_list[0].position.y + 0.5, stage.node_list[0].position.z), stage.node_list[0].rotation);
+	AI_Racer *ai_bot = new AI_Racer("json/racers/ai_racer.json", glm::vec3(stage.node_list[0].position.x + 9.0f, stage.node_list[0].position.y + 0.5, stage.node_list[0].position.z), stage.node_list[0].rotation);
 
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
 
-	stage.add_player(player);
+	stage.add_racer(player);
+	stage.add_racer(ai_bot);
 
-	Player *winner = NULL;
+	Racer *winner = NULL;
 	sf::Text winner_text;
 
 	//end TODO
+	//just to reset the game delat timer
 
+	Graphics::frame_begin();
+	Graphics::next_frame();
 	while (singleplayer_running && !winner)
 	{
 		bool debug_pressed = false;
@@ -307,9 +315,9 @@ void singleplayer_mode()
 		camera->get_mouse_input();
 		camera->view_matrix_look_forward();*/
 
-		Entity_Manager::update_all();
-
 		stage.update_stage();
+
+		Entity_Manager::update_all();
 
 		Physics::physics_step(Graphics::get_time().asMilliseconds());
 
@@ -330,11 +338,11 @@ void singleplayer_mode()
 
 		Entity_Manager::draw_all(camera, test_cube);
 
-		/*if (debug_rigid_bodies || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		if (debug_rigid_bodies || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
 			mydebugdrawer.SetMatrices(camera->get_view_matrix(), camera->get_projection_matrix());
 			Physics::world->debugDrawWorld();
-		}*/
+		}
 
 		//this should be enabled for 2d sprites to have their transparency
 		glEnable(GL_BLEND);
@@ -378,9 +386,13 @@ void singleplayer_mode()
 		winner_text.setOutlineThickness(6.0f);
 		winner_text.setPosition((WINDOW_WIDTH / 2.0f) - (winner_text.getLocalBounds().width / 2.0f), (WINDOW_HEIGHT / 2.0f) - (winner_text.getLocalBounds().height / 2.0f));
 
-		if (player == winner)
+		if (player->entity_component->id == winner->entity_component->id)
 		{
 			winner_text.setString("You Win!");
+		}
+		else
+		{
+			winner_text.setString("You Lose!");
 		}
 
 		singleplayer_running = 1;
