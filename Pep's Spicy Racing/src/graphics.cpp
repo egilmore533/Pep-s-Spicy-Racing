@@ -32,6 +32,7 @@ Graphics::Graphics()
 	//game_window.setFramerateLimit(30);
 	//game_window.setMouseCursorGrabbed(true);
 	game_window.setVerticalSyncEnabled(true);
+	game_window.setKeyRepeatEnabled(false);
 	clear_color = glm::vec4(0.0f, 0.0f, 0.6f, 0.0f);
 
 	glEnable(GL_DEPTH_TEST);

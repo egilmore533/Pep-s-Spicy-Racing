@@ -98,6 +98,7 @@ void Player::update(float delta_time)
 	else if (entity_component->current_speed < 0)
 		entity_component->current_speed = glm::min(entity_component->current_speed + entity_component->acceleration_rate / idle_slow, 0.0f);
 
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		forward = 1;

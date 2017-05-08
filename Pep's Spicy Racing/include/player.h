@@ -23,6 +23,8 @@ public:
 
 	void draw_player_hud_text();
 
+	void handle_player_input();
+
 	/**
 	* @brief the update's the player's position, rotation, speed and updates the model matrix accordingly
 	* @param ent	the player's entity component
@@ -45,6 +47,7 @@ public:
 
 	sf::Text lap_text;
 	sf::Text lap_num_text;
+	bool w, a, s, d;
 };
 
 /**

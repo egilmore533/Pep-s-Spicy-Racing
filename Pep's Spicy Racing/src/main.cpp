@@ -270,7 +270,7 @@ void singleplayer_mode()
 		bool debug_pressed = false;
 		sf::Event event;
 
-		while (Graphics::get_game_window()->pollEvent(event))
+		if(Graphics::get_game_window()->pollEvent(event))
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 			{
