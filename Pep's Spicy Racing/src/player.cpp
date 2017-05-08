@@ -62,20 +62,21 @@ Player::~Player()
 
 }
 
-void Player::draw_player_hud()
+void Player::draw_player_hud_sprites()
 {
 	Sprite_Manager::draw(player_cam, leader_1->id);
 	Sprite_Manager::draw(player_cam, item_backdrop->id);
+}
 
+void Player::draw_player_hud_text()
+{
 	speed.setString(std::to_string((int)std::round(entity_component->current_speed / 10.0f)));
 	speed.setPosition(mph.getPosition().x - speed.getLocalBounds().width - 10.0f, WINDOW_HEIGHT - 74);
-	Graphics::begin_draw_text();
 	Graphics::draw_text(speed);
 	Graphics::draw_text(mph);
 	Graphics::draw_text(lap_text);
 	lap_num_text.setString(std::to_string(lap_number) + "/3");
 	Graphics::draw_text(lap_num_text);
-	Graphics::end_draw_text();
 }
 
 void Player::update_player_cam()
@@ -84,11 +85,10 @@ void Player::update_player_cam()
 	player_cam->view_matrix_look_at_target();
 }
 
-void Player::update()
+void Player::update(float delta_time)
 {
 	int forward;
 	forward = 0;
-	float delta_time = Graphics::get_delta_time().asSeconds();
 	bool turn_slow = false;
 	float idle_slow = 3.0f;
 
@@ -103,7 +103,7 @@ void Player::update()
 		forward = 1;
 		entity_component->current_speed += entity_component->acceleration_rate;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		forward = -1;
 		entity_component->current_speed -= entity_component->deacceleration_rate;
@@ -113,7 +113,7 @@ void Player::update()
 		entity_component->current_rotation -= entity_component->handling * 20 * delta_time;
 		turn_slow = true;
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		entity_component->current_rotation += entity_component->handling * 20 * delta_time;
 		turn_slow = true;

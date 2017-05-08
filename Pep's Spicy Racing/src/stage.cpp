@@ -1,6 +1,7 @@
 #include <simple_logger.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "json_helper.h"
+#include "graphics.h"
 #include "stage.h"
 
 std::vector<Node> Stage::node_list;
@@ -99,9 +100,12 @@ void Stage::draw_stage(Camera *camera, Entity *single_light)
 		glUniform3f(light_position_location, single_light->world_position.x, single_light->world_position.y, single_light->world_position.z);
 		glUniform3f(view_position_location, camera->get_position().x, camera->get_position().y, camera->get_position().z);
 
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, wall_texture->get_texture());
-		glActiveTexture(GL_TEXTURE0);
+		if (shader->shader_def_file != "json/shaders/toon_shader.json")
+		{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, wall_texture->get_texture());
+			glActiveTexture(GL_TEXTURE0);
+		}
 
 		wall_mesh->Mesh::draw(shader->program);
 
@@ -431,13 +435,16 @@ void Stage::update_stage()
 		
 	}
 
+	float delta_time = Graphics::get_delta_time().asSeconds();
 	for (int i = 0; i < racer_list.size(); i++)
 	{
-		racer_list[i]->update();
+		racer_list[i]->update(delta_time);
 
 		node_collision hit_trigger(racer_list[i]->check_this_node, racer_list[i]);
 
 		Physics::world->contactPairTest(racer_list[i]->entity_component->body.rb, path_rigid_bodies[racer_list[i]->check_this_node.node_num].rb, hit_trigger);
+
+		
 
 	}
 }

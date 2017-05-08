@@ -254,8 +254,8 @@ void singleplayer_mode()
 
 	Entity *test_cube = Entity_Manager::create_entity("json/entities/light-cube.json", glm::vec3(stage.start_position.x, stage.start_position.y + 4, stage.start_position.z));
 
-	stage.add_racer(player);
 	stage.add_racer(ai_bot);
+	stage.add_racer(player);
 
 	Racer *winner = NULL;
 	sf::Text winner_text;
@@ -269,6 +269,7 @@ void singleplayer_mode()
 	{
 		bool debug_pressed = false;
 		sf::Event event;
+
 		while (Graphics::get_game_window()->pollEvent(event))
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -277,23 +278,23 @@ void singleplayer_mode()
 				pressed = true;
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-			{
-				//set path type to CenterOriented
-				stage.path_type = CenterOriented;
-			}
+			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+			//{
+			//	//set path type to CenterOriented
+			//	stage.path_type = CenterOriented;
+			//}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-			{
-				//set path type to CutCorners
-				stage.path_type = CutCorners;
-			}
+			//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+			//{
+			//	//set path type to CutCorners
+			//	stage.path_type = CutCorners;
+			//}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-			{
-				//set path type to SmartTurns
-				stage.path_type = SmartTurns;
-			}
+			//else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+			//{
+			//	//set path type to SmartTurns
+			//	stage.path_type = SmartTurns;
+			//}
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab))
 			{
@@ -324,8 +325,6 @@ void singleplayer_mode()
 		camera->Camera::follow_entity(player->entity_component);
 		camera->Camera::view_matrix_look_at_target();
 
-
-
 		winner = stage.get_winner();
 		if (winner)
 			break;
@@ -351,17 +350,16 @@ void singleplayer_mode()
 		//this should be disabled for UI and HUD stuffs, but enabled for 3D
 		glDisable(GL_DEPTH_TEST);
 
-		player->draw_player_hud();
-
-		//but this needs to be disabled after all sprites have been drawn so the 3d assets are drawn properly
+		player->draw_player_hud_sprites();
 		
-		glDisable(GL_BLEND);
-
 		Graphics::begin_draw_text();
 
 		fps.setString(std::to_string(Graphics::get_delta_time().asMilliseconds()));
 		Graphics::draw_text(fps);
+		player->draw_player_hud_text();
 		Graphics::end_draw_text();
+
+		glDisable(GL_BLEND);
 
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
@@ -369,6 +367,7 @@ void singleplayer_mode()
 		/*Drawing Code End*/
 
 		Graphics::next_frame();
+
 	}
 
 	if (winner)

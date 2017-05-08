@@ -8,11 +8,10 @@ AI_Racer::AI_Racer(std::string racer_def_file, glm::vec3 position, float rotatio
 	entity_component->current_rotation = glm::abs(entity_component->current_rotation);
 }
 
-void AI_Racer::update()
+void AI_Racer::update(float delta_time)
 {
 	int forward;
 	forward = 0;
-	float delta_time = Graphics::get_delta_time().asSeconds();
 	bool turn_slow = false;
 	float idle_slow = 3.0f;
 

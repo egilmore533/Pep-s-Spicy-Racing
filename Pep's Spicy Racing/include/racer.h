@@ -38,7 +38,7 @@ public:
 	/**
 	* @brief update the racer's current state
 	*/
-	virtual void update();
+	virtual void update(float delta_time);
 
 	RacerType racer_type;
 	Entity *entity_component;			/**< the entity component of the racer */

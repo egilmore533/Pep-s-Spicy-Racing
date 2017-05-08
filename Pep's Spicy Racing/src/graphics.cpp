@@ -82,7 +82,7 @@ void Graphics::next_frame()
 	game_window.display();
 	if (game_delta_time.getElapsedTime().asMilliseconds() < 16.0f)
 	{
-		sf::Time time = sf::milliseconds(16);
+		sf::Time time = sf::milliseconds(game_delta_time.getElapsedTime().asMilliseconds() - 16.0f);
 		sf::sleep(time - game_delta_time.getElapsedTime());
 	}
 	game_delta_time.restart();

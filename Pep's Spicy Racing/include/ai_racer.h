@@ -28,7 +28,7 @@ public:
 	/**
 	* @brief update the ai racer's current rotation and movement to be twoards the node
 	*/
-	virtual void update();
+	virtual void update(float delta_time);
 
 	void update_driving_state();
 

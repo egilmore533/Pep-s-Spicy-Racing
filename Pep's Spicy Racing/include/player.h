@@ -19,13 +19,15 @@ public:
 
 	~Player();
 
-	void draw_player_hud();
+	void draw_player_hud_sprites();
+
+	void draw_player_hud_text();
 
 	/**
 	* @brief the update's the player's position, rotation, speed and updates the model matrix accordingly
 	* @param ent	the player's entity component
 	*/
-	virtual void update();
+	virtual void update(float delta_time);
 
 	/**
 	* @brief uses Camera's follow entity to posiition the camera behind the player, also updates the view matrix for the camera

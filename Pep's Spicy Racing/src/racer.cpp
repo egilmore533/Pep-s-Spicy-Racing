@@ -70,10 +70,8 @@ void draw(Entity *ent)
 	ent->mesh->Mesh::draw(ent->shader->program);
 }
 
-void Racer::update()
+void Racer::update(float delta_time)
 {
-	float delta_time = Graphics::get_delta_time().asSeconds();
-
 	//get gas/brake/reverse
 	//change velocity based on that combined with the acceleration and deacceleration rates from the entity
 	//update position based on the new velocity
