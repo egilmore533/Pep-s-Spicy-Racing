@@ -30,7 +30,7 @@ public:
 
 	std::string filepath;		/**< the filepath to this texture, used to identify different textures */
 	int reference_count;		/**< the number of times this texture is being referenced */
-	bool in_use;
+	bool in_use;				/**< flag to determine if the texture is in use for the manager*/
 
 private:
 	GLuint texture;				/**< the index for the texture */

@@ -23,6 +23,9 @@ public:
 	*/
 	AI_Racer(std::string racer_def_file, glm::vec3 position, float rotation);
 
+	/**
+	* @brief deletes nothing yet, but would be used if given a resource such as a sprite
+	*/
 	~AI_Racer();
 
 	/**
@@ -30,10 +33,13 @@ public:
 	*/
 	virtual void update(float delta_time);
 
+	/**
+	* @brief updates the driving state of the AI Racer, based on the turn needed
+	*/
 	void update_driving_state();
 
-	DrivingState state;
-	float target_rotation;
+	DrivingState state;		/**< the current driving state of the racer, determines input simialr to the players */
+	float target_rotation;	/**< target ortation of the racer */
 };
 
 /**

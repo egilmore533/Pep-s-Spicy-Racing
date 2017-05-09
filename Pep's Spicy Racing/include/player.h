@@ -17,17 +17,24 @@ public:
 	*/
 	Player(std::string racer_def_file, glm::vec3 position, float rotation);
 
+	/**
+	* @brief deletes the player's entity and HUD sprites
+	*/
 	~Player();
 
+	/**
+	* @brief draws the player's HUD sprites
+	*/
 	void draw_player_hud_sprites();
 
+	/**
+	* @brief draws the player's HUD text
+	*/
 	void draw_player_hud_text();
-
-	void handle_player_input();
 
 	/**
 	* @brief the update's the player's position, rotation, speed and updates the model matrix accordingly
-	* @param ent	the player's entity component
+	* @param delta_time		the time since the last frame
 	*/
 	virtual void update(float delta_time);
 
@@ -38,16 +45,19 @@ public:
 
 	Camera *player_cam;					/**< the camera that follows the player and is used to draw the game */
 
-	Sprite *leader_1;
-	Sprite *item_backdrop;
+	bool w, a, s, d;		/**< flags to determine the player's input */
 
-	sf::Font hud_font;
-	sf::Text mph;
-	sf::Text speed;
+	/////HUD Sprites
+	Sprite *leader_1;			/**< image for leader 1 */
+	Sprite *leader_2;			/**< image for leader 2 */
+	Sprite *item_backdrop;		/**< image for the backdrop of items and racers */
 
-	sf::Text lap_text;
-	sf::Text lap_num_text;
-	bool w, a, s, d;
+	sf::Font hud_font;		/**< font used for HUD text */
+	sf::Text mph;			/**< text that says mph */
+	sf::Text speed;			/**< text that says current speeds */
+
+	sf::Text lap_text;		/**< text that displays lap */
+	sf::Text lap_num_text;	/**< */
 };
 
 /**

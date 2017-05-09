@@ -98,6 +98,9 @@ public:
 	*/
 	Node get_cut_corner_nodes(glm::vec3 current_tile, glm::vec3 next_tile, Node previous_node, bool finish_tile);
 
+	/**
+	* @brief clears all nodes from the physics and the node list
+	*/
 	void clear_nodes();
 
 	/**
@@ -110,26 +113,40 @@ public:
 	*/
 	void get_cut_corner_path();
 
+	/**
+	* @brief	used to get the next node in the path, loops back to the start if the end is reached
+	*			static so it can be used in the collision struct for bullet
+	* @param	current_node	the current node that we want to use to find the next
+	* @return	Node		the next node from the given
+	*/
 	static Node get_next_node_in_path(Node current_node);
 
+	/**
+	* @brief adds a racer to the racer list for tracking each racer
+	* @param *r		the racer to add to the racer_list (can be a Player or a AI_Racer)
+	*/
 	void add_racer(Racer *r);
 
+	/**
+	* @brief checks and returns if any racer in the racer_list has won (lap counter is greater than 3)
+	* @return the winner of the winner
+	*/
 	Racer *get_winner();
 
 	//std::string  name;
 	//MusicPak *stage_music;
 
 	Mesh *tile_mesh;						/**< mesh that this stage uses to create its tiles */
-	glm::vec4 tile_color_data;
+	glm::vec4 tile_color_data;				/**< the color of the tiles */
 	Texture *tile_texture;					/**< the stage's texture for each tile */
 
 	Mesh *wall_mesh;						/**< the mesh for the stage's walls */
-	glm::vec4 wall_color_data;
+	glm::vec4 wall_color_data;				/**< the color of the walls */
 	Texture *wall_texture;					/**< texture for the walls */
 
 	Mesh *node_mesh;						/**< debug plane to be drawn to see nodes in relation to the stage */
 
-	glm::vec3 background_color;
+	glm::vec3 background_color;				/**< clear color of the window */
 
 	glm::vec3 tile_dimensions;					/**< the size of the tiles, used to draw, and determine node positions*/
 	std::vector<glm::vec3> tile_positions;		/**< the positions of each tile in the stage */
@@ -152,15 +169,27 @@ public:
 	std::vector<glm::vec3> tile_positions_in_order;		/**< position data for the actual race track, these are the tiles in order that the players need to go through */
 	PathType path_type;									/**< enumeration that determines what type of node list we have loaded here */
 	static std::vector<Node> node_list;					/**< list of all the nodes in the stage, in order, determines race position and will be used by the AI to determine how to move */
-	std::vector<rigid_body> path_rigid_bodies;	/**< list of the rigid body (triggers) that are associated with each node */
+	std::vector<rigid_body> path_rigid_bodies;			/**< list of the rigid body (triggers) that are associated with each node */
 
+	/**
+	* @struct event that will happen when a collision occurs between a player and a node in the node list
+	*/
 	struct node_collision : public btCollisionWorld::ContactResultCallback
 	{
+		/**
+		* @brief creates a collision event check 
+		*		 tests the given and a racer
+		* @param node		the node that collided with the player
+		* @param *racer		the racer that collided with the node
+		*/
 		node_collision(Node node, Racer *racer) : n(node), r(racer) {}
 
-		Node n;
-		Racer *r;
+		Node n;		/**< the node */
+		Racer *r;	/**< the racer*/
 
+		/**
+		* @brief bullet function that will run if a collision occurs, save the node and check if its the finish, increment lap number of so, then get the next node
+		*/
 		virtual	btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
 		{
 			Node touched_node = r->check_this_node;
@@ -179,8 +208,8 @@ private:
 	int node_id_num;				/**< current node id number, used to id the nodes, in order as they appear on the stage */
 	PathType current_path_type;		/**< used to determine if the node list needs to be reloaded */
 
-	std::vector<Racer *> racer_list;
-	static bool collided;
+	std::vector<Racer *> racer_list;	/**< the list of all racers in the game */
+	static bool collided;				/**< */
 };
 
 /**
@@ -199,8 +228,5 @@ glm::vec3 find_next_neighbor_tile(std::vector<glm::vec3> tile_positions, std::ve
 * @param dimensions			dimensions of the tiles
 */
 CardinalDirection direction_to_next_tile(glm::vec3 current_tile, glm::vec3 next_tile, glm::vec3 dimensions);
-
-
-
 
 #endif

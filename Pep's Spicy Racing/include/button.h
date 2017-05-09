@@ -14,6 +14,9 @@ public:
 	*/
 	Button(std::string button_def_file);
 
+	/**
+	* @brief deletes the sprite for the button
+	*/
 	~Button();
 
 	/**

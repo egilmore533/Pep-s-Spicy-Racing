@@ -15,6 +15,7 @@ void AI_Racer::update(float delta_time)
 	bool turn_slow = false;
 	float idle_slow = 3.0f;
 
+	
 	//uniform removal of some speed every frame
 	if (entity_component->current_speed > 0)
 		entity_component->current_speed = glm::max(entity_component->current_speed - entity_component->deacceleration_rate / idle_slow, 0.0f);

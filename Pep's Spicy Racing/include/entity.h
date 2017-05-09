@@ -38,12 +38,15 @@ public:
 	*/
 	void (*draw)(Entity *ent);
 
+	/**
+	* @brief adds a rigid body to the entity wit the given dimensions
+	* @param dimensions	the dimensions of the rigid bdy, which will be halved when used by bullet
+	*/
 	void add_rigid_body(glm::vec3 dimensions);
 
 	bool in_use;				/**< in use flag to determine if this entity is in use */
 	int id;						/**< the id of the entity */
 
-	//Soundpack *soundpack;		/**< the soundpak that belongs to this entity */
 	Mesh *mesh;					/**< mesh that belongs to this entity */
 	Texture *texture;			/**< the entity's texture */
 

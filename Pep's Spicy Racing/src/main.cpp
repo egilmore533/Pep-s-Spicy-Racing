@@ -354,8 +354,8 @@ void singleplayer_mode()
 		
 		Graphics::begin_draw_text();
 
-		fps.setString(std::to_string(Graphics::get_delta_time().asMilliseconds()));
-		Graphics::draw_text(fps);
+		//fps.setString(std::to_string(Graphics::get_delta_time().asMilliseconds()));
+		//Graphics::draw_text(fps);
 		player->draw_player_hud_text();
 		Graphics::end_draw_text();
 

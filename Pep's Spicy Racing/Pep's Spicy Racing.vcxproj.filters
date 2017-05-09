@@ -143,9 +143,6 @@
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\gui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Pep%27s Spicy Racing\Pep%27s Spicy Racing\include\physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>

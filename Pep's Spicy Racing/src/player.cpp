@@ -14,6 +14,7 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation) :
 
 	//HUD components load
 	leader_1 = Sprite_Manager::create_sprite("json/GUI/sprites/joe_sprite.json");
+	leader_2 = Sprite_Manager::create_sprite("json/GUI/sprites/enemy_icon_sprite.json");
 	item_backdrop = Sprite_Manager::create_sprite("json/GUI/sprites/wood_sprite.json");
 
 	if (!hud_font.loadFromFile("fonts/Spicy.ttf"))
@@ -52,6 +53,7 @@ Player::Player(std::string racer_def_file, glm::vec3 position, float rotation) :
 	lap_text.setOutlineThickness(2.0f);
 	lap_text.setPosition(WINDOW_WIDTH - (lap_text.getLocalBounds().width + 50.0f), WINDOW_HEIGHT - (lap_num_text.getLocalBounds().height + 42));
 
+	in_lead = false;
 }
 
 Player::~Player()
@@ -64,8 +66,12 @@ Player::~Player()
 
 void Player::draw_player_hud_sprites()
 {
-	Sprite_Manager::draw(player_cam, leader_1->id);
 	Sprite_Manager::draw(player_cam, item_backdrop->id);
+	if(in_lead)
+		Sprite_Manager::draw(player_cam, leader_1->id);
+	else
+		Sprite_Manager::draw(player_cam, leader_2->id);
+	
 }
 
 void Player::draw_player_hud_text()

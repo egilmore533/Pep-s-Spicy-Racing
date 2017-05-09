@@ -33,18 +33,24 @@ public:
 	*/
 	Racer(std::string racer_def_file, glm::vec3 position, float rotation);
 
+	/**
+	* @brief deletes the racer's entity in the entity manager
+	*/
 	~Racer();
 
 	/**
 	* @brief update the racer's current state
+	* @param delta_time how much time has passed since the last frame
 	*/
 	virtual void update(float delta_time);
 
-	RacerType racer_type;
+	RacerType racer_type;				/**< used to know which type of racer this is player or bot */
 	Entity *entity_component;			/**< the entity component of the racer */
 
-	Node check_this_node;
-	int lap_number;
+	Node check_this_node;		/**< the racer's node to check currently  */
+	int lap_number;				/**< racer's current lap number */
+
+	bool in_lead;		/**< flag to denote if the racer is in the lead */
 };
 
 /**

@@ -5,7 +5,6 @@
 #include "stage.h"
 
 std::vector<Node> Stage::node_list;
-bool Stage::collided;
 
 Stage::Stage(std::string stage_def_filepath)
 {
@@ -435,6 +434,10 @@ void Stage::update_stage()
 		
 	}
 
+	Racer *leader = NULL;
+	int leader_lap_num = -1;
+	int leader_node_num = -1;
+	Racer *player;
 	float delta_time = Graphics::get_delta_time().asSeconds();
 	for (int i = 0; i < racer_list.size(); i++)
 	{
@@ -444,8 +447,34 @@ void Stage::update_stage()
 
 		Physics::world->contactPairTest(racer_list[i]->entity_component->body.rb, path_rigid_bodies[racer_list[i]->check_this_node.node_num].rb, hit_trigger);
 
+
+		if (racer_list[i]->check_this_node.node_num > leader_node_num)
+		{
+			if (racer_list[i]->lap_number > leader_lap_num)
+			{
+				leader = racer_list[i];
+				leader_lap_num = racer_list[i]->lap_number;
+				leader_node_num = racer_list[i]->check_this_node.node_num;
+			}
+		}
 		
 
+		if (racer_list[i]->racer_type == PlayerRacer)
+		{
+			player = racer_list[i];
+		}
+	}
+
+	if (racer_list.size() >= 0 && leader)
+	{
+		if (leader->racer_type == PlayerRacer)
+		{
+			leader->in_lead = true;
+		}
+		else
+		{
+			player->in_lead = false;
+		}
 	}
 }
 
